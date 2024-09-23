@@ -1,0 +1,220 @@
+<!--* A ideia do programa foi criada pelo Gabriel F. A., sendo que o Filipe S.L. aproveitou ela e criou neste formato HTML.*\-->
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programa HTML para cabeçalhos de ata</title>
+    
+    
+    <style>
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+            font-family: Arial;
+            font-size: 12px;
+            color: black;
+        }
+        button {
+            margin: 5px;
+        }
+        #caixa2, #caixa3, #caixa4, #caixa5, #caixa6, #caixa7 {
+            display: none;
+        }
+        #extrairTextoCopiado {
+            background-color: rgba(50, 51, 50, 0.233);
+            color: black;
+            font-weight: bold;
+        }
+        #limparCaixas {
+            background-color: rgba(128, 0, 0, 0.281);
+            color: black;
+            font-weight: bold;
+        }
+        #copiarCaixa8 {
+            background-color: rgba(0, 0, 255, 0.247);
+            color: black;
+            font-weight: bold;
+        }
+        #copiarCaixa9 {
+            background-color: rgba(255, 255, 0, 0.233);
+            color: black;
+            font-weight: bold;
+        }
+        #caixa1 {
+            background-color: rgba(50, 51, 50, 0.233); /* Verde com 80% de transparência */
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        h1 {
+            text-align: center;
+        }
+        #output1, #output2 {
+            margin-top: 20px;
+            font-family: Arial;
+            font-size: 13px;
+            color: black;
+            white-space: pre-wrap; /* Preserve whitespace formatting */
+        }
+        P2 {
+            background-color: rgba(0, 0, 255, 0.247); /* Cor de fundo para o primeiro cabeçalho */
+            display: inline-block;
+            padding: 5px;
+        }
+        P3 {
+            background-color: rgba(255, 255, 0, 0.233); /* Cor de fundo para o segundo cabeçalho */
+            display: inline-block;
+            padding: 5px;
+        }
+    </style>
+
+
+</head>
+<body>
+    <p style="text-align: right;" id="Autor"><b>Gabriel Freitas Angst e Filipe de Sousa Lima</b></p>
+    <h1>Programa HTML para cabeçalhos de ata</h1>
+    <textarea id="caixa1" placeholder="Informações do PJe Ctrl+A e Ctrl+C"></textarea>
+    <textarea id="caixa2" placeholder="Caixa de Texto 2"></textarea>
+    <textarea id="caixa3" placeholder="Caixa de Texto 3"></textarea>
+    <textarea id="caixa4" placeholder="Caixa de Texto 4"></textarea>
+    <textarea id="caixa5" placeholder="Caixa de Texto 5"></textarea>
+    <textarea id="caixa6" placeholder="Caixa de Texto 6"></textarea>
+    <textarea id="caixa7" placeholder="Caixa de Texto 7"></textarea>
+    <br>
+    <div class="button-container">
+        <button id="extrairTextoCopiado" onclick="extrairClipboard()">Extrair texto copiado</button>
+        <button id="copiarCaixa8" onclick="copiarCaixa8()">Copiar 1º cabeçalho</button>
+        <button id="copiarCaixa9" onclick="copiarCaixa9()">Copiar 2º cabeçalho</button>
+        <button id="limparCaixas" onclick="limparCaixas()">Limpar todas Caixas</button>
+    </div>
+
+    <br><br>
+    <P2><b>PRIMEIRO CABEÇALHO DA ATA</b></P2>
+    <p id="output1"></p>
+    <br><br>
+    <P3><b>SEGUNDO CABEÇALHO DA ATA</b></P3>
+    <br>
+    <p id="output2"></p>
+
+
+    <script>
+        function extrairClipboard() {
+            navigator.clipboard.readText().then(text => {
+                document.getElementById('caixa1').value = text;
+                processarCaixas();
+            });
+        }
+    
+        function limparCaixas() {
+            for (let i = 1; i <= 7; i++) {
+                document.getElementById('caixa' + i).value = '';
+            }
+            document.getElementById('output1').innerHTML = '';
+            document.getElementById('output2').innerHTML = '';
+        }
+    
+        function copiarCaixa8() {
+            copiarTexto('output1');
+        }
+    
+        function copiarCaixa9() {
+            copiarTexto('output2');
+        }
+    
+        function copiarTexto(id) {
+            const element = document.getElementById(id);
+            const range = document.createRange();
+            range.selectNodeContents(element);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            document.execCommand('copy');
+            alert('Texto copiado para a área de transferência!');
+        }
+    
+        function processarCaixas() {
+            const caixa1 = document.getElementById('caixa1').value.split('\n');
+            if (caixa1.length > 1) {
+                document.getElementById('caixa2').value = caixa1[1].replace(/[^\d\W]/g, '');
+            }
+    
+            const orgaoJulgadorIndex = caixa1.findIndex(line => line.includes('Órgão julgador'));
+            if (orgaoJulgadorIndex !== -1 && orgaoJulgadorIndex + 1 < caixa1.length) {
+                document.getElementById('caixa3').value = caixa1[orgaoJulgadorIndex + 1];
+            }
+    
+            const poloAtivoIndex = caixa1.findIndex(line => line.includes('Polo ativo'));
+            const poloPassivoIndex = caixa1.findIndex(line => line.includes('Polo passivo'));
+            if (poloAtivoIndex !== -1 && poloPassivoIndex !== -1 && poloAtivoIndex < poloPassivoIndex) {
+                const requerentes = caixa1.slice(poloAtivoIndex + 1, poloPassivoIndex)
+                    .filter(line => !line.startsWith(' '));
+                document.getElementById('caixa4').value = requerentes.join('\n');
+            }
+    
+            const poloPassivoIndex2 = caixa1.findIndex(line => line.includes('Polo passivo'));
+            if (poloPassivoIndex2 !== -1) {
+                const requeridos = caixa1.slice(poloPassivoIndex2 + 1)
+                    .filter(line => /(REQUERIDO|RÉU|REU|EXECUTADO)\)$/.test(line.trim()));
+                document.getElementById('caixa6').value = requeridos.join('\n');
+            }
+    
+            document.getElementById('caixa5').value = formatarRequerentes(document.getElementById('caixa4').value.split('\n'));
+            document.getElementById('caixa7').value = formatarRequeridos(document.getElementById('caixa6').value.split('\n'));
+    
+            // Atualiza os outputs diretamente aqui
+            atualizarOutputs();
+        }
+    
+        function formatarRequerentes(requerentes) {
+            if (requerentes.length === 1) {
+                return `<b>Requerente:</b> ${requerentes[0].replace(/ \((REQUERENTE|AUTOR|EXEQUENTE|AUTORA)\)/g, '')}`;
+            }
+            return requerentes.map((req, index) => `<b>${index + 1}º Requerente:</b> ${req.replace(/ \((REQUERENTE|AUTOR|EXEQUENTE|AUTORA)\)/g, '')}`).join('\n');
+        }
+    
+        function formatarRequeridos(requeridos) {
+            if (requeridos.length === 1) {
+                return `<b>Requerido(a):</b> ${requeridos[0].replace(/ \((REQUERIDO|RÉU|REU|EXECUTADO)\)/g, '')}`;
+            }
+            return requeridos.map((req, index) => `<b>${index + 1}º Requerido(a):</b> ${req.replace(/ \((REQUERIDO|RÉU|REU|EXECUTADO)\)/g, '')}`).join('\n');
+        }
+    
+        function atualizarOutputs() {
+            const caixa8 = `<b>Juízo:</b> ${document.getElementById('caixa3').value}\n` +
+                `<b>Processo:</b> ${document.getElementById('caixa2').value}\n` +
+                `${document.getElementById('caixa5').value}\n` +
+                `${document.getElementById('caixa7').value}`;
+    
+            const caixa9 = caixa8.split('\n').slice(2).map(line => `
+    ${line.trim()}
+    <b>Telefone:</b> Número
+    <b>Preposto(a):</b> nome completo, <b>CPF:</b> número, <b>telefone:</b> número (<b>Carta de preposto ID n. xxxx</b>).
+    <b>Advogado(a):</b> nome completo, <b>OAB/DF:</b> número, <b>telefone:</b> número (<b>Procuração ID xxxx</b>).
+    
+    `).join('\n').replace(/^\s+/gm, '');
+    
+            const textoAdicional = `
+    <b>Observador(es):</b> Nome completo, CPF, (...), que assume(m) o dever de confidencialidade (CPC, art. 166, § 1º).
+    <b>Conciliador(es)/Mediador(es):</b> Nome completo <b>Sala:</b> número da sala
+    <b>Supervisor(es):</b> nome se houver e <b>Matrícula:</b> número
+    `;
+    
+            const formatBold = text => text.replace(/(CPF:|CNPJ:)/g, '<b>$1</b>');
+    
+            function formatParagraphs(text, isOutput1 = false) {
+                return text.split('\n').map((line, index) => isOutput1 && index === 0 ? `<p><b>${line}</b></p>` : `<p>${line.trim()}</p>`).join('');
+            }
+    
+            document.getElementById('output1').innerHTML = formatParagraphs(formatBold(caixa8), true);
+            document.getElementById('output2').innerHTML = formatParagraphs(formatBold(caixa9 + textoAdicional));
+        }
+    </script>
+    
+
+</body>
+</html>
