@@ -17,7 +17,10 @@
             font-size: 12px;
             color: black;
         }
-        .button-container{
+         .button-container{
+    background-color: #FFC107;
+         }
+        .botao{
     background-color: #FFC107;
     border: none;
     color: #fff;
@@ -31,8 +34,8 @@
     border-radius: 8px;
     transition: transform 0.5s ease;
 }
-.button-container:hover{
-    transform: rotate(360deg);
+.botao:hover{
+    background-color: #4CAF50;
 }
         #caixa2, #caixa3, #caixa4, #caixa5, #caixa6, #caixa7 {
             display: none;
@@ -85,7 +88,7 @@
 
 </head>
 <body>
-    <p style="text-align: right;" id="Autor"><b>Gabriel Freitas Angst e Filipe de Sousa Lima</b></p>
+    <p style="text-align: right;" id="Autor"><b>Gabriel Freitas Angst e Filipe de Sousa Lima / Beta 24/09/2024</b></p>
     <h1>Programa HTML para cabeçalhos de ata</h1>
     <textarea id="caixa1" placeholder="Informações do PJe Ctrl+A e Ctrl+C"></textarea>
     <textarea id="caixa2" placeholder="Caixa de Texto 2"></textarea>
@@ -96,10 +99,10 @@
     <textarea id="caixa7" placeholder="Caixa de Texto 7"></textarea>
     <br>
     <div class="button-container">
-        <button id="extrairTextoCopiado" onclick="extrairClipboard()">Extrair texto copiado</button>
-        <button id="copiarCaixa8" onclick="copiarCaixa8()">Copiar 1º cabeçalho</button>
-        <button id="copiarCaixa9" onclick="copiarCaixa9()">Copiar 2º cabeçalho</button>
-        <button id="limparCaixas" onclick="limparCaixas()">Limpar todas Caixas</button>
+        <butto class="botao" id="extrairTextoCopiado" onclick="extrairClipboard()">Extrair texto copiado</button>
+        <button class="botao" id="copiarCaixa8" onclick="copiarCaixa8()">Copiar 1º cabeçalho</button>
+        <button class="botao" id="copiarCaixa9" onclick="copiarCaixa9()">Copiar 2º cabeçalho</button>
+        <button class="botao" id="limparCaixas" onclick="limparCaixas()">Limpar todas Caixas</button>
     </div>
 
     <br><br>
