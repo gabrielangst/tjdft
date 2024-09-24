@@ -62,7 +62,7 @@
         
         
         #limparCaixas {
-            background-color: #4682B4;
+            background-color: #F08080;
     border: none;
     color: #fff;
     padding: 10px 24px;
@@ -80,7 +80,7 @@
             //font-weight: bold;
         }
         #limparCaixas:hover{
-        background-color: #00BFFF;
+        background-color: #FFB6C1;
         }
 
         
@@ -136,7 +136,7 @@
             width: 70%;
         }
         h1 {
-            text-align: center;
+            text-align: left;
             font-family: Georgia;
         }
         #output1, #output2 {
@@ -166,9 +166,9 @@
 
 </head>
 <body>
-    <p style="text-align: right; font-family: Georgia;" id="Autor"><b>Filipe de Sousa Lima e Gabriel Freitas Angst <br> TJDFT | 24/09/2024 15:54</b></p>
-    <h1>Programa HTML para cabeçalhos de ata</h1>
-    <textarea id="caixa1" placeholder="Informações do PJe Ctrl+A e Ctrl+C"></textarea>
+    <p style="text-align: right; font-family: Georgia;" id="Autor"><b>Filipe de Sousa Lima e Gabriel Freitas Angst <br> TJDFT | 24/09/2024 16:53</b></p>
+    <h1>📄 Programa HTML para cabeçalhos de ata</h1>
+    <textarea id="caixa1" placeholder="Após abrir o cabeçalho do processo no PJe e copiar todos os dados apertando Ctrl+A e Ctrl+C, clique no botão abaixo "Extrair texto copiado""></textarea>
     <textarea id="caixa2" placeholder="Caixa de Texto 2"></textarea>
     <textarea id="caixa3" placeholder="Caixa de Texto 3"></textarea>
     <textarea id="caixa4" placeholder="Caixa de Texto 4"></textarea>
@@ -177,22 +177,20 @@
     <textarea id="caixa7" placeholder="Caixa de Texto 7"></textarea>
     <br>
     <div>
-        <button class="botao" id="extrairTextoCopiado" onclick="extrairClipboard()">Extrair texto copiado</button>
-        <button class="botao" id="copiarCaixa8" onclick="copiarCaixa8()">Copiar 1º cabeçalho</button>
-        <button class="botao" id="copiarCaixa9" onclick="copiarCaixa9()">Copiar 2º cabeçalho</button>
+        <button class="botao" id="extrairTextoCopiado" onclick="extrairClipboard()">Extrair texto copiado</button>  
         <button class="botao" id="limparCaixas" onclick="limparCaixas()">Limpar todas Caixas</button>
     </div>
 
     <br><br>
    
     <div style="width: 70%; border-width: 1px 1px 1px 1px; border-style: solid;">
-<P2><b>DADOS EXTRAÍDOS DO PJE</b></P2>
+<P2><b>DADOS EXTRAÍDOS DO PJE</b> <button class="botao" id="copiarCaixa8" onclick="copiarCaixa8()">Copiar Dados</button> </P2>
     <p id="output1"></p></th>
     </div>
     
     <br><br>
      <div style="width: 70%; border-width: 1px 1px 1px 1px; border-style: solid;">
- <P3><b>PARTICIPANTES DA AUDIÊNCIA</b></P3>
+ <P3><b>PARTICIPANTES DA AUDIÊNCIA</b> <button class="botao" id="copiarCaixa9" onclick="copiarCaixa9()">Copiar Participantes</button></P3>
     <br>
     <p id="output2"></p></th>
      </div>
