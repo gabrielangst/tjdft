@@ -1,4 +1,3 @@
-
 <!--* A ideia do programa foi criada pelo Gabriel F. A., sendo que o Filipe S.L. aproveitou ela e criou neste formato HTML.*\-->
 
 <!DOCTYPE html>
@@ -6,7 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Programa HTML para cabeçalhos de ata</title>
+   <title> <span style="font-family:'Georgia'">Programa HTML para cabeçalhos de ata</title>
+    
     
     <style>
         textarea {
@@ -16,43 +16,126 @@
             font-family: Arial;
             font-size: 12px;
             color: black;
+            background-color: #DCDCDC;
         }
-        button {
-            margin: 5px;
-        }
+         .button-container{
+    background-color: #FFC107;
+         }
+        .botao{
+    background-color: #FFC107;
+    border: none;
+    color: #fff;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: transform 0.5s ease;
+}
+.botao:hover{
+    background-color: #4CAF50;
+}
         #caixa2, #caixa3, #caixa4, #caixa5, #caixa6, #caixa7 {
             display: none;
         }
+        
         #extrairTextoCopiado {
-            background-color: rgba(50, 51, 50, 0.233);
-            color: black;
-            font-weight: bold;
+            background-color: #4682B4;
+    border: none;
+    color: #fff;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: transform 0.5s ease;
         }
+        #extrairTextoCopiado:hover{
+        background-color: #00BFFF;
+        }
+        
+        
         #limparCaixas {
-            background-color: rgba(128, 0, 0, 0.281);
-            color: black;
-            font-weight: bold;
+            background-color: #4682B4;
+    border: none;
+    color: #fff;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: transform 0.5s ease;
+            
+            //background-color: rgba(128, 0, 0, 0.281);
+            //color: black;
+            //font-weight: bold;
         }
+        #limparCaixas:hover{
+        background-color: #00BFFF;
+        }
+
+        
         #copiarCaixa8 {
-            background-color: rgba(0, 0, 255, 0.247);
-            color: black;
-            font-weight: bold;
+             background-color: #4682B4;
+    border: none;
+    color: #fff;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: transform 0.5s ease;
+            //background-color: rgba(0, 0, 255, 0.247);
+            //color: black;
+            //font-weight: bold;
         }
+        #copiarCaixa8:hover{
+        background-color: #00BFFF;
+        }
+
+        
         #copiarCaixa9 {
-            background-color: rgba(255, 255, 0, 0.233);
-            color: black;
-            font-weight: bold;
+            background-color: #4682B4;
+    border: none;
+    color: #fff;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: transform 0.5s ease;
+            //background-color: rgba(255, 255, 0, 0.233);
+            //color: black;
+            //font-weight: bold;
         }
+        #copiarCaixa9:hover{
+        background-color: #00BFFF;
+        }
+
+
+        
         #caixa1 {
-            background-color: rgba(50, 51, 50, 0.233); /* Verde com 80% de transparência */
-        }
-        .button-container {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
+            //background-color: rgba(50, 51, 50, 0.233); /* Verde com 80% de transparência */
+           background-color: #DCDCDC;
         }
         h1 {
             text-align: center;
+            font-family: Georgia;
         }
         #output1, #output2 {
             margin-top: 20px;
@@ -65,20 +148,20 @@
             background-color: rgba(0, 0, 255, 0.247); /* Cor de fundo para o primeiro cabeçalho */
             display: inline-block;
             padding: 5px;
+            font-family: Georgia;
         }
         P3 {
             background-color: rgba(255, 255, 0, 0.233); /* Cor de fundo para o segundo cabeçalho */
             display: inline-block;
             padding: 5px;
-        }
-        #versao{
-            text-align: right;
+            font-family: Georgia;
         }
     </style>
+
+
 </head>
 <body>
-    <p style="text-align: right;" id="Autor"><b>Filipe de Sousa Lima e Gabriel Freitas Angst</b></p>
-    <p style="text-align: right; font-size: 15px;" id="Versao" >Versão 1.3</p>
+    <p style="text-align: right; font-family: Georgia;" id="Autor"><b>Filipe de Sousa Lima e Gabriel Freitas Angst <br> TJDFT | 24/09/2024 15:08</b></p>
     <h1>Programa HTML para cabeçalhos de ata</h1>
     <textarea id="caixa1" placeholder="Informações do PJe Ctrl+A e Ctrl+C"></textarea>
     <textarea id="caixa2" placeholder="Caixa de Texto 2"></textarea>
@@ -88,11 +171,11 @@
     <textarea id="caixa6" placeholder="Caixa de Texto 6"></textarea>
     <textarea id="caixa7" placeholder="Caixa de Texto 7"></textarea>
     <br>
-    <div class="button-container">
-        <button id="extrairTextoCopiado" onclick="extrairClipboard()">Extrair texto copiado</button>
-        <button id="copiarCaixa8" onclick="copiarCaixa8()">Copiar 1º cabeçalho</button>
-        <button id="copiarCaixa9" onclick="copiarCaixa9()">Copiar 2º cabeçalho</button>
-        <button id="limparCaixas" onclick="limparCaixas()">Limpar todas Caixas</button>
+    <div>
+        <button class="botao" id="extrairTextoCopiado" onclick="extrairClipboard()">Extrair texto copiado</button>
+        <button class="botao" id="copiarCaixa8" onclick="copiarCaixa8()">Copiar 1º cabeçalho</button>
+        <button class="botao" id="copiarCaixa9" onclick="copiarCaixa9()">Copiar 2º cabeçalho</button>
+        <button class="botao" id="limparCaixas" onclick="limparCaixas()">Limpar todas Caixas</button>
     </div>
 
     <br><br>
