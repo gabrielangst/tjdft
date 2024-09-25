@@ -1,3 +1,4 @@
+
 <!--* A ideia do programa foi criada pelo Gabriel F. A., sendo que o Filipe S.L. aproveitou ela e criou neste formato HTML.*\-->
  
 <!DOCTYPE html>
@@ -252,14 +253,16 @@
             }
     
             const poloPassivoIndex2 = caixa1.findIndex(line => line.includes('Polo passivo'));
-            if (poloPassivoIndex2 !== -1) {
-                const requeridos = caixa1.slice(poloPassivoIndex2 + 1)
-                    .filter(line => /(REQUERIDO|RÉU|REU|EXECUTADO)\)$/.test(line.trim()));
-                document.getElementById('caixa6').value = requeridos.join('\n');
-            }
-    
-            document.getElementById('caixa5').value = formatarRequerentes(document.getElementById('caixa4').value.split('\n'));
-            document.getElementById('caixa7').value = formatarRequeridos(document.getElementById('caixa6').value.split('\n'));
+const iconeDownloadIndex = caixa1.findIndex(line => line.includes('Ícone de download'));
+
+if (poloPassivoIndex2 !== -1 && iconeDownloadIndex !== -1 && iconeDownloadIndex > poloPassivoIndex2) {
+    const requeridos = caixa1.slice(poloPassivoIndex2 + 1, iconeDownloadIndex)
+        .filter(line => /(REQUERIDO|RÉU|REU|EXECUTADO)\)$/.test(line.trim()));
+    document.getElementById('caixa6').value = requeridos.join('\n');
+}
+
+document.getElementById('caixa5').value = formatarRequerentes(document.getElementById('caixa4').value.split('\n'));
+document.getElementById('caixa7').value = formatarRequeridos(document.getElementById('caixa6').value.split('\n'));
     
             // Atualiza os outputs diretamente aqui
             atualizarOutputs();
