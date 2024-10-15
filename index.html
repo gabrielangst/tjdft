@@ -10,7 +10,6 @@
     
     
     <style>
-      <style>
         #alert-box {
             display: none;
             background-color: #f44336;
@@ -21,8 +20,7 @@
             right: 20px;
             z-index: 1000;
             border-radius: 5px;
-        }
-    </style>   
+        } 
      
      textarea {
             width: 100%;
@@ -182,7 +180,7 @@
 
 </head>
 <body style="margin:60px;padding:0">
-    <p style="text-align: center; font-family: Georgia;" id="Autor">Filipe de Sousa Lima | Gabriel Freitas Angst <br> 3º NUVIMEC/TJDFT | <b>15/10/2024 12:16 <a href="https://tjdf.sharepoint.com/sites/5NUVIMEC/_layouts/15/stream.aspx?id=%2Fsites%2F5NUVIMEC%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20%2D%20Extrator%20PJe%2Emp4&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E8feed9ae%2D0b9e%2D4e31%2D943c%2D9b089e43d927" target="_blank">🎦</a></b></p>
+    <p style="text-align: center; font-family: Georgia;" id="Autor">Filipe de Sousa Lima | Gabriel Freitas Angst <br> 3º NUVIMEC/TJDFT | <b>15/10/2024 12:18 <a href="https://tjdf.sharepoint.com/sites/5NUVIMEC/_layouts/15/stream.aspx?id=%2Fsites%2F5NUVIMEC%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20%2D%20Extrator%20PJe%2Emp4&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E8feed9ae%2D0b9e%2D4e31%2D943c%2D9b089e43d927" target="_blank">🎦</a></b></p>
     <h1>📄 Extrator de cabeçalhos do PJe </h1>
     <textarea id="caixa1" placeholder="Após abrir o cabeçalho do processo no PJe e copiar todos os dados apertando Ctrl+A e Ctrl+C, clique no botão abaixo ''Extrair texto copiado''"></textarea>
     <textarea id="caixa2" placeholder="Caixa de Texto 2"></textarea>
@@ -197,7 +195,7 @@
         <button class="botao" id="limparCaixas" onclick="limparCaixas()">Limpar todas Caixas</button>
     </div>
 
-    <br><br>
+    <br><div id="alert-box">Dados copiados com sucesso!</div><br>
    
     <div style="width: 70%; border-width: 1px 1px 1px 1px; border-style: solid;">
 <P2><b>DADOS EXTRAÍDOS DO PJE</b> <button class="botao" id="copiarCaixa8" onclick="copiarCaixa8()">Copiar Dados</button> </P2>
@@ -210,8 +208,6 @@
     <br>
     <p id="output2"></p></th>
      </div>
-
- <div id="alert-box">Dados copiados com sucesso!</div>
 
     <script>
      function showAlert3s() {
