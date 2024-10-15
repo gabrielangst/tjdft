@@ -197,9 +197,18 @@
     <p id="output2"></p></th>
      </div>
 
+ <div id="alert-box">Dados copiados com sucesso!</div>
 
     <script>
-        function extrairClipboard() {
+     function showAlert3s() {
+            const alertBox = document.getElementById('alert-box');
+            alertBox.style.display = 'block';
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 3000);
+        }   
+     
+     function extrairClipboard() {
             navigator.clipboard.readText().then(text => {
                 document.getElementById('caixa1').value = text;
                 processarCaixas();
@@ -230,7 +239,7 @@
             selection.removeAllRanges();
             selection.addRange(range);
             document.execCommand('copy');
-            alert('Texto copiado para a área de transferência!');
+            showAlert3s('Texto copiado para a área de transferência!');
         }
     
         function processarCaixas() {
