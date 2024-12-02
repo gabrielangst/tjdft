@@ -117,7 +117,6 @@
             font-family: Arial;
             font-size: 13px;
             color: black;
-            white-space: pre-wrap; /* Preserve whitespace formatting */
         }
         P2, P3, P4 {
             background-color: #DCDCDC;
@@ -159,10 +158,25 @@
             font-family: Arial, sans-serif;
             font-size: 12px;
         }
+
+        .parte {
+            margin-top: 0pt;  /* Garantir que não há espaço acima */
+            margin-bottom: 0pt;  /* Garantir que não há espaço abaixo */
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            line-height: 1.5;  /* Espaçamento entre linhas */
+            display: block;  /* Faz o <div> se comportar como um bloco */
+        }
+
+        /* Controlar o espaçamento entre as divs */
+        .parte + .parte {
+            margin-top: 10px;  /* Ajuste esse valor conforme necessário */
+        }
+        
     </style>
 </head>
 <body style="margin:60px;padding:0">
-    <p style="text-align: center; font-family: Georgia;" id="Autor">Filipe de Sousa Lima | Gabriel Freitas Angst <br> 3º NUVIMEC/TJDFT | <b>29/11/2024 12:20 <a title="Veja um tutorial em vídeo de como utilizar esta ferramenta" href="https://tjdf.sharepoint.com/sites/5NUVIMEC/_layouts/15/stream.aspx?id=%2Fsites%2F5NUVIMEC%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20%2D%20Extrator%20PJe%2Emp4&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E8feed9ae%2D0b9e%2D4e31%2D943c%2D9b089e43d927" target="_blank">🎦</a></b></p>
+    <p style="text-align: center; font-family: Georgia;" id="Autor">Filipe de Sousa Lima | Gabriel Freitas Angst <br> 3º NUVIMEC/TJDFT | <b>02/12/2024 12:38 <a title="Experimente a versão Beta (em testes)" href="https://gabrielangst.github.io/tjdft/beta.html" target="_blank">🆕</a><a title="Veja um tutorial em vídeo de como utilizar esta ferramenta" href="https://tjdf.sharepoint.com/sites/5NUVIMEC/_layouts/15/stream.aspx?id=%2Fsites%2F5NUVIMEC%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20%2D%20Extrator%20PJe%2Emp4&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E8feed9ae%2D0b9e%2D4e31%2D943c%2D9b089e43d927" target="_blank">🎦</a></b></p>
     <h1>📄 Extrator de cabeçalhos do PJe </h1>
     <textarea id="caixa1" placeholder="Após abrir o cabeçalho do processo no PJe e copiar todos os dados apertando Ctrl+A e Ctrl+C, clique no botão abaixo ''Extrair texto copiado''"></textarea>
     <textarea id="caixa2" placeholder="Caixa de Texto 2"></textarea>
@@ -195,7 +209,7 @@
     </div>
 
 <!-- BOTÃO GERAR WORD-->
-    <button class="botao" id="gerarWord" onclick="gerarWord()">Baixar Doc Word</button>
+    <button class="botao" id="gerarWord" onclick="gerarWord()">Baixar Doc Word</button> <!-- Apagar Disabled para ativar-->
 
 
 <!-- Início do Script-->
@@ -327,24 +341,26 @@ ${line.trim()}
         document.getElementById('output2').innerHTML = formatParagraphs(formatBold(caixa9 + textoAdicional));
 
 // Atualiza o output3 com os dados das partes
-const requerentes = document.getElementById('caixa4').value.split('\n').map(req => req.replace(/ \((REQUERENTE|AUTOR|EXEQUENTE|AUTORA)\)/g, ''));
-const requeridos = document.getElementById('caixa6').value.split('\n').map(req => req.replace(/ \((REQUERIDO|RÉU|REU|EXECUTADO)\)/g, ''));
+const requerentes = document.getElementById('caixa4').value.split('\n')
+    .map(req => req.replace(/ \((REQUERENTE|AUTOR|EXEQUENTE|AUTORA)\)/g, '').trim());
+const requeridos = document.getElementById('caixa6').value.split('\n')
+    .map(req => req.replace(/ \((REQUERIDO|RÉU|REU|EXECUTADO)\)/g, '').trim());
 
 let output3Content = '';
 if (requerentes.length === 1) {
     const req = requerentes[0];
     if (req.includes('CNPJ:')) {
-        output3Content += `<p class="parte"><b>A parte REQUERENTE: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</p> <br>`;
+        output3Content += `<div class="parte"><b>A parte REQUERENTE: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div> <br>`;
     } else {
-        output3Content += `<p class="parte"><b>A parte REQUERENTE: ${req}</b>, residente e domiciliado(a) xxxx, telefone xxxx e e-mail xxxx.</p> <br>`;
+        output3Content += `<div class="parte"><b>A parte REQUERENTE: ${req}</b>, residente e domiciliado(a) xxxx, telefone xxxx e e-mail xxxx.</div> <br>`;
     }
 } else {
     requerentes.forEach((req, index) => {
         const ordinal = `${index + 1}ª`;
         if (req.includes('CNPJ:')) {
-            output3Content += `<p class="parte"><b>A parte ${ordinal} REQUERENTE: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</p> <br>`;
+            output3Content += `<div class="parte"><b>A parte ${ordinal} REQUERENTE: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div><br>`;
         } else {
-            output3Content += `<p class="parte"><b>A parte ${ordinal} REQUERENTE: ${req}</b>, residente e domiciliado(a) xxxx, telefone xxxx e e-mail xxxx.</p> <br>`;
+            output3Content += `<div class="parte"><b>A parte ${ordinal} REQUERENTE: ${req}</b>, residente e domiciliado(a) xxxx, telefone xxxx e e-mail xxxx.</div> <br>`;
         }
     });
 }
@@ -352,46 +368,51 @@ if (requerentes.length === 1) {
 if (requeridos.length === 1) {
     const req = requeridos[0];
     if (req.includes('CNPJ:')) {
-        output3Content += `<p class="parte"><b>A parte REQUERIDA: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</p> <br>`;
+        output3Content += `<div class="parte"><b>A parte REQUERIDA: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div> <br>`;
     } else {
-        output3Content += `<p class="parte"><b>A parte REQUERIDA: ${req}</b>, residente e domiciliado(a) xxxx, telefone xxxx e e-mail xxxx.</p> <br>`;
+        output3Content += `<div class="parte"><b>A parte REQUERIDA: ${req}</b>, residente e domiciliado(a) xxxx, telefone xxxx e e-mail xxxx.</div> <br>`;
     }
 } else {
     requeridos.forEach((req, index) => {
         const ordinal = `${index + 1}ª`;
         if (req.includes('CNPJ:')) {
-            output3Content += `<p class="parte"><b>A parte ${ordinal} REQUERIDA: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</p> <br>`;
+            output3Content += `<div class="parte"><b>A parte ${ordinal} REQUERIDA: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div> <br>`;
         } else {
-            output3Content += `<p class="parte"><b>A parte ${ordinal} REQUERIDA: ${req}</b>, residente e domiciliado(a) xxxx, telefone xxxx e e-mail xxxx.</p> <br>`;
+            output3Content += `<div class="parte"><b>A parte ${ordinal} REQUERIDA: ${req}</b>, residente e domiciliado(a) xxxx, telefone xxxx e e-mail xxxx.</div> <br>`;
         }
     });
 }
 
 document.getElementById('output3').innerHTML = output3Content;
+
+
 }
 
 //Gerar word
 
 function gerarWord() {
-            // Captura os conteúdos dos outputs
-            const output1 = document.getElementById('output1').innerHTML;
-            const output2 = document.getElementById('output2').innerHTML;
-            const output3 = document.getElementById('output3').innerHTML;
+    // Captura os conteúdos dos outputs
+    const output1 = document.getElementById('output1').innerHTML;
+    const output2 = document.getElementById('output2').innerHTML;
+    const output3 = document.getElementById('output3').innerHTML;
 
+    // Link da imagem hospedada
+    const imagemURL = 'https://i.imgur.com/HD5W5cV.jpeg';  // Substitua pelo link correto
 
-// Cria o conteúdo com caixas de texto
-const content = `
-<html xmlns:o="urn:schemas-microsoft-com:office:office" 
-      xmlns:w="urn:schemas-microsoft-com:office:word" 
+    // Cria o conteúdo com a imagem via URL
+    const content = `
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
       xmlns="http://www.w3.org/TR/REC-html40">
 <head>
     <meta charset="UTF-8">
     <style>
-        @page {
-            size: A4;
-            margin: 0.5cm 2cm 0.5cm 2cm; /* Superior 0.5cm, direita 2cm, inferior 0.5cm, esquerda 2cm */
-            mso-footer-space:1cm; /* Espaço para rodapé */
-            mso-header-space:1.5cm; /* Ajuste do espaço para cabeçalho, fica dentro da margem superior */
+        @page WordSection1 {
+            size: 595.3pt 841.9pt; /* Tamanho A4 */
+            margin: 2cm; /* Margens: 2 cm em todos os lados */
+        }
+        div.WordSection1 {
+            page: WordSection1;
         }
         body {
             font-family: Arial, sans-serif;
@@ -408,102 +429,78 @@ const content = `
         .titulo {
             text-align: center;
             font-weight: bold;
-            text-decoration: underline; /* Adiciona sublinhado ao texto */
+            text-decoration: underline;
         }
-
-        .caixa p {
-            margin-top: 0;
-            margin-bottom: 0;
-            line-height: 2.0; /* Define o espaçamento entre linhas como 2,0 */
-        }
-
-        /* Estilos de Cabeçalho e Rodapé */
-        .header {
+        .header, .footer {
             text-align: center;
             font-size: 10pt;
             font-family: Arial, sans-serif;
             color: gray;
-            padding: 10px 0;
-            position: relative;
         }
-        .footer {
-            text-align: center;
-            font-size: 10pt;
-            font-family: Arial, sans-serif;
-            color: gray;
-            position: relative;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-            width: 100%; /* Ajuste a largura para 100% do contêiner */
-            max-width: 600px; /* Define uma largura máxima para a imagem */
-        }
-        .Topo_titulo{
+        .Topo_titulo {
             text-align: center;
             font-weight: bold;
         }
-
-        .titulo_complementacao{
+        .titulo_complementacao {
             text-align: center;
             font-weight: bold;
-        }           
-
-
+        }
     </style>
 </head>
 <body>
-    <!-- Cabeçalho (Será repetido em todas as páginas) -->
-    <div class="header">
-        <img src="https://i.postimg.cc/SNrhXmDT/t-ESTESSS-3.jpg" alt="Cabeçalho">
-    </div>
+    <div class="WordSection1">
+        <!-- Cabeçalho com imagem via URL -->
+        <div class="header">
+            <img src="${imagemURL}" alt="Cabeçalho">
+        </div>
 
-    <div>
-        <p class="Topo_titulo"> TERMO DE SESSÃO DE CONCILIAÇÃO – JUIZADO ESPECIAL CÍVEL<p>
-    </div    
-    <div class="caixa">
-        <p class="titulo">DADOS EXTRAÍDOS DO PJE</p>
-        ${output1}
-    </div>
-    <div class="caixa">
-        <p class="titulo">PARTICIPANTES DA AUDIÊNCIA</p>
-        ${output2}
-    </div>
-    <div class="caixa">
-        <p class="titulo">DADOS DAS PARTES</p>
-        <p class="titulo_complementacao">(Portaria Conjunta GPR, GPVP, GSVP e GC n.º 71/2013; e CPC, art. 319, II)</p>
-        ${output3}
-    </div>
+        <!-- Conteúdo -->
+        <div>
+            <p class="Topo_titulo">TERMO DE SESSÃO DE CONCILIAÇÃO – JUIZADO ESPECIAL CÍVEL</p>
+            <p class="Topo_titulo">(____________)</p>
+        </div>
+        <div class="caixa">
+            <p class="titulo">DADOS EXTRAÍDOS DO PJE</p>
+            ${output1}
+        </div>
+        <div class="caixa">
+            <p class="titulo">PARTICIPANTES DA AUDIÊNCIA</p>
+            ${output2}
+        </div>
+        <div class="caixa">
+            <p class="titulo">DADOS DAS PARTES</p>
+            <p class="titulo_complementacao">(Portaria Conjunta GPR, GPVP, GSVP e GC n.º 71/2013; e CPC, art. 319, II)</p>
+            ${output3}
+        </div>
 
-    <div>
-        COLAR CONTEÚDO DA ATA AQUI E APAGAR ESTA LINHA
-        <br>
-        <br>
-        <br>
-    </div>
-
-    <!-- Rodapé (Será repetido em todas as páginas) -->
-    <div class="footer">
-        <p>____________________________________________________________________________</p>
-        <p>3º NUVIMEC – CEJUSC’s Ceilândia, Gama, Núcleo Bandeirante, Recanto das Emas, Riacho Fundo e Santa Maria. 
-        Telefone: (61) 3103-9390</p>
+        <div>
+            <p>Colar conteúdo da ata e apagar esta linha</p>
+        </div>
+        <!-- Rodapé -->
+        <div class="footer">
+            <p>____________________________________________________________________________</p>
+            <p>5º Núcleo Virtual de Mediação e Conciliação - 5NUVIMEC. Telefone: (61) 3103-1792.</p>
+        </div>
     </div>
 </body>
 </html>
 `;
 
-            // Cria um blob com o conteúdo
-            const blob = new Blob(['\ufeff', content], { type: 'application/msword' });
+    // Cria um blob com o conteúdo
+    const blob = new Blob(['\ufeff', content], { type: 'application/msword' });
 
-            // Cria um link para download
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'Número do processo - RESULTADO.doc';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
+    // Cria um link para download
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'Número do processo - RESULTADO.doc';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+
+
     </script>
 
 
