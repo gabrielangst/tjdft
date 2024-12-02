@@ -209,7 +209,7 @@
     </div>
 
 <!-- BOTÃO GERAR WORD-->
-    <button class="botao" id="gerarWord" onclick="gerarWord()">Baixar Doc Word</button> <!-- Apagar Disabled para ativar-->
+    <button class="botao" id="gerarWord" onclick="gerarWord()">Baixar Doc Word</button>
 
 
 <!-- Início do Script-->
@@ -341,16 +341,14 @@ ${line.trim()}
         document.getElementById('output2').innerHTML = formatParagraphs(formatBold(caixa9 + textoAdicional));
 
 // Atualiza o output3 com os dados das partes
-const requerentes = document.getElementById('caixa4').value.split('\n')
-    .map(req => req.replace(/ \((REQUERENTE|AUTOR|EXEQUENTE|AUTORA)\)/g, '').trim());
-const requeridos = document.getElementById('caixa6').value.split('\n')
-    .map(req => req.replace(/ \((REQUERIDO|RÉU|REU|EXECUTADO)\)/g, '').trim());
+const requerentes = document.getElementById('caixa4').value.split('\n').map(req => req.replace(/ \((REQUERENTE|AUTOR|EXEQUENTE|AUTORA)\)/g, ''));
+const requeridos = document.getElementById('caixa6').value.split('\n').map(req => req.replace(/ \((REQUERIDO|RÉU|REU|EXECUTADO)\)/g, ''));
 
 let output3Content = '';
 if (requerentes.length === 1) {
     const req = requerentes[0];
     if (req.includes('CNPJ:')) {
-        output3Content += `<div class="parte"><b>A parte REQUERENTE: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div> <br>`;
+        output3Content += `<div class="parte"><b>A parte REQUERENTE: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div>`;
     } else {
         output3Content += `<div class="parte"><b>A parte REQUERENTE: ${req}</b>, residente e domiciliado(a) xxxx, telefone xxxx e e-mail xxxx.</div> <br>`;
     }
@@ -358,7 +356,7 @@ if (requerentes.length === 1) {
     requerentes.forEach((req, index) => {
         const ordinal = `${index + 1}ª`;
         if (req.includes('CNPJ:')) {
-            output3Content += `<div class="parte"><b>A parte ${ordinal} REQUERENTE: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div><br>`;
+            output3Content += `<div class="parte"><b>A parte ${ordinal} REQUERENTE: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div>`;
         } else {
             output3Content += `<div class="parte"><b>A parte ${ordinal} REQUERENTE: ${req}</b>, residente e domiciliado(a) xxxx, telefone xxxx e e-mail xxxx.</div> <br>`;
         }
@@ -368,7 +366,7 @@ if (requerentes.length === 1) {
 if (requeridos.length === 1) {
     const req = requeridos[0];
     if (req.includes('CNPJ:')) {
-        output3Content += `<div class="parte"><b>A parte REQUERIDA: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div> <br>`;
+        output3Content += `<div class="parte"><b>A parte REQUERIDA: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div>`;
     } else {
         output3Content += `<div class="parte"><b>A parte REQUERIDA: ${req}</b>, residente e domiciliado(a) xxxx, telefone xxxx e e-mail xxxx.</div> <br>`;
     }
@@ -376,7 +374,7 @@ if (requeridos.length === 1) {
     requeridos.forEach((req, index) => {
         const ordinal = `${index + 1}ª`;
         if (req.includes('CNPJ:')) {
-            output3Content += `<div class="parte"><b>A parte ${ordinal} REQUERIDA: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div> <br>`;
+            output3Content += `<div class="parte"><b>A parte ${ordinal} REQUERIDA: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div>`;
         } else {
             output3Content += `<div class="parte"><b>A parte ${ordinal} REQUERIDA: ${req}</b>, residente e domiciliado(a) xxxx, telefone xxxx e e-mail xxxx.</div> <br>`;
         }
@@ -385,10 +383,10 @@ if (requeridos.length === 1) {
 
 document.getElementById('output3').innerHTML = output3Content;
 
-
 }
 
 //Gerar word
+
 
 function gerarWord() {
     // Captura os conteúdos dos outputs
@@ -397,7 +395,7 @@ function gerarWord() {
     const output3 = document.getElementById('output3').innerHTML;
 
     // Link da imagem hospedada
-    const imagemURL = 'https://i.imgur.com/HD5W5cV.jpeg';  // Substitua pelo link correto
+    const imagemURL = 'https://i.imgur.com/HD5W5cV.jpeg'; // Substitua pelo link correto
 
     // Cria o conteúdo com a imagem via URL
     const content = `
@@ -421,15 +419,25 @@ function gerarWord() {
             text-align: justify;
             margin: 0;
         }
-        .caixa {
-            border: 1px solid black;
-            padding: 5px;
+        table {
+            width: 100%;
+            border-collapse: collapse;
             margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        td {
+            padding: 10px;
         }
         .titulo {
             text-align: center;
             font-weight: bold;
             text-decoration: underline;
+        }
+        .titulo_complementacao {
+            text-align: center;
+            font-weight: bold;
         }
         .header, .footer {
             text-align: center;
@@ -438,10 +446,6 @@ function gerarWord() {
             color: gray;
         }
         .Topo_titulo {
-            text-align: center;
-            font-weight: bold;
-        }
-        .titulo_complementacao {
             text-align: center;
             font-weight: bold;
         }
@@ -459,25 +463,38 @@ function gerarWord() {
             <p class="Topo_titulo">TERMO DE SESSÃO DE CONCILIAÇÃO – JUIZADO ESPECIAL CÍVEL</p>
             <p class="Topo_titulo">(____________)</p>
         </div>
-        <div class="caixa">
-            <p class="titulo">DADOS EXTRAÍDOS DO PJE</p>
-            ${output1}
-        </div>
-        <div class="caixa">
-            <p class="titulo">PARTICIPANTES DA AUDIÊNCIA</p>
-            ${output2}
-        </div>
-        <div class="caixa">
-            <p class="titulo">DADOS DAS PARTES</p>
-            <p class="titulo_complementacao">(Portaria Conjunta GPR, GPVP, GSVP e GC n.º 71/2013; e CPC, art. 319, II)</p>
-            ${output3}
-        </div>
+        <table>
+            <tr>
+                <td>
+                    <p class="titulo">DADOS EXTRAÍDOS DO PJE</p>
+                    ${output1}
+                </td>
+            </tr>
+        </table>
+
+        <br /> <!-- Linha em branco entre tabelas -->
+
+        <table>
+            <tr>
+                <td>
+                    <p class="titulo">PARTICIPANTES DA AUDIÊNCIA</p>
+                    ${output2}
+                </td>
+            </tr>
+        </table>
+
+        <br /> <!-- Linha em branco entre tabelas -->
+
+        <table>
+            <tr>
+                <td>
+                    <p class="titulo">DADOS DAS PARTES</p>
+                    <p class="titulo_complementacao">(Portaria Conjunta GPR, GPVP, GSVP e GC n.º 71/2013; e CPC, art. 319, II)</p>
+                    ${output3}
+                </td>
+            </tr>
+        </table>
         
-        <!-- Rodapé -->
-        <div class="footer">
-            <p>____________________________________________________________________________</p>
-            <p>5º Núcleo Virtual de Mediação e Conciliação - 5NUVIMEC. Telefone: (61) 3103-1792.</p>
-        </div>
     </div>
 </body>
 </html>
