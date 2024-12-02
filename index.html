@@ -1,15 +1,13 @@
-
 <!--* A ideia do programa foi criada pelo Gabriel F. A., sendo que o Filipe S.L. aproveitou ela e criou neste formato HTML.*\-->
- 
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Extrator de cabeçalhos do PJe - TJDFT</title>
-    
-    
+    <title>Extrator de cabeçalhos do PJe - TJDFT</title>
     <style>
+        /* Seu CSS existente */
         #alert-box {
             display: none;
             background-color: #36f4c8;
@@ -21,130 +19,91 @@
             z-index: 1000;
             border-radius: 5px;
         } 
-     
-     textarea {
+        textarea {
             width: 100%;
             height: 100px;
             margin-bottom: 10px;
             font-family: Arial;
             font-size: 18px;
             color: black;
-            
         }
-         .button-container{
-    background-color: #FFC107;
-         }
-        .botao{
-    background-color: #FFC107;
-    border: none;
-    color: #fff;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: transform 0.5s ease;
-}
-.botao:hover{
-    background-color: #4CAF50;
-}
+        .button-container {
+            background-color: #FFC107;
+        }
+        .botao {
+            background-color: #FFC107;
+            border: none;
+            color: #fff;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: transform 0.5s ease;
+        }
+        .botao:hover {
+            background-color: #4CAF50;
+        }
+        /* Remover a propriedade display: none para exibir todas as caixas de texto */
         #caixa2, #caixa3, #caixa4, #caixa5, #caixa6, #caixa7 {
             display: none;
         }
-        
         #extrairTextoCopiado {
             background-color: #2E8B57;
-    border: none;
-    color: #fff;
-    padding: 10px 24px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: transform 0.5s ease;
+            border: none;
+            color: #fff;
+            padding: 10px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: transform 0.5s ease;
         }
-        #extrairTextoCopiado:hover{
-        background-color: #3CB371;
+        #extrairTextoCopiado:hover {
+            background-color: #3CB371;
         }
-        
-        
         #limparCaixas {
             background-color: #F08080;
-    border: none;
-    color: #fff;
-    padding: 10px 24px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: transform 0.5s ease;
-            
-            //background-color: rgba(128, 0, 0, 0.281);
-            //color: black;
-            //font-weight: bold;
+            border: none;
+            color: #fff;
+            padding: 10px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: transform 0.5s ease;
         }
-        #limparCaixas:hover{
-        background-color: #FFB6C1;
+        #limparCaixas:hover {
+            background-color: #FFB6C1;
         }
-
-        
-        #copiarCaixa8 {
-             background-color: #4682B4;
-    border: none;
-    color: #fff;
-    padding: 10px 24px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: transform 0.5s ease;
-            //background-color: rgba(0, 0, 255, 0.247);
-            //color: black;
-            //font-weight: bold;
-        }
-        #copiarCaixa8:hover{
-        background-color: #00BFFF;
-        }
-
-        
-        #copiarCaixa9 {
+        #copiarCaixa8, #copiarCaixa9, #copiarCaixa10 {
             background-color: #4682B4;
-    border: none;
-    color: #fff;
-    padding: 10px 24px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: transform 0.5s ease;
-            //background-color: rgba(255, 255, 0, 0.233);
-            //color: black;
-            //font-weight: bold;
+            border: none;
+            color: #fff;
+            padding: 10px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: transform 0.5s ease;
         }
-        #copiarCaixa9:hover{
-        background-color: #00BFFF;
+        #copiarCaixa8:hover, #copiarCaixa9:hover, #copiarCaixa10:hover {
+            background-color: #00BFFF;
         }
-
-
-        
         #caixa1 {
-           /* //background-color: rgba(50, 51, 50, 0.233);  Verde com 80% de transparência */
-           background-color: #F5F5F5;
+            background-color: #F5F5F5;
             border-radius: 10px;
             width: 70%;
             font-size: 16px;
@@ -153,31 +112,68 @@
             text-align: left;
             font-family: Georgia;
         }
-        #output1, #output2 {
+        #output1, #output2, #output3 {
             margin-top: 20px;
             font-family: Arial;
             font-size: 13px;
             color: black;
-            white-space: pre-wrap; /* Preserve whitespace formatting */
         }
-        P2 {
-            /* background-color: rgba(0, 0, 255, 0.247); /* Cor de fundo para o primeiro cabeçalho #FFE4B5 B0C4DE*/ 
+        P2, P3, P4 {
             background-color: #DCDCDC;
             display: inline-block;
             padding: 5px;
             font-family: Georgia;
         }
-        P3 {
-            /* background-color: rgba(255, 255, 0, 0.233); /* Cor de fundo para o segundo cabeçalho #7FFFD4 */  
-            background-color: #DCDCDC;
+
+
+/* Caixa de texto botão baixar*/
+.botao {
+            background-color: #1f5e3a;
+            border: none;
+            color: #fff;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
             display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: transform 0.5s ease;
+        }
+        .botao:hover {
+            background-color: #2E8B57;
+        }
+        .caixa-texto {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 12pt;
+            color: black;
+            text-align: justify;
             padding: 5px;
-            font-family: Georgia;            
+            border: 1px solid black; /* Borda visível */
+            margin-bottom: 20px;
+        }
+        .centralizado{
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+
+        .parte {
+            margin-top: 0pt;  /* Garantir que não há espaço acima */
+            margin-bottom: 0pt;  /* Garantir que não há espaço abaixo */
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            line-height: 1.5;  /* Espaçamento entre linhas */
+            display: block;  /* Faz o <div> se comportar como um bloco */
+        }
+
+        /* Controlar o espaçamento entre as divs */
+        .parte + .parte {
+            margin-top: 10px;  /* Ajuste esse valor conforme necessário */
         }
         
     </style>
-
-
 </head>
 <body style="margin:60px;padding:0">
     <p style="text-align: center; font-family: Georgia;" id="Autor">Filipe de Sousa Lima | Gabriel Freitas Angst <br> 3º NUVIMEC/TJDFT | <b>02/12/2024 12:38 <a title="Experimente a versão Beta (em testes)" href="https://gabrielangst.github.io/tjdft/beta.html" target="_blank">🆕</a><a title="Veja um tutorial em vídeo de como utilizar esta ferramenta" href="https://tjdf.sharepoint.com/sites/5NUVIMEC/_layouts/15/stream.aspx?id=%2Fsites%2F5NUVIMEC%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20%2D%20Extrator%20PJe%2Emp4&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E8feed9ae%2D0b9e%2D4e31%2D943c%2D9b089e43d927" target="_blank">🎦</a></b></p>
@@ -194,144 +190,319 @@
         <button class="botao" id="extrairTextoCopiado" onclick="extrairClipboard()">Extrair texto copiado</button>  
         <button class="botao" id="limparCaixas" onclick="limparCaixas()">Limpar todas Caixas</button>
     </div>
-
     <br><div id="alert-box">Dados copiados <b>com sucesso</b>!</div><br>
-   
     <div style="width: 70%; border-width: 1px 1px 1px 1px; border-style: solid;">
-<P2><br><b>DADOS EXTRAÍDOS DO PJE</b> <button class="botao" id="copiarCaixa8" onclick="copiarCaixa8()">Copiar Dados</button> </P2>
-    <p id="output1"></p></th>
+        <P2><br><b>DADOS EXTRAÍDOS DO PJE</b> <button class="botao" id="copiarCaixa8" onclick="copiarCaixa8()">Copiar Dados</button> </P2>
+        <p id="output1"></p>
     </div>
-    
     <br><br>
-     <div style="width: 70%; border-width: 1px 1px 1px 1px; border-style: solid;">
- <P3><b>PARTICIPANTES DA AUDIÊNCIA</b> <button class="botao" id="copiarCaixa9" onclick="copiarCaixa9()">Copiar Participantes</button></P3>
-    <br>
-    <p id="output2"></p></th>
-     </div>
+    <div style="width: 70%; border-width: 1px 1px 1px 1px; border-style: solid;">
+        <P3><b>PARTICIPANTES DA AUDIÊNCIA</b> <button class="botao" id="copiarCaixa9" onclick="copiarCaixa9()">Copiar Participantes</button></P3>
+        <br>
+        <p id="output2"></p>
+    </div>
+    <br><br>
+    <div style="width: 70%; border-width: 1px 1px 1px 1px; border-style: solid;">
+        <P4><b>DADOS DAS PARTES</b> <button class="botao" id="copiarCaixa10" onclick="copiarCaixa10()">Copiar Dados das Partes</button></P4>
+        <br>
+        <p id="output3"></p>
+    </div>
 
-    <script>
-     function showAlert3s() {
-            const alertBox = document.getElementById('alert-box');
-            alertBox.style.display = 'block';
-            setTimeout(() => {
-                alertBox.style.display = 'none';
-            }, 3000);
-        }   
-     
-     function extrairClipboard() {
-            navigator.clipboard.readText().then(text => {
-                document.getElementById('caixa1').value = text;
-                processarCaixas();
-            });
-        }
-    
-        function limparCaixas() {
-            for (let i = 1; i <= 7; i++) {
-                document.getElementById('caixa' + i).value = '';
-            }
-            document.getElementById('output1').innerHTML = '';
-            document.getElementById('output2').innerHTML = '';
-        }
-    
-        function copiarCaixa8() {
-            copiarTexto('output1');
-        }
-    
-        function copiarCaixa9() {
-            copiarTexto('output2');
-        }
-    
-        function copiarTexto(id) {
-            const element = document.getElementById(id);
-            const range = document.createRange();
-            range.selectNodeContents(element);
-            const selection = window.getSelection();
-            selection.removeAllRanges();
-            selection.addRange(range);
-            document.execCommand('copy');
-            showAlert3s('Texto copiado para a área de transferência!');
-        }
-    
-        function processarCaixas() {
-            const caixa1 = document.getElementById('caixa1').value.split('\n');
-            if (caixa1.length > 1) {
-                document.getElementById('caixa2').value = caixa1[1].replace(/[^\d\W]/g, '');
-            }
-    
-            const orgaoJulgadorIndex = caixa1.findIndex(line => line.includes('Órgão julgador'));
-            if (orgaoJulgadorIndex !== -1 && orgaoJulgadorIndex + 1 < caixa1.length) {
-                document.getElementById('caixa3').value = caixa1[orgaoJulgadorIndex + 1];
-            }
-    
-            const poloAtivoIndex = caixa1.findIndex(line => line.includes('Polo ativo'));
-            const poloPassivoIndex = caixa1.findIndex(line => line.includes('Polo passivo'));
-            if (poloAtivoIndex !== -1 && poloPassivoIndex !== -1 && poloAtivoIndex < poloPassivoIndex) {
-                const requerentes = caixa1.slice(poloAtivoIndex + 1, poloPassivoIndex)
-                    .filter(line => !line.startsWith(' '));
-                document.getElementById('caixa4').value = requerentes.join('\n');
-            }
-    
-            const poloPassivoIndex2 = caixa1.findIndex(line => line.includes('Polo passivo'));
-const iconeDownloadIndex = caixa1.findIndex(line => line.includes('Ícone de download'));
+<!-- BOTÃO GERAR WORD-->
+    <button class="botao" id="gerarWord" onclick="gerarWord()">Baixar Doc Word</button> <!-- Apagar Disabled para ativar-->
 
-if (poloPassivoIndex2 !== -1 && iconeDownloadIndex !== -1 && iconeDownloadIndex > poloPassivoIndex2) {
-    const requeridos = caixa1.slice(poloPassivoIndex2 + 1, iconeDownloadIndex)
-        .filter(line => /(REQUERIDO|RÉU|REU|EXECUTADO)\)$/.test(line.trim()));
-    document.getElementById('caixa6').value = requeridos.join('\n');
+
+<!-- Início do Script-->
+
+<script>
+    function showAlert3s() {
+        const alertBox = document.getElementById('alert-box');
+        alertBox.style.display = 'block';
+        setTimeout(() => {
+            alertBox.style.display = 'none';
+        }, 3000);
+    }
+
+    function extrairClipboard() {
+        navigator.clipboard.readText().then(text => {
+            document.getElementById('caixa1').value = text;
+            processarCaixas();
+        });
+    }
+
+    function limparCaixas() {
+        for (let i = 1; i <= 7; i++) {
+            document.getElementById('caixa' + i).value = '';
+        }
+        document.getElementById('output1').innerHTML = '';
+        document.getElementById('output2').innerHTML = '';
+        document.getElementById('output3').innerHTML = '';
+    }
+
+    function copiarCaixa8() {
+        copiarTexto('output1');
+    }
+
+    function copiarCaixa9() {
+        copiarTexto('output2');
+    }
+
+    function copiarCaixa10() {
+        copiarTexto('output3');
+    }
+
+    function copiarTexto(id) {
+    const element = document.getElementById(id);
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    document.execCommand('copy');
+    showAlert3s('Texto copiado para a área de transferência!');
 }
 
-document.getElementById('caixa5').value = formatarRequerentes(document.getElementById('caixa4').value.split('\n'));
-document.getElementById('caixa7').value = formatarRequeridos(document.getElementById('caixa6').value.split('\n'));
-    
-            // Atualiza os outputs diretamente aqui
-            atualizarOutputs();
+    function processarCaixas() {
+        const caixa1 = document.getElementById('caixa1').value.split('\n');
+        if (caixa1.length > 1) {
+            document.getElementById('caixa2').value = caixa1[1].replace(/[^\d\W]/g, '');
         }
-    
-        function formatarRequerentes(requerentes) {
-            if (requerentes.length === 1) {
-                return `<b>Requerente:</b> ${requerentes[0].replace(/ \((REQUERENTE|AUTOR|EXEQUENTE|AUTORA)\)/g, '')}`;
-            }
-            return requerentes.map((req, index) => `<b>${index + 1}º Requerente:</b> ${req.replace(/ \((REQUERENTE|AUTOR|EXEQUENTE|AUTORA)\)/g, '')}`).join('\n');
+
+        const orgaoJulgadorIndex = caixa1.findIndex(line => line.includes('Órgão julgador'));
+        if (orgaoJulgadorIndex !== -1 && orgaoJulgadorIndex + 1 < caixa1.length) {
+            document.getElementById('caixa3').value = caixa1[orgaoJulgadorIndex + 1];
         }
-    
-        function formatarRequeridos(requeridos) {
-            if (requeridos.length === 1) {
-                return `<b>Requerido(a):</b> ${requeridos[0].replace(/ \((REQUERIDO|RÉU|REU|EXECUTADO)\)/g, '')}`;
-            }
-            return requeridos.map((req, index) => `<b>${index + 1}º Requerido(a):</b> ${req.replace(/ \((REQUERIDO|RÉU|REU|EXECUTADO)\)/g, '')}`).join('\n');
+
+        const poloAtivoIndex = caixa1.findIndex(line => line.includes('Polo ativo'));
+        const poloPassivoIndex = caixa1.findIndex(line => line.includes('Polo passivo'));
+        if (poloAtivoIndex !== -1 && poloPassivoIndex !== -1 && poloAtivoIndex < poloPassivoIndex) {
+            const requerentes = caixa1.slice(poloAtivoIndex + 1, poloPassivoIndex)
+                .filter(line => !line.startsWith(' '));
+            document.getElementById('caixa4').value = requerentes.join('\n');
         }
-    
-        function atualizarOutputs() {
-            const caixa8 = `<b>Juízo:</b> ${document.getElementById('caixa3').value}\n` +
-                `<b>Processo:</b> ${document.getElementById('caixa2').value}\n` +
-                `${document.getElementById('caixa5').value}\n` +
-                `${document.getElementById('caixa7').value}`;
-    
-            const caixa9 = caixa8.split('\n').slice(2).map(line => `
-    ${line.trim()}
-    <b>Telefone:</b> Número
-    <b>Preposto(a):</b> nome completo, <b>CPF:</b> número, <b>telefone:</b> número (<b>Carta de preposto ID n. xxxx</b>).
-    <b>Advogado(a):</b> nome completo, <b>OAB/DF:</b> número, <b>telefone:</b> número (<b>Procuração ID xxxx</b>).
-    <br>
-    `).join('\n').replace(/^\s+/gm, '');
-    
-            const textoAdicional = `
-    <b>Observador(es):</b> Nome completo, CPF, (...), que assume(m) o dever de confidencialidade (CPC, art. 166, § 1º).
-    <b>Conciliador(es)/Mediador(es):</b> Nome completo <b>Sala:</b> número da sala
-    <b>Supervisor(es):</b> nome se houver e <b>Matrícula:</b> número
-    `;
-    
-            const formatBold = text => text.replace(/(CPF:|CNPJ:)/g, '<b>$1</b>');
-    
-            function formatParagraphs(text, isOutput1 = false) {
-                return text.split('\n').map((line, index) => isOutput1 && index === 0 ? `<p><b>${line}</b></p>` : `<p>${line.trim()}</p>`).join('');
-            }
-    
-            document.getElementById('output1').innerHTML = formatParagraphs(formatBold(caixa8), true);
-            document.getElementById('output2').innerHTML = formatParagraphs(formatBold(caixa9 + textoAdicional));
+
+        const poloPassivoIndex2 = caixa1.findIndex(line => line.includes('Polo passivo'));
+        const iconeDownloadIndex = caixa1.findIndex(line => line.includes('Ícone de download'));
+
+        if (poloPassivoIndex2 !== -1 && iconeDownloadIndex !== -1 && iconeDownloadIndex > poloPassivoIndex2) {
+            const requeridos = caixa1.slice(poloPassivoIndex2 + 1, iconeDownloadIndex)
+                .filter(line => /(REQUERIDO|RÉU|REU|EXECUTADO)\)$/.test(line.trim()));
+            document.getElementById('caixa6').value = requeridos.join('\n');
         }
+
+        document.getElementById('caixa5').value = formatarRequerentes(document.getElementById('caixa4').value.split('\n'));
+        document.getElementById('caixa7').value = formatarRequeridos(document.getElementById('caixa6').value.split('\n'));
+
+        // Atualiza os outputs diretamente aqui
+        atualizarOutputs();
+    }
+
+    function formatarRequerentes(requerentes) {
+        if (requerentes.length === 1) {
+            return `<b>Requerente:</b> ${requerentes[0].replace(/ \((REQUERENTE|AUTOR|EXEQUENTE|AUTORA)\)/g, '')}`;
+        }
+        return requerentes.map((req, index) => `<b>${index + 1}º Requerente:</b> ${req.replace(/ \((REQUERENTE|AUTOR|EXEQUENTE|AUTORA)\)/g, '')}`).join('\n');
+    }
+
+    function formatarRequeridos(requeridos) {
+        if (requeridos.length === 1) {
+            return `<b>Requerido(a):</b> ${requeridos[0].replace(/ \((REQUERIDO|RÉU|REU|EXECUTADO)\)/g, '')}`;
+        }
+        return requeridos.map((req, index) => `<b>${index + 1}º Requerido(a):</b> ${req.replace(/ \((REQUERIDO|RÉU|REU|EXECUTADO)\)/g, '')}`).join('\n');
+    }
+
+    function atualizarOutputs() {
+        const caixa8 = `<b>Juízo:</b> ${document.getElementById('caixa3').value}\n` +
+            `<b>Processo:</b> ${document.getElementById('caixa2').value}\n` +
+            `${document.getElementById('caixa5').value}\n` +
+            `${document.getElementById('caixa7').value}`;
+
+        const caixa9 = caixa8.split('\n').slice(2).map(line => `
+${line.trim()}
+<b>Telefone:</b> Número
+<b>Preposto(a):</b> nome completo, <b>CPF:</b> número, <b>telefone:</b> número (<b>Carta de preposto ID n. xxxx</b>).
+<b>Advogado(a):</b> nome completo, <b>OAB/DF:</b> número, <b>telefone:</b> número (<b>Procuração ID xxxx</b>).
+<br>
+`).join('\n').replace(/^\s+/gm, '');
+
+        const textoAdicional = `
+<b>Observador(es):</b> Nome completo, CPF, (...), que assume(m) o dever de confidencialidade (CPC, art. 166, § 1º).
+<b>Conciliador(es)/Mediador(es):</b> Nome completo <b>Sala:</b> número da sala
+<b>Supervisor(es):</b> Nome se houver e <b>Matrícula:</b> número
+`;
+
+        const formatBold = text => text.replace(/(CPF:|CNPJ:)/g, '<b>$1</b>');
+
+        function formatParagraphs(text, isOutput1 = false) {
+            return text.split('\n').map((line, index) => isOutput1 && index === 0 ? `<p><b>${line}</b></p>` : `<p>${line.trim()}</p>`).join('');
+        }
+
+        document.getElementById('output1').innerHTML = formatParagraphs(formatBold(caixa8), true);
+        document.getElementById('output2').innerHTML = formatParagraphs(formatBold(caixa9 + textoAdicional));
+
+// Atualiza o output3 com os dados das partes
+const requerentes = document.getElementById('caixa4').value.split('\n')
+    .map(req => req.replace(/ \((REQUERENTE|AUTOR|EXEQUENTE|AUTORA)\)/g, '').trim());
+const requeridos = document.getElementById('caixa6').value.split('\n')
+    .map(req => req.replace(/ \((REQUERIDO|RÉU|REU|EXECUTADO)\)/g, '').trim());
+
+let output3Content = '';
+if (requerentes.length === 1) {
+    const req = requerentes[0];
+    if (req.includes('CNPJ:')) {
+        output3Content += `<div class="parte"><b>A parte REQUERENTE: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div> <br>`;
+    } else {
+        output3Content += `<div class="parte"><b>A parte REQUERENTE: ${req}</b>, residente e domiciliado(a) xxxx, telefone xxxx e e-mail xxxx.</div> <br>`;
+    }
+} else {
+    requerentes.forEach((req, index) => {
+        const ordinal = `${index + 1}ª`;
+        if (req.includes('CNPJ:')) {
+            output3Content += `<div class="parte"><b>A parte ${ordinal} REQUERENTE: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div><br>`;
+        } else {
+            output3Content += `<div class="parte"><b>A parte ${ordinal} REQUERENTE: ${req}</b>, residente e domiciliado(a) xxxx, telefone xxxx e e-mail xxxx.</div> <br>`;
+        }
+    });
+}
+
+if (requeridos.length === 1) {
+    const req = requeridos[0];
+    if (req.includes('CNPJ:')) {
+        output3Content += `<div class="parte"><b>A parte REQUERIDA: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div> <br>`;
+    } else {
+        output3Content += `<div class="parte"><b>A parte REQUERIDA: ${req}</b>, residente e domiciliado(a) xxxx, telefone xxxx e e-mail xxxx.</div> <br>`;
+    }
+} else {
+    requeridos.forEach((req, index) => {
+        const ordinal = `${index + 1}ª`;
+        if (req.includes('CNPJ:')) {
+            output3Content += `<div class="parte"><b>A parte ${ordinal} REQUERIDA: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div> <br>`;
+        } else {
+            output3Content += `<div class="parte"><b>A parte ${ordinal} REQUERIDA: ${req}</b>, residente e domiciliado(a) xxxx, telefone xxxx e e-mail xxxx.</div> <br>`;
+        }
+    });
+}
+
+document.getElementById('output3').innerHTML = output3Content;
+
+
+}
+
+//Gerar word
+
+function gerarWord() {
+    // Captura os conteúdos dos outputs
+    const output1 = document.getElementById('output1').innerHTML;
+    const output2 = document.getElementById('output2').innerHTML;
+    const output3 = document.getElementById('output3').innerHTML;
+
+    // Link da imagem hospedada
+    const imagemURL = 'https://i.imgur.com/HD5W5cV.jpeg';  // Substitua pelo link correto
+
+    // Cria o conteúdo com a imagem via URL
+    const content = `
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page WordSection1 {
+            size: 595.3pt 841.9pt; /* Tamanho A4 */
+            margin: 2cm; /* Margens: 2 cm em todos os lados */
+        }
+        div.WordSection1 {
+            page: WordSection1;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12pt;
+            color: black;
+            text-align: justify;
+            margin: 0;
+        }
+        .caixa {
+            border: 1px solid black;
+            padding: 5px;
+            margin-bottom: 20px;
+        }
+        .titulo {
+            text-align: center;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        .header, .footer {
+            text-align: center;
+            font-size: 10pt;
+            font-family: Arial, sans-serif;
+            color: gray;
+        }
+        .Topo_titulo {
+            text-align: center;
+            font-weight: bold;
+        }
+        .titulo_complementacao {
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="WordSection1">
+        <!-- Cabeçalho com imagem via URL -->
+        <div class="header">
+            <img src="${imagemURL}" alt="Cabeçalho">
+        </div>
+
+        <!-- Conteúdo -->
+        <div>
+            <p class="Topo_titulo">TERMO DE SESSÃO DE CONCILIAÇÃO – JUIZADO ESPECIAL CÍVEL</p>
+            <p class="Topo_titulo">(____________)</p>
+        </div>
+        <div class="caixa">
+            <p class="titulo">DADOS EXTRAÍDOS DO PJE</p>
+            ${output1}
+        </div>
+        <div class="caixa">
+            <p class="titulo">PARTICIPANTES DA AUDIÊNCIA</p>
+            ${output2}
+        </div>
+        <div class="caixa">
+            <p class="titulo">DADOS DAS PARTES</p>
+            <p class="titulo_complementacao">(Portaria Conjunta GPR, GPVP, GSVP e GC n.º 71/2013; e CPC, art. 319, II)</p>
+            ${output3}
+        </div>
+        
+        <!-- Rodapé -->
+        <div class="footer">
+            <p>____________________________________________________________________________</p>
+            <p>5º Núcleo Virtual de Mediação e Conciliação - 5NUVIMEC. Telefone: (61) 3103-1792.</p>
+        </div>
+    </div>
+</body>
+</html>
+`;
+
+    // Cria um blob com o conteúdo
+    const blob = new Blob(['\ufeff', content], { type: 'application/msword' });
+
+    // Cria um link para download
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'Número do processo - RESULTADO.doc';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+
+
     </script>
-    
+
+
+</script>
+
 
 </body>
 </html>
