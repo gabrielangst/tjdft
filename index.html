@@ -176,7 +176,7 @@
     </style>
 </head>
 <body style="margin:60px;padding:0">
-    <p style="text-align: center; font-family: Georgia;" id="Autor">Filipe de Sousa Lima | Gabriel Freitas Angst <br> 3º NUVIMEC/TJDFT | <b>02/12/2024 13:58 <a title="Experimente a versão Beta (em testes)" href="https://gabrielangst.github.io/tjdft/beta.html" target="_blank">🆕</a><a title="Veja um tutorial em vídeo de como utilizar esta ferramenta" href="https://tjdf.sharepoint.com/sites/5NUVIMEC/_layouts/15/stream.aspx?id=%2Fsites%2F5NUVIMEC%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20%2D%20Extrator%20PJe%2Emp4&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E8feed9ae%2D0b9e%2D4e31%2D943c%2D9b089e43d927" target="_blank">🎦</a></b></p>
+    <p style="text-align: center; font-family: Georgia;" id="Autor">Filipe de Sousa Lima | Gabriel Freitas Angst <br> 3º NUVIMEC/TJDFT | <b>02/12/2024 14:03 <a title="Experimente a versão Beta (em testes)" href="https://gabrielangst.github.io/tjdft/beta.html" target="_blank">🆕</a><a title="Veja um tutorial em vídeo de como utilizar esta ferramenta" href="https://tjdf.sharepoint.com/sites/5NUVIMEC/_layouts/15/stream.aspx?id=%2Fsites%2F5NUVIMEC%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20%2D%20Extrator%20PJe%2Emp4&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E8feed9ae%2D0b9e%2D4e31%2D943c%2D9b089e43d927" target="_blank">🎦</a></b></p>
     <h1>📄 Extrator de cabeçalhos do PJe </h1>
     <textarea id="caixa1" placeholder="Após abrir o cabeçalho do processo no PJe e copiar todos os dados apertando Ctrl+A e Ctrl+C, clique no botão abaixo ''Extrair texto copiado''"></textarea>
     <textarea id="caixa2" placeholder="Caixa de Texto 2"></textarea>
@@ -341,14 +341,16 @@ ${line.trim()}
         document.getElementById('output2').innerHTML = formatParagraphs(formatBold(caixa9 + textoAdicional));
 
 // Atualiza o output3 com os dados das partes
-const requerentes = document.getElementById('caixa4').value.split('\n').map(req => req.replace(/ \((REQUERENTE|AUTOR|EXEQUENTE|AUTORA)\)/g, ''));
-const requeridos = document.getElementById('caixa6').value.split('\n').map(req => req.replace(/ \((REQUERIDO|RÉU|REU|EXECUTADO)\)/g, ''));
+const requerentes = document.getElementById('caixa4').value.split('\n')
+    .map(req => req.replace(/ \((REQUERENTE|AUTOR|EXEQUENTE|AUTORA)\)/g, '').trim());
+const requeridos = document.getElementById('caixa6').value.split('\n')
+    .map(req => req.replace(/ \((REQUERIDO|RÉU|REU|EXECUTADO)\)/g, '').trim());
 
 let output3Content = '';
 if (requerentes.length === 1) {
     const req = requerentes[0];
     if (req.includes('CNPJ:')) {
-        output3Content += `<div class="parte"><b>A parte REQUERENTE: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div>`;
+        output3Content += `<div class="parte"><b>A parte REQUERENTE: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div> <br>`;
     } else {
         output3Content += `<div class="parte"><b>A parte REQUERENTE: ${req}</b>, residente e domiciliado(a) xxxx, telefone xxxx e e-mail xxxx.</div> <br>`;
     }
@@ -356,7 +358,7 @@ if (requerentes.length === 1) {
     requerentes.forEach((req, index) => {
         const ordinal = `${index + 1}ª`;
         if (req.includes('CNPJ:')) {
-            output3Content += `<div class="parte"><b>A parte ${ordinal} REQUERENTE: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div>`;
+            output3Content += `<div class="parte"><b>A parte ${ordinal} REQUERENTE: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div><br>`;
         } else {
             output3Content += `<div class="parte"><b>A parte ${ordinal} REQUERENTE: ${req}</b>, residente e domiciliado(a) xxxx, telefone xxxx e e-mail xxxx.</div> <br>`;
         }
@@ -366,7 +368,7 @@ if (requerentes.length === 1) {
 if (requeridos.length === 1) {
     const req = requeridos[0];
     if (req.includes('CNPJ:')) {
-        output3Content += `<div class="parte"><b>A parte REQUERIDA: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div>`;
+        output3Content += `<div class="parte"><b>A parte REQUERIDA: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div> <br>`;
     } else {
         output3Content += `<div class="parte"><b>A parte REQUERIDA: ${req}</b>, residente e domiciliado(a) xxxx, telefone xxxx e e-mail xxxx.</div> <br>`;
     }
@@ -374,7 +376,7 @@ if (requeridos.length === 1) {
     requeridos.forEach((req, index) => {
         const ordinal = `${index + 1}ª`;
         if (req.includes('CNPJ:')) {
-            output3Content += `<div class="parte"><b>A parte ${ordinal} REQUERIDA: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div>`;
+            output3Content += `<div class="parte"><b>A parte ${ordinal} REQUERIDA: ${req}</b>, pessoa jurídica estabelecida no(a) xxxx, telefone xxx e e-mail xxxx.</div> <br>`;
         } else {
             output3Content += `<div class="parte"><b>A parte ${ordinal} REQUERIDA: ${req}</b>, residente e domiciliado(a) xxxx, telefone xxxx e e-mail xxxx.</div> <br>`;
         }
@@ -382,6 +384,7 @@ if (requeridos.length === 1) {
 }
 
 document.getElementById('output3').innerHTML = output3Content;
+
 
 }
 
