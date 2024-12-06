@@ -511,7 +511,7 @@ function gerarWord() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${numeroProcesso} - RESULTADO.doc`;
+    link.download = `${numeroProcesso} - Cabeçalho.doc`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
