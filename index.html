@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <title>Extrator de cabeçalhos do PJe - TJDFT</title>
     <style>
         /* Seu CSS existente */
@@ -85,6 +86,24 @@
         #limparCaixas:hover {
             background-color: #FFB6C1;
         }
+        #gerarWord {
+            background-color: #708090; /* SlateGray */
+            border: none;
+            color: #fff;
+            padding: 10px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: transform 0.5s ease;
+        }
+        #gerarWord:hover {
+            background-color: #5F9EA0; /* CadetBlue */
+        }
+
         #copiarCaixa8, #copiarCaixa9, #copiarCaixa10 {
             background-color: #4682B4;
             border: none;
@@ -124,26 +143,13 @@
             padding: 5px;
             font-family: Georgia;
         }
-
-
-/* Caixa de texto botão baixar*/
-.botao {
-            background-color: #1f5e3a;
-            border: none;
-            color: #fff;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: transform 0.5s ease;
+        .Dados_documento {
+            width: 70%;
+            border-width: 1px 1px 1px 1px;
+            border-style: solid;
         }
-        .botao:hover {
-            background-color: #2E8B57;
-        }
+
+/* Caixa de texto do botão baixar*/
         .caixa-texto {
             font-family: 'Times New Roman', Times, serif;
             font-size: 12pt;
@@ -172,11 +178,80 @@
         .parte + .parte {
             margin-top: 10px;  /* Ajuste esse valor conforme necessário */
         }
-        
+
+        /*Temas: Claro e escuro*/
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --input-bg-color: #ffffff;
+            --input-bg-color2: #DCDCDC;
+            --input-border-color: #cccccc;
+            --button-bg-color: #ffc107;
+            --button-hover-bg-color: #4caf50;
+        }
+
+        body.dark {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --input-bg-color: #333333; /*Alternativa: #1f1f1f*/
+            --input-bg-color2: #252525; /*Alternativa: #1f1f1f*/
+            --input-border-color: #555555; /*Alternativa: #333333*/
+            --button-bg-color: #3e3e3e;
+            --button-hover-bg-color: #555555;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        textarea, #output1, #output2, #output3, #caixa1, #caixa2, #caixa3, #caixa4, #caixa5, #caixa6, #caixa7, .Dados_documento{
+            background-color: var(--input-bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+        p2, p3, p4{
+            background-color: var(--input-bg-color2);
+        }
+
+        #theme-text {
+            color: var(--text-color);
+            margin-top: 10px; /* Ajuste o valor para mais ou menos espaçamento */
+            transition: color 0.3s;
+        }
+/*Se refere a cor quando passa em cima do botão*/
+        /*.botao:hover, #extrairTextoCopiado:hover, #limparCaixas:hover, #copiarCaixa8:hover, #copiarCaixa9:hover, #copiarCaixa10:hover {
+            background-color: var(--button-hover-bg-color);
+        }*/
+
+/*icon sun and mon*/
+        #theme-icon {
+            color: #000000; /* Cor da Lua. Alternativa #3498db */
+            transition: color 0.3s;
+        }
+
+        body.dark #theme-icon {
+            color: #f39c12; /* Cor do sol */
+        }
+    
     </style>
 </head>
 <body style="margin:60px;padding:0">
-    <p style="text-align: center; font-family: Georgia;" id="Autor">Filipe de Sousa Lima | Gabriel Freitas Angst <br> 3º NUVIMEC/TJDFT | <b>02/12/2024 14:03 <a title="Experimente a versão Beta (em testes)" href="https://gabrielangst.github.io/tjdft/beta.html" target="_blank">🆕</a><a title="Veja um tutorial em vídeo de como utilizar esta ferramenta" href="https://tjdf.sharepoint.com/sites/5NUVIMEC/_layouts/15/stream.aspx?id=%2Fsites%2F5NUVIMEC%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20%2D%20Extrator%20PJe%2Emp4&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E8feed9ae%2D0b9e%2D4e31%2D943c%2D9b089e43d927" target="_blank">🎦</a></b></p>
+    <!--Interruptor temas Claro e escuro-->
+    <div style="position: fixed; top: 10px; right: 10px; z-index: 1000; text-align: center;">
+        <label>
+            <input type="checkbox" id="theme-toggle" style="display: none;">
+            <span id="theme-label" style="cursor: pointer; padding: 10px; background-color: #ccc; border-radius: 20px;">
+                <i id="theme-icon" class="fas fa-moon"></i>
+            </span>
+        </label>
+        <div id="theme-text" style="margin-top: 10px; font-family: Arial, sans-serif; font-size: 14px; color: var(--text-color);">
+            Tema Claro
+        </div>
+    </div>
+    
+    <p style="text-align: center; font-family: Georgia;" id="Autor">Filipe de Sousa Lima | Gabriel Freitas Angst <br> 3º NUVIMEC/TJDFT | <b>09/12/2024 12:09 <a title="Veja um tutorial em vídeo de como utilizar esta ferramenta" href="https://tjdf.sharepoint.com/sites/5NUVIMEC/_layouts/15/stream.aspx?id=%2Fsites%2F5NUVIMEC%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20%2D%20Extrator%20PJe%2Emp4&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E8feed9ae%2D0b9e%2D4e31%2D943c%2D9b089e43d927" target="_blank">🎦</a></b></p>
     <h1>📄 Extrator de cabeçalhos do PJe </h1>
     <textarea id="caixa1" placeholder="Após abrir o cabeçalho do processo no PJe e copiar todos os dados apertando Ctrl+A e Ctrl+C, clique no botão abaixo ''Extrair texto copiado''"></textarea>
     <textarea id="caixa2" placeholder="Caixa de Texto 2"></textarea>
@@ -189,28 +264,25 @@
     <div>
         <button class="botao" id="extrairTextoCopiado" onclick="extrairClipboard()">Extrair texto copiado</button>  
         <button class="botao" id="limparCaixas" onclick="limparCaixas()">Limpar todas Caixas</button>
+        <button class="botao" id="gerarWord" onclick="gerarWord()">Baixar Doc Word</button>
     </div>
     <br><div id="alert-box">Dados copiados <b>com sucesso</b>!</div><br>
-    <div style="width: 70%; border-width: 1px 1px 1px 1px; border-style: solid;">
+    <div class="Dados_documento">   
         <P2><br><b>DADOS EXTRAÍDOS DO PJE</b> <button class="botao" id="copiarCaixa8" onclick="copiarCaixa8()">Copiar Dados</button> </P2>
         <p id="output1"></p>
     </div>
     <br><br>
-    <div style="width: 70%; border-width: 1px 1px 1px 1px; border-style: solid;">
+    <div class="Dados_documento">
         <P3><b>PARTICIPANTES DA AUDIÊNCIA</b> <button class="botao" id="copiarCaixa9" onclick="copiarCaixa9()">Copiar Participantes</button></P3>
         <br>
         <p id="output2"></p>
     </div>
     <br><br>
-    <div style="width: 70%; border-width: 1px 1px 1px 1px; border-style: solid;">
+    <div class="Dados_documento">
         <P4><b>DADOS DAS PARTES</b> <button class="botao" id="copiarCaixa10" onclick="copiarCaixa10()">Copiar Dados das Partes</button></P4>
         <br>
         <p id="output3"></p>
     </div>
-
-<!-- BOTÃO GERAR WORD-->
-    <button class="botao" id="gerarWord" onclick="gerarWord()">Baixar Doc Word</button>
-
 
 <!-- Início do Script-->
 
@@ -251,16 +323,67 @@
         copiarTexto('output3');
     }
 
+//Função copiar texto
     function copiarTexto(id) {
     const element = document.getElementById(id);
+
+    // Criar um elemento temporário para copiar com a formatação desejada
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = element.innerHTML;
+
+    // Aplica as regras de formatação para parágrafos
+    const style = `
+        p {
+            margin-top: 0;
+            margin-bottom: 0;
+            line-height: 27px; /* Espaçamento entre linhas 1.5 vezes o tamanho da fonte */
+            font-family: Arial, sans-serif; /* Garantir a fonte Arial */
+            font-size: 16px; /* Tamanho de fonte 16px */
+        }
+        .content {
+            font-family: Arial, sans-serif; /* Garantir a fonte Arial */
+            font-size: 16px; /* Tamanho de fonte 16px */
+            color: #000000;
+            background: transparent; /* Remover qualquer fundo */
+            white-space: pre-wrap;
+        }
+    `;
+    
+    // Adiciona a formatação ao elemento temporário
+    tempDiv.style.fontFamily = "Arial, sans-serif"; // Fonte Arial
+    tempDiv.style.fontSize = "16px"; // Tamanho 16px
+    tempDiv.style.color = "#000000"; // Cor preta
+    tempDiv.style.background = "transparent";  // Garantir fundo transparente
+    tempDiv.classList.add('content');
+    
+    tempDiv.querySelectorAll('p').forEach(p => {
+        p.style.marginTop = '0';
+        p.style.marginBottom = '0';
+        p.style.lineHeight = '27px'; // 27px (1.5 * 16px) de espaçamento entre linhas
+        p.style.background = "transparent";  // Garantir fundo transparente
+        p.style.fontFamily = "Arial, sans-serif"; // Fonte Arial
+        p.style.fontSize = "16px"; // Tamanho 16px
+    });
+
+    // Adiciona o elemento ao DOM temporariamente para copiar
+    document.body.appendChild(tempDiv);
+
+    // Cria a seleção do conteúdo a ser copiado
     const range = document.createRange();
-    range.selectNodeContents(element);
+    range.selectNodeContents(tempDiv);
     const selection = window.getSelection();
     selection.removeAllRanges();
     selection.addRange(range);
-    document.execCommand('copy');
+
+    // Realiza a cópia
+    document.execCommand("copy");
+
+    // Remove o elemento temporário
+    document.body.removeChild(tempDiv);
+
     showAlert3s('Texto copiado para a área de transferência!');
 }
+
 
     function processarCaixas() {
         const caixa1 = document.getElementById('caixa1').value.split('\n');
@@ -327,7 +450,7 @@ ${line.trim()}
 
         const textoAdicional = `
 <b>Observador(es):</b> Nome completo, CPF, (...), que assume(m) o dever de confidencialidade (CPC, art. 166, § 1º).
-<b>Conciliador(es)/Mediador(es):</b> Nome completo <b>Sala:</b> número da sala
+<b>Conciliador(es)/Mediador(es):</b> Nome completo <b> &emsp; <b>Sala:</b> número da sala
 <b>Supervisor(es):</b> Nome se houver e <b>Matrícula:</b> número
 `;
 
@@ -384,13 +507,9 @@ if (requeridos.length === 1) {
 }
 
 document.getElementById('output3').innerHTML = output3Content;
-
-
 }
 
 //Gerar word
-
-
 function gerarWord() {
     // Captura os conteúdos dos outputs
     const output1 = document.getElementById('output1').innerHTML;
@@ -421,6 +540,7 @@ function gerarWord() {
             color: black;
             text-align: justify;
             margin: 0;
+            line-height: 27px; /* Espaçamento entre linhas de 27px */
         }
         table {
             width: 100%;
@@ -433,14 +553,23 @@ function gerarWord() {
         td {
             padding: 10px;
         }
+        /* Parágrafos com espaçamento entre linhas e sem espaçamento adicional entre parágrafos */
+        p {
+            line-height: 27px; /* Espaçamento entre linhas de 27px */
+            margin-top: 0;
+            margin-bottom: 0; /* Remover o espaçamento entre os parágrafos */
+        }
         .titulo {
             text-align: center;
             font-weight: bold;
             text-decoration: underline;
+            line-height: 27px; /* Garantir espaçamento entre linhas */
+            margin-bottom: 10px; /* Espaço abaixo do título */
         }
         .titulo_complementacao {
             text-align: center;
             font-weight: bold;
+            line-height: 27px; /* Espaçamento entre linhas */
         }
         .header, .footer {
             text-align: center;
@@ -451,22 +580,26 @@ function gerarWord() {
         .Topo_titulo {
             text-align: center;
             font-weight: bold;
+            line-height: 27px; /* Espaçamento entre linhas */
+            margin-bottom: 10px; /* Espaço abaixo do topo */
         }
     </style>
 </head>
+
 <body>
+<!-- DESATIVEI COM COMENTÁRIO. ESSA PARTE TRAZIA A IMAGEM QUE SERIA O CABEÇALHO -->
     <div class="WordSection1">
         <!-- Cabeçalho com imagem via URL -->
-        <div class="header">
+        <!--<div class="header">
             <img src="${imagemURL}" alt="Cabeçalho">
-        </div>
-
+        </div>-->
+        
         <!-- Conteúdo -->
         <div>
             <p class="Topo_titulo">TERMO DE SESSÃO DE CONCILIAÇÃO – JUIZADO ESPECIAL CÍVEL</p>
             <p class="Topo_titulo">(____________)</p>
         </div>
-        <table>
+        <table style="margin-bottom: 0;">
             <tr>
                 <td>
                     <p class="titulo">DADOS EXTRAÍDOS DO PJE</p>
@@ -475,9 +608,9 @@ function gerarWord() {
             </tr>
         </table>
 
-        <br /> <!-- Linha em branco entre tabelas -->
+        <p style="margin: 0;">&nbsp;</p> <!-- Parágrafo vazio com margem zero -->
 
-        <table>
+        <table style="margin-bottom: 0;">
             <tr>
                 <td>
                     <p class="titulo">PARTICIPANTES DA AUDIÊNCIA</p>
@@ -486,9 +619,9 @@ function gerarWord() {
             </tr>
         </table>
 
-        <br /> <!-- Linha em branco entre tabelas -->
+        <p style="margin: 0;">&nbsp;</p> <!-- Parágrafo vazio com margem zero -->
 
-        <table>
+        <table style="margin-bottom: 0;">
             <tr>
                 <td>
                     <p class="titulo">DADOS DAS PARTES</p>
@@ -497,9 +630,9 @@ function gerarWord() {
                 </td>
             </tr>
         </table>
-        
     </div>
 </body>
+
 </html>
 `;
 
@@ -509,20 +642,39 @@ function gerarWord() {
     // Cria um link para download
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
+    const nomeArquivo = document.getElementById('caixa2').value.trim().replace(/^_/, '');
     link.href = url;
-    link.download = 'Número do processo - RESULTADO.doc';
+    link.download = `${nomeArquivo} - CABEÇALHO.doc`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-}
+    }
 
+    //Temas: claro e escuro
+    document.addEventListener("DOMContentLoaded", () => {
+    const themeToggle = document.getElementById("theme-toggle");
+    const themeIcon = document.getElementById("theme-icon");
+    const themeText = document.getElementById("theme-text");
+    const body = document.body;
 
+    // Carrega o tema salvo no localStorage
+    const savedTheme = localStorage.getItem("theme") || "light";
+    body.classList.toggle("dark", savedTheme === "dark");
+    themeIcon.className = savedTheme === "dark" ? "fas fa-sun" : "fas fa-moon";
+    themeText.textContent = savedTheme === "dark" ? "Tema Escuro" : "Tema Claro";
+
+    // Alterna o tema ao clicar
+    themeToggle.addEventListener("change", () => {
+        const isDark = body.classList.toggle("dark");
+        themeIcon.className = isDark ? "fas fa-sun" : "fas fa-moon";
+        themeText.textContent = isDark ? "Tema Escuro" : "Tema Claro";
+        localStorage.setItem("theme", isDark ? "dark" : "light");
+    });
+});
 
     </script>
 
-
 </script>
-
 
 </body>
 </html>
