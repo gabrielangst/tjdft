@@ -234,7 +234,111 @@
         body.dark #theme-icon {
             color: #f39c12; /* Cor do sol */
         }
-    
+
+/*AJUDA*/
+body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        /* Estilo para o parágrafo com texto */
+        #Autor {
+            text-align: center;
+            font-family: Georgia;
+        }
+
+        /* Contêiner do ícone e texto */
+        .help-icon-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            animation: move 1.5s ease-in-out infinite; /* Animação de movimento para o contêiner */
+        }
+
+        /* Estilo para o ícone de ajuda */
+        .help-icon {
+            font-size: 30px;
+            color: #007BFF;
+            cursor: pointer;
+            background-color: transparent; /* Ícone sem fundo */
+            padding: 10px;
+            border-radius: 50%;
+            box-shadow: none;
+            transition: color 0.3s, box-shadow 0.3s; /* Transição suave */
+            animation: pulse 1.5s infinite; /* Animação de pulso */
+        }
+
+        /* Animação de pulso no ícone */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Efeito de cor ao passar o mouse sobre o ícone */
+        .help-icon:hover {
+            color: #f39c12; /* Cor laranja ao passar o mouse */
+            box-shadow: 0 0 15px 5px rgba(255, 165, 0, 0.6); /* Brilho ao passar o mouse */
+        }
+
+        /* Texto abaixo do ícone (Ajuda?) */
+        .help-text {
+            color: #007BFF;
+            font-size: 16px;
+            margin-top: 5px;
+            font-weight: bold;
+            animation: pulseText 1.5s infinite; /* Animação de pulso no texto */
+            transition: color 0.3s;
+        }
+
+        /* Animação de pulso no texto */
+        @keyframes pulseText {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Efeito de cor ao passar o mouse sobre o texto */
+        .help-icon:hover + .help-text {
+            color: #f39c12; /* Cor do texto quando passar o mouse */
+        }
+
+        /* Tooltip que aparece ao passar o mouse sobre o ícone */
+        .tooltip {
+            visibility: hidden;
+            position: fixed;
+            bottom: 70px;
+            right: 80px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: red; /* Cor do texto do tooltip (vermelho) */
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            z-index: 1001;
+            transition: visibility 0.3s;
+        }
+
+        /* Exibe o tooltip ao passar o mouse */
+        .help-icon:hover + .tooltip {
+            visibility: visible;
+        }
+
     </style>
 </head>
 <body style="margin:60px;padding:0">
@@ -251,7 +355,7 @@
         </div>
     </div>
     
-    <p style="text-align: center; font-family: Georgia;" id="Autor">Filipe de Sousa Lima | Gabriel Freitas Angst <br> 3º NUVIMEC/TJDFT | <b>09/12/2024 12:09 <a title="Veja um tutorial em vídeo de como utilizar esta ferramenta" href="https://tjdf.sharepoint.com/sites/5NUVIMEC/_layouts/15/stream.aspx?id=%2Fsites%2F5NUVIMEC%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20%2D%20Extrator%20PJe%2Emp4&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E8feed9ae%2D0b9e%2D4e31%2D943c%2D9b089e43d927" target="_blank">🎦</a></b></p>
+    <p style="text-align: center; font-family: Georgia;" id="Autor">Filipe de Sousa Lima | Gabriel Freitas Angst <br> 3º NUVIMEC/TJDFT | <b>09/12/2024 12:42 <a title="Veja um tutorial em vídeo de como utilizar esta ferramenta" href="https://tjdf.sharepoint.com/sites/5NUVIMEC/_layouts/15/stream.aspx?id=%2Fsites%2F5NUVIMEC%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20%2D%20Extrator%20PJe%2Emp4&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E8feed9ae%2D0b9e%2D4e31%2D943c%2D9b089e43d927" target="_blank">🎦</a></b></p>
     <h1>📄 Extrator de cabeçalhos do PJe </h1>
     <textarea id="caixa1" placeholder="Após abrir o cabeçalho do processo no PJe e copiar todos os dados apertando Ctrl+A e Ctrl+C, clique no botão abaixo ''Extrair texto copiado''"></textarea>
     <textarea id="caixa2" placeholder="Caixa de Texto 2"></textarea>
@@ -283,7 +387,19 @@
         <br>
         <p id="output3"></p>
     </div>
+<div>
+    <!-- Contêiner com ícone e texto -->
+    <div class="help-icon-container">
+        <!-- Ícone de ajuda (link para o tutorial) -->
+        <a href="https://tjdf.sharepoint.com/sites/5NUVIMEC/_layouts/15/stream.aspx?id=%2Fsites%2F5NUVIMEC%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20%2D%20Extrator%20PJe%2Emp4&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E8feed9ae%2D0b9e%2D4e31%2D943c%2D9b089e43d927" target="_blank">
+            <i class="fas fa-question-circle help-icon"></i>
+        </a>
+        <!-- Texto abaixo do ícone -->
+        <div class="help-text">Ajuda?</div>
+    </div>
 
+    <!-- Tooltip com texto de ajuda -->
+    <div class="tooltip">Está com dificuldade? Nosso tutorial pode ajudar!</div>
 <!-- Início do Script-->
 
 <script>
