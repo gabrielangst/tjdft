@@ -355,7 +355,7 @@ body {
         </div>
     </div>
     
-    <p style="text-align: center; font-family: Georgia;" id="Autor">Filipe de Sousa Lima | Gabriel Freitas Angst <br> 3º NUVIMEC/TJDFT | <b>07/12/2024 12:09 <a title="Veja um tutorial em vídeo de como utilizar esta ferramenta" href="https://tjdf.sharepoint.com/sites/5NUVIMEC/_layouts/15/stream.aspx?id=%2Fsites%2F5NUVIMEC%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20%2D%20Extrator%20PJe%2Emp4&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E8feed9ae%2D0b9e%2D4e31%2D943c%2D9b089e43d927" target="_blank">🎦</a></b></p>
+    <p style="text-align: center; font-family: Georgia;" id="Autor">Filipe de Sousa Lima | Gabriel Freitas Angst <br> 3º NUVIMEC/TJDFT | <b>17/12/2024 16:36 <a title="Veja um tutorial em vídeo de como utilizar esta ferramenta" href="https://tjdf.sharepoint.com/sites/5NUVIMEC/_layouts/15/stream.aspx?id=%2Fsites%2F5NUVIMEC%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20%2D%20Extrator%20PJe%2Emp4&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E8feed9ae%2D0b9e%2D4e31%2D943c%2D9b089e43d927" target="_blank">🎦</a></b></p>
     <h1>📄 Extrator de cabeçalhos do PJe </h1>
     <textarea id="caixa1" placeholder="Após abrir o cabeçalho do processo no PJe e copiar todos os dados apertando Ctrl+A e Ctrl+C, clique no botão abaixo ''Extrair texto copiado''"></textarea>
     <textarea id="caixa2" placeholder="Caixa de Texto 2"></textarea>
@@ -526,7 +526,7 @@ function processarCaixas() {
 
     if (poloPassivoIndex2 !== -1 && iconeDownloadIndex !== -1 && iconeDownloadIndex > poloPassivoIndex2) {
         const requeridos = caixa1.slice(poloPassivoIndex2 + 1, iconeDownloadIndex)
-            .filter(line => /(REQUERIDO|RÉU|REU|EXECUTADO)\)$/.test(line.trim()));
+            .filter(line => /(REQUERIDO|RÉU|REU|EXECUTADO|EMBARGADO)\)$/.test(line.trim()));
         document.getElementById('caixa6').value = requeridos.join('\n');
     }
 
@@ -539,16 +539,16 @@ function processarCaixas() {
 
     function formatarRequerentes(requerentes) {
         if (requerentes.length === 1) {
-            return `<b>Requerente:</b> ${requerentes[0].replace(/ \((REQUERENTE|AUTOR|EXEQUENTE|AUTORA)\)/g, '')}`;
+            return `<b>Requerente:</b> ${requerentes[0].replace(/ \((REQUERENTE|AUTOR|EXEQUENTE|AUTORA|EMBARGANTE)\)/g, '')}`;
         }
-        return requerentes.map((req, index) => `<b>${index + 1}º Requerente:</b> ${req.replace(/ \((REQUERENTE|AUTOR|EXEQUENTE|AUTORA)\)/g, '')}`).join('\n');
+        return requerentes.map((req, index) => `<b>${index + 1}º Requerente:</b> ${req.replace(/ \((REQUERENTE|AUTOR|EXEQUENTE|AUTORA|EMBARGANTE)\)/g, '')}`).join('\n');
     }
 
     function formatarRequeridos(requeridos) {
         if (requeridos.length === 1) {
-            return `<b>Requerido(a):</b> ${requeridos[0].replace(/ \((REQUERIDO|RÉU|REU|EXECUTADO)\)/g, '')}`;
+            return `<b>Requerido(a):</b> ${requeridos[0].replace(/ \((REQUERIDO|RÉU|REU|EXECUTADO|EMBARGADO)\)/g, '')}`;
         }
-        return requeridos.map((req, index) => `<b>${index + 1}º Requerido(a):</b> ${req.replace(/ \((REQUERIDO|RÉU|REU|EXECUTADO)\)/g, '')}`).join('\n');
+        return requeridos.map((req, index) => `<b>${index + 1}º Requerido(a):</b> ${req.replace(/ \((REQUERIDO|RÉU|REU|EXECUTADO|EMBARGADO)\)/g, '')}`).join('\n');
     }
 
     function atualizarOutputs() {
@@ -559,11 +559,17 @@ function processarCaixas() {
     const hasExequente = caixa4.some(line => /\(EXEQUENTE\)$/.test(line.trim()));
     const hasExecutado = caixa6.some(line => /\(EXECUTADO\)$/.test(line.trim()));
 
+    // Adicionado: Verifica se as expressões (EMBARGANTE) e (EMBARGADO) estão presentes
+    const hasEmbargante = caixa4.some(line => /\(EMBARGANTE\)$/.test(line.trim()));
+    const hasEmbargado = caixa6.some(line => /\(EMBARGADO\)$/.test(line.trim()));
+
+
     // Adicionado: Define os termos dinâmicos para os outputs
-    const exequenteTermo = hasExequente ? 'Exequente' : 'Requerente';
-    const executadoTermo = hasExecutado ? 'Executado(a)' : 'Requerido(a)';
-    const exequenteParte = hasExequente ? 'EXEQUENTE' : 'REQUERENTE';
-    const executadoParte = hasExecutado ? 'EXECUTADA' : 'REQUERIDA';
+    const exequenteTermo = hasExequente ? 'Exequente' : hasEmbargante ? 'Embargante' : 'Requerente';
+    const executadoTermo = hasExecutado ? 'Executado(a)' : hasEmbargado ? 'Embargado(a)' : 'Requerido(a)';
+    const exequenteParte = hasExequente ? 'EXEQUENTE' : hasEmbargante ? 'EMBARGANTE' : 'REQUERENTE';
+    const executadoParte = hasExecutado ? 'EXECUTADA' : hasEmbargado ? 'EMBARGADA' : 'REQUERIDA';
+    
 
     const caixa8 = `<b>Juízo:</b> ${document.getElementById('caixa3').value}\n` +
         `<b>Processo:</b> ${document.getElementById('caixa2').value}\n` +
