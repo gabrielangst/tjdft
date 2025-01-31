@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Seleção de Boardgames</title>
     <style>
-        body {
+    body {
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
             margin: 20px;
@@ -35,12 +35,37 @@
         }
 
         /* CSS para ocultar a div por padrão */
-.hidden {
-    display: none;
-}
+        .hidden {
+           display: none;
+            }
+
+
+        
+        /* Estilo para os botões */
+        button {
+            background-color: #4CAF50; /* Verde */
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border: none;
+            border-radius: 12px;
+            transition-duration: 0.4s;
+        }
+
+        button:hover {
+            background-color: white;
+            color: black;
+            border: 2px solid #4CAF50;
+        }
     </style>
     <script>
-        function updateResult() {
+
+ function updateResult() {
             const checkboxes = document.querySelectorAll('input[type="checkbox"]');
             const result = document.getElementById('result');
             let selectedOptions = '';
@@ -54,23 +79,53 @@
             result.textContent = selectedOptions;
         }
 
-        function mostrarDiv(divId) {
+ function mostrarDiv(divId) {
     var div = document.getElementById(divId);
-    div.classList.toggle("hidden");
+    if (div.style.display === "none" || div.classList.contains("hidden")) {
+        div.style.display = "block";
+        div.classList.remove("hidden");
+    } else {
+        div.style.display = "none";
+        div.classList.add("hidden");
+    }
 }
+
+        function toggleTodasDivs() {
+            const divs = document.querySelectorAll('.category');
+            divs.forEach(div => {
+                if (div.style.display === "none" || div.classList.contains("hidden")) {
+                    div.style.display = "block";
+                    div.classList.remove("hidden");
+                } else {
+                    div.style.display = "none";
+                    div.classList.add("hidden");
+                }
+            });
+        }
+
+
     </script>
 </head>
 <body>
     <h1>Lista de Seleção de Boardgames</h1>
     <div id="categories">
         <!-- Categorias e checkboxes -->
-        <button onclick="mostrarDiv('1jog')">Clique aqui para mostrar a primeira div</button>
-        <div class="category" id="1jog" class="hidden">
+        <br>
+<br>
+<button onclick="toggleTodasDivs()">Mostrar todas as divs</button>
+<br>
+<br>     
+
+
+ <button onclick="mostrarDiv('1jog')">1 jogador</button>
+        <div id="1jog" class="category hidden">
             <h2>1 Jogador</h2>
             <label><input type="checkbox" value="Scooby Doo (1-6)" onclick="updateResult()"> Scooby Doo (1-6)</label><br>
             <label><input type="checkbox" value="Convidados Indesejados (1-8)" onclick="updateResult()"> Convidados Indesejados (1-8)</label>
         </div>
-        <div class="category">
+<br>
+       <button onclick="mostrarDiv('2jog')">2 jogadores</button>
+        <div id="2jog" class="category hidden">
             <h2>2 Jogadores</h2>
             <label><input type="checkbox" value="Black Stories (2+)" onclick="updateResult()"> Black Stories (2+)</label><br>
             <label><input type="checkbox" value="Timeline (2-8)" onclick="updateResult()"> Timeline (2-8)</label><br>
@@ -90,7 +145,9 @@
             <label><input type="checkbox" value="Convidados Indesejados (1-8)" onclick="updateResult()"> Convidados Indesejados (1-8)</label><br>
             <label><input type="checkbox" value="Ito (2-8)" onclick="updateResult()"> Ito (2-8)</label>
         </div>
-        <div class="category">
+<br>
+       <button onclick="mostrarDiv('3jog')">3 jogadores</button>
+        <div id="3jog" class="category hidden">
             <h2>3 Jogadores</h2>
             <label><input type="checkbox" value="Black Stories (2+)" onclick="updateResult()"> Black Stories (2+)</label><br>
             <label><input type="checkbox" value="Timeline (2-8)" onclick="updateResult()"> Timeline (2-8)</label><br>
@@ -120,7 +177,9 @@
             <label><input type="checkbox" value="That’s not a Hat (3-8)" onclick="updateResult()"> That’s not a Hat (3-8)</label><br>
             <label><input type="checkbox" value="Ito (2-8)" onclick="updateResult()"> Ito (2-8)</label>
         </div>
-        <div class="category">
+<br>
+       <button onclick="mostrarDiv('4jog')">4 jogadores</button>
+        <div id="4jog" class="category hidden">
 <h2>4 Jogadores</h2>
             <label><input type="checkbox" value="Black Stories (2+)" onclick="updateResult()"> Black Stories (2+)</label><br>
             <label><input type="checkbox" value="Timeline (2-8)" onclick="updateResult()"> Timeline (2-8)</label><br>
@@ -159,7 +218,9 @@
             <label><input type="checkbox" value="Ito (2-8)" onclick="updateResult()"> Ito (2-8)</label><br>
             <label><input type="checkbox" value="Dreadful Circus (4-8)" onclick="updateResult()"> Dreadful Circus (4-8)</label>
         </div>
-        <div class="category">
+<br>
+       <button onclick="mostrarDiv('5jog')">5 jogadores</button>
+        <div id="5jog" class="category hidden">
             <h2>5 Jogadores</h2>
             <label><input type="checkbox" value="Black Stories (2+)" onclick="updateResult()"> Black Stories (2+)</label><br>
             <label><input type="checkbox" value="Timeline (2-8)" onclick="updateResult()"> Timeline (2-8)</label><br>
@@ -199,7 +260,9 @@
             <label><input type="checkbox" value="Ito (2-8)" onclick="updateResult()"> Ito (2-8)</label><br>
             <label><input type="checkbox" value="Dreadful Circus (4-8)" onclick="updateResult()"> Dreadful Circus (4-8)</label>
         </div>
-        <div class="category">
+<br>
+       <button onclick="mostrarDiv('6jog')">6 jogadores</button>
+        <div id="6jog" class="category hidden">
             <h2>6 Jogadores</h2>
             <label><input type="checkbox" value="Black Stories (2+)" onclick="updateResult()"> Black Stories (2+)</label><br>
             <label><input type="checkbox" value="Timeline (2-8)" onclick="updateResult()"> Timeline (2-8)</label><br>
@@ -240,7 +303,9 @@
             <label><input type="checkbox" value="Dreadful Circus (4-8)" onclick="updateResult()"> Dreadful Circus (4-8)</label><br>
             <label><input type="checkbox" value="Máfia de Cuba (6-12)" onclick="updateResult()"> Máfia de Cuba (6-12)</label>
         </div>
-        <div class="category">
+<br>
+       <button onclick="mostrarDiv('7jog')">7 jogadores</button>
+        <div id="7jog" class="category hidden">
             <h2>7 Jogadores</h2>
             <label><input type="checkbox" value="Black Stories (2+)" onclick="updateResult()"> Black Stories (2+)</label><br>
             <label><input type="checkbox" value="Timeline (2-8)" onclick="updateResult()"> Timeline (2-8)</label><br>
@@ -273,7 +338,9 @@
             <label><input type="checkbox" value="Dreadful Circus (4-8)" onclick="updateResult()"> Dreadful Circus (4-8)</label><br>
             <label><input type="checkbox" value="Máfia de Cuba (6-12)" onclick="updateResult()"> Máfia de Cuba (6-12)</label>
         </div>
-        <div class="category">
+<br>
+       <button onclick="mostrarDiv('8jog')">8 jogadores</button>
+        <div id="8jog" class="category hidden">
             <h2>8 Jogadores</h2>
             <label><input type="checkbox" value="Black Stories (2+)" onclick="updateResult()"> Black Stories (2+)</label><br>
             <label><input type="checkbox" value="Timeline (2-8)" onclick="updateResult()"> Timeline (2-8)</label><br>
@@ -306,7 +373,9 @@
             <label><input type="checkbox" value="Dreadful Circus (4-8)" onclick="updateResult()"> Dreadful Circus (4-8)</label><br>
             <label><input type="checkbox" value="Máfia de Cuba (6-12)" onclick="updateResult()"> Máfia de Cuba (6-12)</label>
         </div>
-        <div class="category">
+<br>
+       <button onclick="mostrarDiv('10jog')">10 jogadores</button>
+        <div id="10jog" class="category hidden">
             <h2>10 Jogadores</h2>
             <label><input type="checkbox" value="Black Stories (2+)" onclick="updateResult()"> Black Stories (2+)</label><br>
             <label><input type="checkbox" value="Pega em 6 (2-10)" onclick="updateResult()"> Pega em 6 (2-10)</label><br>
@@ -322,7 +391,9 @@
             <label><input type="checkbox" value="Sintonia (2+)" onclick="updateResult()"> Sintonia (2+)</label><br>
             <label><input type="checkbox" value="Máfia de Cuba (6-12)" onclick="updateResult()"> Máfia de Cuba (6-12)</label>
         </div>
-        <div class="category">
+<br>
+       <button onclick="mostrarDiv('11mais')">11 jogadores</button>
+        <div id="11mais" class="category hidden">
             <h2>11+ Jogadores</h2>
             <label><input type="checkbox" value="Black Stories (2+)" onclick="updateResult()"> Black Stories (2+)</label><br>
             <label><input type="checkbox" value="Concept (2+)" onclick="updateResult()"> Concept (2+)</label><br>
