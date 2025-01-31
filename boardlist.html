@@ -1,460 +1,201 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Seleção de Boardgames</title>
-    <style>
-    body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
+   <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            font-size: 18px;
+            background-color: #f4f4f4;
+            color: #333;
             margin: 20px;
+            text-align: left;
         }
-        h1 {
-            font-size: 2em;
-            text-align: center;
+        .game-list { 
+            margin-top: 20px;
         }
-        .category {
-            margin-bottom: 30px;
-        }
-        .category h2 {
-            font-size: 1.5em;
+        .game-list div {
             margin-bottom: 10px;
         }
-        .category label {
-            display: block;
-            font-size: 1.2em;
-            margin: 5px 0;
-        }
-        .result {
-            margin-top: 30px;
-            font-size: 1.2em;
-            white-space: pre-wrap;
-            border-top: 1px solid #ccc;
-            padding-top: 10px;
-        }
-
-        /* CSS para ocultar a div por padrão */
         .hidden {
-           display: none;
-            }
-
-
-        
-        /* Estilo para os botões */
+            display: none;
+        }
         button {
-            background-color: #4CAF50; /* Verde */
+            background-color: #4CAF50;
+            border: none;
             color: white;
-            padding: 15px 32px;
+            padding: 10px 20px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
             font-size: 16px;
-            margin: 4px 2px;
+            margin: 5px 2px;
             cursor: pointer;
-            border: none;
-            border-radius: 12px;
-            transition-duration: 0.4s;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
         }
-
         button:hover {
-            background-color: white;
-            color: black;
-            border: 2px solid #4CAF50;
+            background-color: #45a049;
+        }
+        input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .selected-games {
+            margin-top: 30px;
+            font-weight: bold;
+        }
+        .selected-games p {
+            margin: 0;
+            font-weight: normal; /* Remove negrito dos nomes dos jogos */
+        }
+        #copy-button {
+            margin-top: 20px;
         }
     </style>
-    <script>
-
-function updateResult() {
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    const result = document.getElementById('result');
-    let selectedOptions = '';
-
-    checkboxes.forEach(checkbox => {
-        if (checkbox.checked) {
-            selectedOptions += checkbox.value + '\r\n'; // Adiciona quebra de linha compatível
-        }
-    });
-
-    // Define o texto como textContent e innerHTML para maior compatibilidade
-    result.textContent = selectedOptions;
-    result.innerHTML = selectedOptions.replace(/\r\n/g, '<br>'); 
-}
-
- function mostrarDiv(divId) {
-    var div = document.getElementById(divId);
-    if (div.style.display === "none" || div.classList.contains("hidden")) {
-        div.style.display = "block";
-        div.classList.remove("hidden");
-    } else {
-        div.style.display = "none";
-        div.classList.add("hidden");
-    }
-}
-
-        function toggleTodasDivs() {
-            const divs = document.querySelectorAll('.category');
-            divs.forEach(div => {
-                if (div.style.display === "none" || div.classList.contains("hidden")) {
-                    div.style.display = "block";
-                    div.classList.remove("hidden");
-                } else {
-                    div.style.display = "none";
-                    div.classList.add("hidden");
-                }
-            });
-        }
-
-
-function copyResult() {
-
-            updateResult();
-    
-            const result = document.getElementById('result');
-            const range = document.createRange();
-            range.selectNodeContents(result);
-            const selection = window.getSelection();
-            selection.removeAllRanges();
-            selection.addRange(range);
-
-            try {
-                document.execCommand('copy');                
-            } catch (err) {
-                alert('Não foi possível copiar o texto.');
-            }
-
-            selection.removeAllRanges();
-        }
-
-    </script>
 </head>
 <body>
     <h1>Lista de Seleção de Boardgames</h1>
-    <div id="categories">
-        <!-- Categorias e checkboxes -->
-        <br>
-<br>
-<button onclick="toggleTodasDivs()">Mostrar todas as divs</button>
-<br>
-<br>     
-
-
- <button onclick="mostrarDiv('1jog')">1 jogador</button>
-        <div id="1jog" class="category hidden">
-            <h2>1 Jogador</h2>
-            <label><input type="checkbox" value="Scooby Doo (1-6)" onclick="updateResult()"> Scooby Doo (1-6)</label><br>
-            <label><input type="checkbox" value="Convidados Indesejados (1-8)" onclick="updateResult()"> Convidados Indesejados (1-8)</label><br>
-            <label><input type="checkbox" value="Hollywood 1947 (1-9)" onclick="updateResult()"> Hollywood 1947 (1-9)</label><br>
-        </div>
-<br>
-       <button onclick="mostrarDiv('2jog')">2 jogadores</button>
-        <div id="2jog" class="category hidden">
-            <h2>2 Jogadores</h2>
-            <label><input type="checkbox" value="Black Stories (2+)" onclick="updateResult()"> Black Stories (2+)</label><br>
-            <label><input type="checkbox" value="Timeline (2-8)" onclick="updateResult()"> Timeline (2-8)</label><br>
-            <label><input type="checkbox" value="Pega em 6 (2-10)" onclick="updateResult()"> Pega em 6 (2-10)</label><br>
-            <label><input type="checkbox" value="Taco Gato Cabra (2-8)" onclick="updateResult()"> Taco Gato Cabra (2-8)</label><br>
-            <label><input type="checkbox" value="Concept (2+)" onclick="updateResult()"> Concept (2+)</label><br>
-            <label><input type="checkbox" value="Scotland Yard (2-6)" onclick="updateResult()"> Scotland Yard (2-6)</label><br>
-            <label><input type="checkbox" value="Coup (2-10)" onclick="updateResult()"> Coup (2-10)</label><br>
-            <label><input type="checkbox" value="Dream On (2-8)" onclick="updateResult()"> Dream On (2-8)</label><br>
-            <label><input type="checkbox" value="Throw Throw Burrito (2-6)" onclick="updateResult()"> Throw Throw Burrito (2-6)</label><br>
-            <label><input type="checkbox" value="Ticket To Ride (2-6)" onclick="updateResult()"> Ticket To Ride (2-6)</label><br>
-            <label><input type="checkbox" value="Carcassone (2-6)" onclick="updateResult()"> Carcassone (2-6)</label><br>
-            <label><input type="checkbox" value="Exploding Kittens (2-10)" onclick="updateResult()"> Exploding Kittens (2-10)</label><br>
-            <label><input type="checkbox" value="Scooby Doo (1-6)" onclick="updateResult()"> Scooby Doo (1-6)</label><br>
-            <label><input type="checkbox" value="Sintonia (2+)" onclick="updateResult()"> Sintonia (2+)</label><br>
-            <label><input type="checkbox" value="Paranormal Detectives (2-6)" onclick="updateResult()"> Paranormal Detectives (2-6)</label><br>
-            <label><input type="checkbox" value="Convidados Indesejados (1-8)" onclick="updateResult()"> Convidados Indesejados (1-8)</label><br>
-            <label><input type="checkbox" value="Ito (2-8)" onclick="updateResult()"> Ito (2-8)</label><br>
-            <label><input type="checkbox" value="Hollywood 1947 (1-9)" onclick="updateResult()"> Hollywood 1947 (1-9)</label><br>
-        </div>
-<br>
-       <button onclick="mostrarDiv('3jog')">3 jogadores</button>
-        <div id="3jog" class="category hidden">
-            <h2>3 Jogadores</h2>
-            <label><input type="checkbox" value="Black Stories (2+)" onclick="updateResult()"> Black Stories (2+)</label><br>
-            <label><input type="checkbox" value="Timeline (2-8)" onclick="updateResult()"> Timeline (2-8)</label><br>
-            <label><input type="checkbox" value="Pega em 6 (2-10)" onclick="updateResult()"> Pega em 6 (2-10)</label><br>
-            <label><input type="checkbox" value="Taco Gato Cabra (2-8)" onclick="updateResult()"> Taco Gato Cabra (2-8)</label><br>
-            <label><input type="checkbox" value="Concept (2+)" onclick="updateResult()"> Concept (2+)</label><br>
-            <label><input type="checkbox" value="Scotland Yard (2-6)" onclick="updateResult()"> Scotland Yard (2-6)</label><br>
-            <label><input type="checkbox" value="Coup (2-10)" onclick="updateResult()"> Coup (2-10)</label><br>
-            <label><input type="checkbox" value="Dream On (2-8)" onclick="updateResult()"> Dream On (2-8)</label><br>
-            <label><input type="checkbox" value="Throw Throw Burrito (2-6)" onclick="updateResult()"> Throw Throw Burrito (2-6)</label><br>
-            <label><input type="checkbox" value="Ticket To Ride (2-6)" onclick="updateResult()"> Ticket To Ride (2-6)</label><br>
-            <label><input type="checkbox" value="Carcassone (2-6)" onclick="updateResult()"> Carcassone (2-6)</label><br>
-            <label><input type="checkbox" value="Exploding Kittens (2-10)" onclick="updateResult()"> Exploding Kittens (2-10)</label><br>
-            <label><input type="checkbox" value="Scooby Doo (1-6)" onclick="updateResult()"> Scooby Doo (1-6)</label><br>
-            <label><input type="checkbox" value="Lobisomen (3-8)" onclick="updateResult()"> Lobisomen (3-8)</label><br>
-            <label><input type="checkbox" value="BANG (3-8)" onclick="updateResult()"> BANG (3-8)</label><br>
-            <label><input type="checkbox" value="Spyfall (3-8)" onclick="updateResult()"> Spyfall (3-8)</label><br>
-            <label><input type="checkbox" value="Bode of War (3-6)" onclick="updateResult()"> Bode of War (3-6)</label><br>
-            <label><input type="checkbox" value="Saboteur (3-10)" onclick="updateResult()"> Saboteur (3-10)</label><br>
-            <label><input type="checkbox" value="No Thanks (3-8)" onclick="updateResult()"> No Thanks (3-8)</label><br>
-            <label><input type="checkbox" value="Imagine (2+)" onclick="updateResult()"> Imagine (2+)</label><br>
-            <label><input type="checkbox" value="Quartz (3-6)" onclick="updateResult()"> Quartz (3-6)</label><br>
-            <label><input type="checkbox" value="Sintonia (2+)" onclick="updateResult()"> Sintonia (2+)</label><br>
-            <label><input type="checkbox" value="Paranormal Detectives (2-6)" onclick="updateResult()"> Paranormal Detectives (2-6)</label><br>
-            <label><input type="checkbox" value="Convidados Indesejados (1-8)" onclick="updateResult()"> Convidados Indesejados (1-8)</label><br>
-            <label><input type="checkbox" value="A Última Mensagem (3-8)" onclick="updateResult()"> A Última Mensagem (3-8)</label><br>
-            <label><input type="checkbox" value="That’s not a Hat (3-8)" onclick="updateResult()"> That’s not a Hat (3-8)</label><br>
-            <label><input type="checkbox" value="Ito (2-8)" onclick="updateResult()"> Ito (2-8)</label><br>
-            <label><input type="checkbox" value="Hollywood 1947 (1-9)" onclick="updateResult()"> Hollywood 1947 (1-9)</label><br>
-        </div>
-<br>
-       <button onclick="mostrarDiv('4jog')">4 jogadores</button>
-        <div id="4jog" class="category hidden">
-<h2>4 Jogadores</h2>
-            <label><input type="checkbox" value="Black Stories (2+)" onclick="updateResult()"> Black Stories (2+)</label><br>
-            <label><input type="checkbox" value="Timeline (2-8)" onclick="updateResult()"> Timeline (2-8)</label><br>
-            <label><input type="checkbox" value="Pega em 6 (2-10)" onclick="updateResult()"> Pega em 6 (2-10)</label><br>
-            <label><input type="checkbox" value="Taco Gato Cabra (2-8)" onclick="updateResult()"> Taco Gato Cabra (2-8)</label><br>
-            <label><input type="checkbox" value="Concept (2+)" onclick="updateResult()"> Concept (2+)</label><br>
-            <label><input type="checkbox" value="Scotland Yard (2-6)" onclick="updateResult()"> Scotland Yard (2-6)</label><br>
-            <label><input type="checkbox" value="Coup (2-10)" onclick="updateResult()"> Coup (2-10)</label><br>
-            <label><input type="checkbox" value="Dream On (2-8)" onclick="updateResult()"> Dream On (2-8)</label><br>
-            <label><input type="checkbox" value="Throw Throw Burrito (2-6)" onclick="updateResult()"> Throw Throw Burrito (2-6)</label><br>
-            <label><input type="checkbox" value="Ticket To Ride (2-6)" onclick="updateResult()"> Ticket To Ride (2-6)</label><br>
-            <label><input type="checkbox" value="Carcassone (2-6)" onclick="updateResult()"> Carcassone (2-6)</label><br>
-            <label><input type="checkbox" value="Exploding Kittens (2-10)" onclick="updateResult()"> Exploding Kittens (2-10)</label><br>
-            <label><input type="checkbox" value="Scooby Doo (1-6)" onclick="updateResult()"> Scooby Doo (1-6)</label><br>
-            <label><input type="checkbox" value="Lobisomen (3-8)" onclick="updateResult()"> Lobisomen (3-8)</label><br>
-            <label><input type="checkbox" value="BANG (3-8)" onclick="updateResult()"> BANG (3-8)</label><br>
-            <label><input type="checkbox" value="Spyfall (3-8)" onclick="updateResult()"> Spyfall (3-8)</label><br>
-            <label><input type="checkbox" value="Bode of War (3-6)" onclick="updateResult()"> Bode of War (3-6)</label><br>
-            <label><input type="checkbox" value="Dixit (4-8)" onclick="updateResult()"> Dixit (4-8)</label><br>
-            <label><input type="checkbox" value="Saboteur (3-10)" onclick="updateResult()"> Saboteur (3-10)</label><br>
-            <label><input type="checkbox" value="Academia/Enciclopédia (4-8)" onclick="updateResult()"> Academia/Enciclopédia (4-8)</label><br>
-            <label><input type="checkbox" value="Código Secreto (4+)" onclick="updateResult()"> Código Secreto (4+)</label><br>
-            <label><input type="checkbox" value="Deception (4-12)" onclick="updateResult()"> Deception (4-12)</label><br>
-            <label><input type="checkbox" value="Os Maus Companheiros (4-8)" onclick="updateResult()"> Os Maus Companheiros (4-8)</label><br>
-            <label><input type="checkbox" value="No Thanks (3-8)" onclick="updateResult()"> No Thanks (3-8)</label><br>
-            <label><input type="checkbox" value="Estupefaça (4-8)" onclick="updateResult()"> Estupefaça (4-8)</label><br>
-            <label><input type="checkbox" value="Time’s Up (4+)" onclick="updateResult()"> Time’s Up (4+)</label><br>
-            <label><input type="checkbox" value="Imagine (2+)" onclick="updateResult()"> Imagine (2+)</label><br>
-            <label><input type="checkbox" value="Quartz (3-6)" onclick="updateResult()"> Quartz (3-6)</label><br>
-            <label><input type="checkbox" value="Sintonia (2+)" onclick="updateResult()"> Sintonia (2+)</label><br>
-            <label><input type="checkbox" value="Paranormal Detectives (2-6)" onclick="updateResult()"> Paranormal Detectives (2-6)</label><br>
-            <label><input type="checkbox" value="Convidados Indesejados (1-8)" onclick="updateResult()"> Convidados Indesejados (1-8)</label><br>
-            <label><input type="checkbox" value="A Última Mensagem (3-8)" onclick="updateResult()"> A Última Mensagem (3-8)</label><br>
-            <label><input type="checkbox" value="That’s not a Hat (3-8)" onclick="updateResult()"> That’s not a Hat (3-8)</label><br>
-            <label><input type="checkbox" value="Telestrations (4-8)" onclick="updateResult()"> Telestrations (4-8)</label><br>
-            <label><input type="checkbox" value="Ito (2-8)" onclick="updateResult()"> Ito (2-8)</label><br>
-            <label><input type="checkbox" value="Dreadful Circus (4-8)" onclick="updateResult()"> Dreadful Circus (4-8)</label><br>
-            <label><input type="checkbox" value="Hollywood 1947 (1-9)" onclick="updateResult()"> Hollywood 1947 (1-9)</label><br>
-        </div>
-<br>
-       <button onclick="mostrarDiv('5jog')">5 jogadores</button>
-        <div id="5jog" class="category hidden">
-            <h2>5 Jogadores</h2>
-            <label><input type="checkbox" value="Black Stories (2+)" onclick="updateResult()"> Black Stories (2+)</label><br>
-            <label><input type="checkbox" value="Timeline (2-8)" onclick="updateResult()"> Timeline (2-8)</label><br>
-            <label><input type="checkbox" value="Pega em 6 (2-10)" onclick="updateResult()"> Pega em 6 (2-10)</label><br>
-            <label><input type="checkbox" value="Taco Gato Cabra (2-8)" onclick="updateResult()"> Taco Gato Cabra (2-8)</label><br>
-            <label><input type="checkbox" value="Concept (2+)" onclick="updateResult()"> Concept (2+)</label><br>
-            <label><input type="checkbox" value="Scotland Yard (2-6)" onclick="updateResult()"> Scotland Yard (2-6)</label><br>
-            <label><input type="checkbox" value="Coup (2-10)" onclick="updateResult()"> Coup (2-10)</label><br>
-            <label><input type="checkbox" value="Dream On (2-8)" onclick="updateResult()"> Dream On (2-8)</label><br>
-            <label><input type="checkbox" value="Throw Throw Burrito (2-6)" onclick="updateResult()"> Throw Throw Burrito (2-6)</label><br>
-            <label><input type="checkbox" value="Ticket To Ride (2-6)" onclick="updateResult()"> Ticket To Ride (2-6)</label><br>
-            <label><input type="checkbox" value="Carcassone (2-6)" onclick="updateResult()"> Carcassone (2-6)</label><br>
-            <label><input type="checkbox" value="Exploding Kittens (2-10)" onclick="updateResult()"> Exploding Kittens (2-10)</label><br>
-            <label><input type="checkbox" value="Scooby Doo (1-6)" onclick="updateResult()"> Scooby Doo (1-6)</label><br>
-            <label><input type="checkbox" value="Lobisomen (3-8)" onclick="updateResult()"> Lobisomen (3-8)</label><br>
-            <label><input type="checkbox" value="BANG (3-8)" onclick="updateResult()"> BANG (3-8)</label><br>
-            <label><input type="checkbox" value="Spyfall (3-8)" onclick="updateResult()"> Spyfall (3-8)</label><br>
-            <label><input type="checkbox" value="Bode of War (3-6)" onclick="updateResult()"> Bode of War (3-6)</label><br>
-            <label><input type="checkbox" value="Dixit (4-8)" onclick="updateResult()"> Dixit (4-8)</label><br>
-            <label><input type="checkbox" value="Saboteur (3-10)" onclick="updateResult()"> Saboteur (3-10)</label><br>
-            <label><input type="checkbox" value="Academia/Enciclopédia (4-8)" onclick="updateResult()"> Academia/Enciclopédia (4-8)</label><br>
-            <label><input type="checkbox" value="Código Secreto (4+)" onclick="updateResult()"> Código Secreto (4+)</label><br>
-            <label><input type="checkbox" value="Deception (4-12)" onclick="updateResult()"> Deception (4-12)</label><br>
-            <label><input type="checkbox" value="Os Maus Companheiros (4-8)" onclick="updateResult()"> Os Maus Companheiros (4-8)</label><br>
-            <label><input type="checkbox" value="The Resistance (5-10)" onclick="updateResult()"> The Resistance (5-10)</label><br>
-            <label><input type="checkbox" value="No Thanks (3-8)" onclick="updateResult()"> No Thanks (3-8)</label><br>
-            <label><input type="checkbox" value="Estupefaça (4-8)" onclick="updateResult()"> Estupefaça (4-8)</label><br>
-            <label><input type="checkbox" value="Time’s Up (4+)" onclick="updateResult()"> Time’s Up (4+)</label><br>
-            <label><input type="checkbox" value="Imagine (2+)" onclick="updateResult()"> Imagine (2+)</label><br>
-            <label><input type="checkbox" value="Quartz (3-6)" onclick="updateResult()"> Quartz (3-6)</label><br>
-            <label><input type="checkbox" value="Sintonia (2+)" onclick="updateResult()"> Sintonia (2+)</label><br>
-            <label><input type="checkbox" value="Paranormal Detectives (2-6)" onclick="updateResult()"> Paranormal Detectives (2-6)</label><br>
-            <label><input type="checkbox" value="Convidados Indesejados (1-8)" onclick="updateResult()"> Convidados Indesejados (1-8)</label><br>
-            <label><input type="checkbox" value="A Última Mensagem (3-8)" onclick="updateResult()"> A Última Mensagem (3-8)</label><br>
-            <label><input type="checkbox" value="That’s not a Hat (3-8)" onclick="updateResult()"> That’s not a Hat (3-8)</label><br>
-            <label><input type="checkbox" value="Telestrations (4-8)" onclick="updateResult()"> Telestrations (4-8)</label><br>
-            <label><input type="checkbox" value="Ito (2-8)" onclick="updateResult()"> Ito (2-8)</label><br>
-            <label><input type="checkbox" value="Dreadful Circus (4-8)" onclick="updateResult()"> Dreadful Circus (4-8)</label><br>
-            <label><input type="checkbox" value="Hollywood 1947 (1-9)" onclick="updateResult()"> Hollywood 1947 (1-9)</label><br>
-        </div>
-<br>
-       <button onclick="mostrarDiv('6jog')">6 jogadores</button>
-        <div id="6jog" class="category hidden">
-            <h2>6 Jogadores</h2>
-            <label><input type="checkbox" value="Black Stories (2+)" onclick="updateResult()"> Black Stories (2+)</label><br>
-            <label><input type="checkbox" value="Timeline (2-8)" onclick="updateResult()"> Timeline (2-8)</label><br>
-            <label><input type="checkbox" value="Pega em 6 (2-10)" onclick="updateResult()"> Pega em 6 (2-10)</label><br>
-            <label><input type="checkbox" value="Taco Gato Cabra (2-8)" onclick="updateResult()"> Taco Gato Cabra (2-8)</label><br>
-            <label><input type="checkbox" value="Concept (2+)" onclick="updateResult()"> Concept (2+)</label><br>
-            <label><input type="checkbox" value="Scotland Yard (2-6)" onclick="updateResult()"> Scotland Yard (2-6)</label><br>
-            <label><input type="checkbox" value="Coup (2-10)" onclick="updateResult()"> Coup (2-10)</label><br>
-            <label><input type="checkbox" value="Dream On (2-8)" onclick="updateResult()"> Dream On (2-8)</label><br>
-            <label><input type="checkbox" value="Throw Throw Burrito (2-6)" onclick="updateResult()"> Throw Throw Burrito (2-6)</label><br>
-            <label><input type="checkbox" value="Ticket To Ride (2-6)" onclick="updateResult()"> Ticket To Ride (2-6)</label><br>
-            <label><input type="checkbox" value="Carcassone (2-6)" onclick="updateResult()"> Carcassone (2-6)</label><br>
-            <label><input type="checkbox" value="Exploding Kittens (2-10)" onclick="updateResult()"> Exploding Kittens (2-10)</label><br>
-            <label><input type="checkbox" value="Scooby Doo (1-6)" onclick="updateResult()"> Scooby Doo (1-6)</label><br>
-            <label><input type="checkbox" value="Lobisomen (3-8)" onclick="updateResult()"> Lobisomen (3-8)</label><br>
-            <label><input type="checkbox" value="BANG (3-8)" onclick="updateResult()"> BANG (3-8)</label><br>
-            <label><input type="checkbox" value="Spyfall (3-8)" onclick="updateResult()"> Spyfall (3-8)</label><br>
-            <label><input type="checkbox" value="Bode of War (3-6)" onclick="updateResult()"> Bode of War (3-6)</label><br>
-            <label><input type="checkbox" value="Dixit (4-8)" onclick="updateResult()"> Dixit (4-8)</label><br>
-            <label><input type="checkbox" value="Saboteur (3-10)" onclick="updateResult()"> Saboteur (3-10)</label><br>
-            <label><input type="checkbox" value="Academia/Enciclopédia (4-8)" onclick="updateResult()"> Academia/Enciclopédia (4-8)</label><br>
-            <label><input type="checkbox" value="Código Secreto (4+)" onclick="updateResult()"> Código Secreto (4+)</label><br>
-            <label><input type="checkbox" value="Deception (4-12)" onclick="updateResult()"> Deception (4-12)</label><br>
-            <label><input type="checkbox" value="Os Maus Companheiros (4-8)" onclick="updateResult()"> Os Maus Companheiros (4-8)</label><br>
-            <label><input type="checkbox" value="The Resistance (5-10)" onclick="updateResult()"> The Resistance (5-10)</label><br>
-            <label><input type="checkbox" value="No Thanks (3-8)" onclick="updateResult()"> No Thanks (3-8)</label><br>
-            <label><input type="checkbox" value="Estupefaça (4-8)" onclick="updateResult()"> Estupefaça (4-8)</label><br>
-            <label><input type="checkbox" value="Time’s Up (4+)" onclick="updateResult()"> Time’s Up (4+)</label><br>
-            <label><input type="checkbox" value="Imagine (2+)" onclick="updateResult()"> Imagine (2+)</label><br>
-            <label><input type="checkbox" value="Quartz (3-6)" onclick="updateResult()"> Quartz (3-6)</label><br>
-            <label><input type="checkbox" value="Sintonia (2+)" onclick="updateResult()"> Sintonia (2+)</label><br>
-            <label><input type="checkbox" value="Paranormal Detectives (2-6)" onclick="updateResult()"> Paranormal Detectives (2-6)</label><br>
-            <label><input type="checkbox" value="Convidados Indesejados (1-8)" onclick="updateResult()"> Convidados Indesejados (1-8)</label><br>
-            <label><input type="checkbox" value="A Última Mensagem (3-8)" onclick="updateResult()"> A Última Mensagem (3-8)</label><br>
-            <label><input type="checkbox" value="That’s not a Hat (3-8)" onclick="updateResult()"> That’s not a Hat (3-8)</label><br>
-            <label><input type="checkbox" value="Telestrations (4-8)" onclick="updateResult()"> Telestrations (4-8)</label><br>
-            <label><input type="checkbox" value="Ito (2-8)" onclick="updateResult()"> Ito (2-8)</label><br>
-            <label><input type="checkbox" value="Dreadful Circus (4-8)" onclick="updateResult()"> Dreadful Circus (4-8)</label><br>
-            <label><input type="checkbox" value="Máfia de Cuba (6-12)" onclick="updateResult()"> Máfia de Cuba (6-12)</label><br>
-            <label><input type="checkbox" value="Hollywood 1947 (1-9)" onclick="updateResult()"> Hollywood 1947 (1-9)</label><br>
-        </div>
-<br>
-       <button onclick="mostrarDiv('7jog')">7 jogadores</button>
-        <div id="7jog" class="category hidden">
-            <h2>7 Jogadores</h2>
-            <label><input type="checkbox" value="Black Stories (2+)" onclick="updateResult()"> Black Stories (2+)</label><br>
-            <label><input type="checkbox" value="Timeline (2-8)" onclick="updateResult()"> Timeline (2-8)</label><br>
-            <label><input type="checkbox" value="Pega em 6 (2-10)" onclick="updateResult()"> Pega em 6 (2-10)</label><br>
-            <label><input type="checkbox" value="Taco Gato Cabra (2-8)" onclick="updateResult()"> Taco Gato Cabra (2-8)</label><br>
-            <label><input type="checkbox" value="Concept (2+)" onclick="updateResult()"> Concept (2+)</label><br>
-            <label><input type="checkbox" value="Coup (2-10)" onclick="updateResult()"> Coup (2-10)</label><br>
-            <label><input type="checkbox" value="Dream On (2-8)" onclick="updateResult()"> Dream On (2-8)</label><br>
-            <label><input type="checkbox" value="Exploding Kittens (2-10)" onclick="updateResult()"> Exploding Kittens (2-10)</label><br>
-            <label><input type="checkbox" value="Lobisomen (3-8)" onclick="updateResult()"> Lobisomen (3-8)</label><br>
-            <label><input type="checkbox" value="BANG (3-8)" onclick="updateResult()"> BANG (3-8)</label><br>
-            <label><input type="checkbox" value="Spyfall (3-8)" onclick="updateResult()"> Spyfall (3-8)</label><br>
-            <label><input type="checkbox" value="Dixit (4-8)" onclick="updateResult()"> Dixit (4-8)</label><br>
-            <label><input type="checkbox" value="Saboteur (3-10)" onclick="updateResult()"> Saboteur (3-10)</label><br>
-            <label><input type="checkbox" value="Academia/Enciclopédia (4-8)" onclick="updateResult()"> Academia/Enciclopédia (4-8)</label><br>
-            <label><input type="checkbox" value="Código Secreto (4+)" onclick="updateResult()"> Código Secreto (4+)</label><br>
-            <label><input type="checkbox" value="Deception (4-12)" onclick="updateResult()"> Deception (4-12)</label><br>
-            <label><input type="checkbox" value="Os Maus Companheiros (4-8)" onclick="updateResult()"> Os Maus Companheiros (4-8)</label><br>
-            <label><input type="checkbox" value="The Resistance (5-10)" onclick="updateResult()"> The Resistance (5-10)</label><br>
-            <label><input type="checkbox" value="No Thanks (3-8)" onclick="updateResult()"> No Thanks (3-8)</label><br>
-            <label><input type="checkbox" value="Estupefaça (4-8)" onclick="updateResult()"> Estupefaça (4-8)</label><br>
-            <label><input type="checkbox" value="Time’s Up (4+)" onclick="updateResult()"> Time’s Up (4+)</label><br>
-            <label><input type="checkbox" value="Imagine (2+)" onclick="updateResult()"> Imagine (2+)</label><br>
-            <label><input type="checkbox" value="Sintonia (2+)" onclick="updateResult()"> Sintonia (2+)</label><br>
-            <label><input type="checkbox" value="Convidados Indesejados (1-8)" onclick="updateResult()"> Convidados Indesejados (1-8)</label><br>
-            <label><input type="checkbox" value="A Última Mensagem (3-8)" onclick="updateResult()"> A Última Mensagem (3-8)</label><br>
-            <label><input type="checkbox" value="That’s not a Hat (3-8)" onclick="updateResult()"> That’s not a Hat (3-8)</label><br>
-            <label><input type="checkbox" value="Telestrations (4-8)" onclick="updateResult()"> Telestrations (4-8)</label><br>
-            <label><input type="checkbox" value="Ito (2-8)" onclick="updateResult()"> Ito (2-8)</label><br>
-            <label><input type="checkbox" value="Dreadful Circus (4-8)" onclick="updateResult()"> Dreadful Circus (4-8)</label><br>
-            <label><input type="checkbox" value="Máfia de Cuba (6-12)" onclick="updateResult()"> Máfia de Cuba (6-12)</label><br>
-            <label><input type="checkbox" value="Hollywood 1947 (1-9)" onclick="updateResult()"> Hollywood 1947 (1-9)</label><br>
-        </div>
-<br>
-       <button onclick="mostrarDiv('8jog')">8 jogadores</button>
-        <div id="8jog" class="category hidden">
-            <h2>8 Jogadores</h2>
-            <label><input type="checkbox" value="Black Stories (2+)" onclick="updateResult()"> Black Stories (2+)</label><br>
-            <label><input type="checkbox" value="Timeline (2-8)" onclick="updateResult()"> Timeline (2-8)</label><br>
-            <label><input type="checkbox" value="Pega em 6 (2-10)" onclick="updateResult()"> Pega em 6 (2-10)</label><br>
-            <label><input type="checkbox" value="Taco Gato Cabra (2-8)" onclick="updateResult()"> Taco Gato Cabra (2-8)</label><br>
-            <label><input type="checkbox" value="Concept (2+)" onclick="updateResult()"> Concept (2+)</label><br>
-            <label><input type="checkbox" value="Coup (2-10)" onclick="updateResult()"> Coup (2-10)</label><br>
-            <label><input type="checkbox" value="Dream On (2-8)" onclick="updateResult()"> Dream On (2-8)</label><br>
-            <label><input type="checkbox" value="Exploding Kittens (2-10)" onclick="updateResult()"> Exploding Kittens (2-10)</label><br>
-            <label><input type="checkbox" value="Lobisomen (3-8)" onclick="updateResult()"> Lobisomen (3-8)</label><br>
-            <label><input type="checkbox" value="BANG (3-8)" onclick="updateResult()"> BANG (3-8)</label><br>
-            <label><input type="checkbox" value="Spyfall (3-8)" onclick="updateResult()"> Spyfall (3-8)</label><br>
-            <label><input type="checkbox" value="Dixit (4-8)" onclick="updateResult()"> Dixit (4-8)</label><br>
-            <label><input type="checkbox" value="Saboteur (3-10)" onclick="updateResult()"> Saboteur (3-10)</label><br>
-            <label><input type="checkbox" value="Academia/Enciclopédia (4-8)" onclick="updateResult()"> Academia/Enciclopédia (4-8)</label><br>
-            <label><input type="checkbox" value="Código Secreto (4+)" onclick="updateResult()"> Código Secreto (4+)</label><br>
-            <label><input type="checkbox" value="Deception (4-12)" onclick="updateResult()"> Deception (4-12)</label><br>
-            <label><input type="checkbox" value="Os Maus Companheiros (4-8)" onclick="updateResult()"> Os Maus Companheiros (4-8)</label><br>
-            <label><input type="checkbox" value="The Resistance (5-10)" onclick="updateResult()"> The Resistance (5-10)</label><br>
-            <label><input type="checkbox" value="No Thanks (3-8)" onclick="updateResult()"> No Thanks (3-8)</label><br>
-            <label><input type="checkbox" value="Estupefaça (4-8)" onclick="updateResult()"> Estupefaça (4-8)</label><br>
-            <label><input type="checkbox" value="Time’s Up (4+)" onclick="updateResult()"> Time’s Up (4+)</label><br>
-            <label><input type="checkbox" value="Imagine (2+)" onclick="updateResult()"> Imagine (2+)</label><br>
-            <label><input type="checkbox" value="Sintonia (2+)" onclick="updateResult()"> Sintonia (2+)</label><br>
-            <label><input type="checkbox" value="Convidados Indesejados (1-8)" onclick="updateResult()"> Convidados Indesejados (1-8)</label><br>
-            <label><input type="checkbox" value="A Última Mensagem (3-8)" onclick="updateResult()"> A Última Mensagem (3-8)</label><br>
-            <label><input type="checkbox" value="That’s not a Hat (3-8)" onclick="updateResult()"> That’s not a Hat (3-8)</label><br>
-            <label><input type="checkbox" value="Telestrations (4-8)" onclick="updateResult()"> Telestrations (4-8)</label><br>
-            <label><input type="checkbox" value="Ito (2-8)" onclick="updateResult()"> Ito (2-8)</label><br>
-            <label><input type="checkbox" value="Dreadful Circus (4-8)" onclick="updateResult()"> Dreadful Circus (4-8)</label><br>
-            <label><input type="checkbox" value="Máfia de Cuba (6-12)" onclick="updateResult()"> Máfia de Cuba (6-12)</label><br>
-            <label><input type="checkbox" value="Hollywood 1947 (1-9)" onclick="updateResult()"> Hollywood 1947 (1-9)</label><br>
-        </div>
-<br>
-       <button onclick="mostrarDiv('9jog')">9 jogadores</button>
-        <div id="9jog" class="category hidden">
-            <h2>9 Jogadores</h2>
-            <label><input type="checkbox" value="Black Stories (2+)" onclick="updateResult()"> Black Stories (2+)</label><br>
-            <label><input type="checkbox" value="Pega em 6 (2-10)" onclick="updateResult()"> Pega em 6 (2-10)</label><br>
-            <label><input type="checkbox" value="Concept (2+)" onclick="updateResult()"> Concept (2+)</label><br>
-            <label><input type="checkbox" value="Coup (2-10)" onclick="updateResult()"> Coup (2-10)</label><br>
-            <label><input type="checkbox" value="Exploding Kittens (2-10)" onclick="updateResult()"> Exploding Kittens (2-10)</label><br>
-            <label><input type="checkbox" value="Saboteur (3-10)" onclick="updateResult()"> Saboteur (3-10)</label><br>
-            <label><input type="checkbox" value="Código Secreto (4+)" onclick="updateResult()"> Código Secreto (4+)</label><br>
-            <label><input type="checkbox" value="Deception (4-12)" onclick="updateResult()"> Deception (4-12)</label><br>
-            <label><input type="checkbox" value="The Resistance (5-10)" onclick="updateResult()"> The Resistance (5-10)</label><br>
-            <label><input type="checkbox" value="Time’s Up (4+)" onclick="updateResult()"> Time’s Up (4+)</label><br>
-            <label><input type="checkbox" value="Imagine (2+)" onclick="updateResult()"> Imagine (2+)</label><br>
-            <label><input type="checkbox" value="Sintonia (2+)" onclick="updateResult()"> Sintonia (2+)</label><br>
-            <label><input type="checkbox" value="Máfia de Cuba (6-12)" onclick="updateResult()"> Máfia de Cuba (6-12)</label><br>
-            <label><input type="checkbox" value="Hollywood 1947 (1-9)" onclick="updateResult()"> Hollywood 1947 (1-9)</label><br>
-        </div>
-<br>
-       <button onclick="mostrarDiv('10jog')">10 jogadores</button>
-        <div id="10jog" class="category hidden">
-            <h2>10 Jogadores</h2>
-            <label><input type="checkbox" value="Black Stories (2+)" onclick="updateResult()"> Black Stories (2+)</label><br>
-            <label><input type="checkbox" value="Pega em 6 (2-10)" onclick="updateResult()"> Pega em 6 (2-10)</label><br>
-            <label><input type="checkbox" value="Concept (2+)" onclick="updateResult()"> Concept (2+)</label><br>
-            <label><input type="checkbox" value="Coup (2-10)" onclick="updateResult()"> Coup (2-10)</label><br>
-            <label><input type="checkbox" value="Exploding Kittens (2-10)" onclick="updateResult()"> Exploding Kittens (2-10)</label><br>
-            <label><input type="checkbox" value="Saboteur (3-10)" onclick="updateResult()"> Saboteur (3-10)</label><br>
-            <label><input type="checkbox" value="Código Secreto (4+)" onclick="updateResult()"> Código Secreto (4+)</label><br>
-            <label><input type="checkbox" value="Deception (4-12)" onclick="updateResult()"> Deception (4-12)</label><br>
-            <label><input type="checkbox" value="The Resistance (5-10)" onclick="updateResult()"> The Resistance (5-10)</label><br>
-            <label><input type="checkbox" value="Time’s Up (4+)" onclick="updateResult()"> Time’s Up (4+)</label><br>
-            <label><input type="checkbox" value="Imagine (2+)" onclick="updateResult()"> Imagine (2+)</label><br>
-            <label><input type="checkbox" value="Sintonia (2+)" onclick="updateResult()"> Sintonia (2+)</label><br>
-            <label><input type="checkbox" value="Máfia de Cuba (6-12)" onclick="updateResult()"> Máfia de Cuba (6-12)</label><br>
-        </div>
-<br>
-       <button onclick="mostrarDiv('11mais')">11 jogadores</button>
-        <div id="11mais" class="category hidden">
-            <h2>11+ Jogadores</h2>
-            <label><input type="checkbox" value="Black Stories (2+)" onclick="updateResult()"> Black Stories (2+)</label><br>
-            <label><input type="checkbox" value="Concept (2+)" onclick="updateResult()"> Concept (2+)</label><br>
-            <label><input type="checkbox" value="Código Secreto (4+)" onclick="updateResult()"> Código Secreto (4+)</label><br>
-            <label><input type="checkbox" value="Deception (4-12)" onclick="updateResult()"> Deception (4-12)</label><br>
-            <label><input type="checkbox" value="Time’s Up (4+)" onclick="updateResult()"> Time’s Up (4+)</label><br>
-            <label><input type="checkbox" value="Imagine (2+)" onclick="updateResult()"> Imagine (2+)</label><br>
-            <label><input type="checkbox" value="Sintonia (2+)" onclick="updateResult()"> Sintonia (2+)</label><br>
-            <label><input type="checkbox" value="Máfia de Cuba (6-12)" onclick="updateResult()"> Máfia de Cuba (6-12)</label><br>
-        </div>
+    <div id="game-container">
+        <button onclick="filterGames(1, '1 jogador')">1 jogador</button>
+        <button onclick="filterGames(2, '2 jogadores')">2 jogadores</button>
+	<button onclick="filterGames(3, '3 jogadores')">3 jogadores</button>
+	<button onclick="filterGames(4, '4 jogadores')">4 jogadores</button>
+	<button onclick="filterGames(5, '5 jogadores')">5 jogadores</button>
+	<button onclick="filterGames(6, '6 jogadores')">6 jogadores</button>
+	<button onclick="filterGames(7, '7 jogadores')">7 jogadores</button>
+	<button onclick="filterGames(8, '8 jogadores')">8 jogadores</button>
+	<button onclick="filterGames(9, '9 jogadores')">9 jogadores</button>
+        <button onclick="filterGames(10, '10 jogadores')">10 jogadores</button>
+	<button onclick="filterGames(11, '11+ jogadores')">11+ jogadores</button>
+        <!-- Adicione mais botões conforme necessário -->
     </div>
-<hr><br><h2><b><font color="green">Lista de jogos selecionados</b>:</h2><button onclick="copyResult()">Copiar Resultado</button>
-    <div id="result" class="result"></div>
+    
+    <div id="games" class="hidden">
+        <!-- Lista única de jogos escondida -->
+        <div data-min="1" data-max="6">Scooby Doo (1-6)</div>
+        <div data-min="2" data-max="8">Timeline (2-8)</div>
+        <div data-min="2" data-max="10">Pega em 6 (2-10)</div>
+        <div data-min="2" data-max="8">Taco Gato Cabra (2-8)</div>
+        <div data-min="2" data-max="100">Concept (2+)</div>
+        <div data-min="2" data-max="6">Scotland Yard (2-6)</div>
+        <div data-min="2" data-max="10">Coup (2-10)</div>
+        <div data-min="2" data-max="8">Dream On (2-8)</div>
+        <div data-min="2" data-max="6">Throw Throw Burrito (2-6)</div>
+        <div data-min="2" data-max="6">Ticket To Ride (2-6)</div>
+        <div data-min="2" data-max="6">Carcassone (2-6)</div>
+        <div data-min="2" data-max="10">Exploding Kittens (2-10)</div>
+        <div data-min="2" data-max="100">Black Stories (2+)</div>
+        <div data-min="1" data-max="6">Scooby Doo (1-6)</div>
+        <div data-min="3" data-max="8">Lobisomen (3-8)</div>
+        <div data-min="3" data-max="8">BANG (3-8)</div>
+        <div data-min="3" data-max="8">Spyfall (3-8)</div>
+        <div data-min="3" data-max="6">Bode of War (3-6)</div>
+        <div data-min="4" data-max="8">Dixit (4-8)</div>
+ 	<div data-min="3" data-max="10">Saboteur (3-10)</div>
+ 	<div data-min="4" data-max="8">Academia/Enciclopédia (4-8)</div>
+ 	<div data-min="4" data-max="100">Código Secreto (4+)</div>
+ 	<div data-min="4" data-max="12">Deception (4-12)</div>
+ 	<div data-min="4" data-max="8">Os Maus Companheiros (4-8)</div>
+ 	<div data-min="5" data-max="10">The Resistance (5-10)</div>
+ 	<div data-min="3" data-max="8">No Thanks (3-8)</div>
+ 	<div data-min="4" data-max="8">Estupefaça (4-8)</div>
+ 	<div data-min="4" data-max="100">Time’s Up (4+)</div>
+ 	<div data-min="2" data-max="100">Imagine (2+)</div>
+ 	<div data-min="3" data-max="6">Quartz (3-6)</div>
+ 	<div data-min="2" data-max="100">Sintonia (2+)</div>
+ 	<div data-min="2" data-max="6">Paranormal Detectives (2-6)</div>
+ 	<div data-min="1" data-max="8">Convidados Indesejados (1-8)</div>
+ 	<div data-min="3" data-max="8">A Última Mensagem (3-8)</div>
+ 	<div data-min="3" data-max="8">That’s not a Hat (3-8)</div>
+ 	<div data-min="4" data-max="8">Telestrations (4-8)</div>
+ 	<div data-min="2" data-max="8">Ito (2-8)</div>
+ 	<div data-min="4" data-max="8">Dreadful Circus (4-8)</div>
+ 	<div data-min="6" data-max="12">Máfia de Cuba (6-12)</div>
+ 	<div data-min="1" data-max="9">Hollywood 1947 (1-9)</div>
+        <!-- Adicione mais jogos conforme necessário -->
+    </div>
+
+    <div id="game-list" class="game-list"></div>
+
+    <div class="selected-games" id="selected-games">
+        <h2>Jogos selecionados:</h2>
+    </div>
+
+    <button id="copy-button" onclick="copyToClipboard()">Copiar a lista</button>
+
+    <script>
+        function filterGames(players, buttonName) {
+            const games = document.querySelectorAll('#games div');
+            const gameList = document.getElementById('game-list');
+            gameList.innerHTML = '';
+
+            games.forEach(game => {
+                const min = parseInt(game.getAttribute('data-min'));
+                const max = parseInt(game.getAttribute('data-max'));
+
+                if (players >= min && players <= max) {
+                    const gameDiv = document.createElement('div');
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.id = game.textContent;
+                    checkbox.name = 'games';
+                    checkbox.value = game.textContent;
+                    checkbox.onchange = updateSelectedGames;
+
+                    const label = document.createElement('label');
+                    label.htmlFor = game.textContent;
+                    label.textContent = game.textContent;
+
+                    gameDiv.appendChild(checkbox);
+                    gameDiv.appendChild(label);
+                    gameList.appendChild(gameDiv);
+                }
+            });
+
+            const selectedGamesContainer = document.getElementById('selected-games');
+            selectedGamesContainer.innerHTML = '<h2>Jogos selecionados:</h2>';
+            const category = document.createElement('p');
+            category.innerHTML = buttonName + '<br><br>';
+            category.setAttribute('data-category', 'true');
+            selectedGamesContainer.appendChild(category);
+
+            updateSelectedGames();
+        }
+
+        function updateSelectedGames() {
+            const checkboxes = document.querySelectorAll('input[name="games"]:checked');
+            const selectedGamesContainer = document.getElementById('selected-games');
+
+            const category = selectedGamesContainer.querySelector('p[data-category]').innerHTML;
+            selectedGamesContainer.innerHTML = '<h2>Jogos selecionados:</h2>';
+            const categoryP = document.createElement('p');
+            categoryP.innerHTML = category;
+            categoryP.setAttribute('data-category', 'true');
+            selectedGamesContainer.appendChild(categoryP);
+
+            let count = 1;
+            checkboxes.forEach(checkbox => {
+                const gameName = document.createElement('p');
+                gameName.textContent = count + ". " + checkbox.value;
+                selectedGamesContainer.appendChild(gameName);
+                count++;
+            });
+        }
+
+        function copyToClipboard() {
+            const selectedGamesContainer = document.getElementById('selected-games');
+            let textToCopy = "";
+            selectedGamesContainer.querySelectorAll('p').forEach(p => {
+                textToCopy += p.textContent + "\n";
+            });
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                alert("Lista copiada para a área de transferência!");
+            }).catch(err => {
+                console.error("Erro ao copiar para a área de transferência: ", err);
+            });
+        }
+    </script>
 </body>
 </html>
