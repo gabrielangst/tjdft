@@ -107,6 +107,9 @@ function updateResult() {
 
 
 function copyResult() {
+
+            updateResult();
+    
             const result = document.getElementById('result');
             const range = document.createRange();
             range.selectNodeContents(result);
@@ -140,7 +143,8 @@ function copyResult() {
         <div id="1jog" class="category hidden">
             <h2>1 Jogador</h2>
             <label><input type="checkbox" value="Scooby Doo (1-6)" onclick="updateResult()"> Scooby Doo (1-6)</label><br>
-            <label><input type="checkbox" value="Convidados Indesejados (1-8)" onclick="updateResult()"> Convidados Indesejados (1-8)</label>
+            <label><input type="checkbox" value="Convidados Indesejados (1-8)" onclick="updateResult()"> Convidados Indesejados (1-8)</label><br>
+            <label><input type="checkbox" value="Hollywood 1947 (1-9)" onclick="updateResult()"> Hollywood 1947 (1-9)</label><br>
         </div>
 <br>
        <button onclick="mostrarDiv('2jog')">2 jogadores</button>
@@ -162,7 +166,8 @@ function copyResult() {
             <label><input type="checkbox" value="Sintonia (2+)" onclick="updateResult()"> Sintonia (2+)</label><br>
             <label><input type="checkbox" value="Paranormal Detectives (2-6)" onclick="updateResult()"> Paranormal Detectives (2-6)</label><br>
             <label><input type="checkbox" value="Convidados Indesejados (1-8)" onclick="updateResult()"> Convidados Indesejados (1-8)</label><br>
-            <label><input type="checkbox" value="Ito (2-8)" onclick="updateResult()"> Ito (2-8)</label>
+            <label><input type="checkbox" value="Ito (2-8)" onclick="updateResult()"> Ito (2-8)</label><br>
+            <label><input type="checkbox" value="Hollywood 1947 (1-9)" onclick="updateResult()"> Hollywood 1947 (1-9)</label><br>
         </div>
 <br>
        <button onclick="mostrarDiv('3jog')">3 jogadores</button>
@@ -194,7 +199,8 @@ function copyResult() {
             <label><input type="checkbox" value="Convidados Indesejados (1-8)" onclick="updateResult()"> Convidados Indesejados (1-8)</label><br>
             <label><input type="checkbox" value="A Última Mensagem (3-8)" onclick="updateResult()"> A Última Mensagem (3-8)</label><br>
             <label><input type="checkbox" value="That’s not a Hat (3-8)" onclick="updateResult()"> That’s not a Hat (3-8)</label><br>
-            <label><input type="checkbox" value="Ito (2-8)" onclick="updateResult()"> Ito (2-8)</label>
+            <label><input type="checkbox" value="Ito (2-8)" onclick="updateResult()"> Ito (2-8)</label><br>
+            <label><input type="checkbox" value="Hollywood 1947 (1-9)" onclick="updateResult()"> Hollywood 1947 (1-9)</label><br>
         </div>
 <br>
        <button onclick="mostrarDiv('4jog')">4 jogadores</button>
@@ -235,7 +241,8 @@ function copyResult() {
             <label><input type="checkbox" value="That’s not a Hat (3-8)" onclick="updateResult()"> That’s not a Hat (3-8)</label><br>
             <label><input type="checkbox" value="Telestrations (4-8)" onclick="updateResult()"> Telestrations (4-8)</label><br>
             <label><input type="checkbox" value="Ito (2-8)" onclick="updateResult()"> Ito (2-8)</label><br>
-            <label><input type="checkbox" value="Dreadful Circus (4-8)" onclick="updateResult()"> Dreadful Circus (4-8)</label>
+            <label><input type="checkbox" value="Dreadful Circus (4-8)" onclick="updateResult()"> Dreadful Circus (4-8)</label><br>
+            <label><input type="checkbox" value="Hollywood 1947 (1-9)" onclick="updateResult()"> Hollywood 1947 (1-9)</label><br>
         </div>
 <br>
        <button onclick="mostrarDiv('5jog')">5 jogadores</button>
@@ -277,7 +284,8 @@ function copyResult() {
             <label><input type="checkbox" value="That’s not a Hat (3-8)" onclick="updateResult()"> That’s not a Hat (3-8)</label><br>
             <label><input type="checkbox" value="Telestrations (4-8)" onclick="updateResult()"> Telestrations (4-8)</label><br>
             <label><input type="checkbox" value="Ito (2-8)" onclick="updateResult()"> Ito (2-8)</label><br>
-            <label><input type="checkbox" value="Dreadful Circus (4-8)" onclick="updateResult()"> Dreadful Circus (4-8)</label>
+            <label><input type="checkbox" value="Dreadful Circus (4-8)" onclick="updateResult()"> Dreadful Circus (4-8)</label><br>
+            <label><input type="checkbox" value="Hollywood 1947 (1-9)" onclick="updateResult()"> Hollywood 1947 (1-9)</label><br>
         </div>
 <br>
        <button onclick="mostrarDiv('6jog')">6 jogadores</button>
@@ -320,7 +328,8 @@ function copyResult() {
             <label><input type="checkbox" value="Telestrations (4-8)" onclick="updateResult()"> Telestrations (4-8)</label><br>
             <label><input type="checkbox" value="Ito (2-8)" onclick="updateResult()"> Ito (2-8)</label><br>
             <label><input type="checkbox" value="Dreadful Circus (4-8)" onclick="updateResult()"> Dreadful Circus (4-8)</label><br>
-            <label><input type="checkbox" value="Máfia de Cuba (6-12)" onclick="updateResult()"> Máfia de Cuba (6-12)</label>
+            <label><input type="checkbox" value="Máfia de Cuba (6-12)" onclick="updateResult()"> Máfia de Cuba (6-12)</label><br>
+            <label><input type="checkbox" value="Hollywood 1947 (1-9)" onclick="updateResult()"> Hollywood 1947 (1-9)</label><br>
         </div>
 <br>
        <button onclick="mostrarDiv('7jog')">7 jogadores</button>
@@ -355,7 +364,8 @@ function copyResult() {
             <label><input type="checkbox" value="Telestrations (4-8)" onclick="updateResult()"> Telestrations (4-8)</label><br>
             <label><input type="checkbox" value="Ito (2-8)" onclick="updateResult()"> Ito (2-8)</label><br>
             <label><input type="checkbox" value="Dreadful Circus (4-8)" onclick="updateResult()"> Dreadful Circus (4-8)</label><br>
-            <label><input type="checkbox" value="Máfia de Cuba (6-12)" onclick="updateResult()"> Máfia de Cuba (6-12)</label>
+            <label><input type="checkbox" value="Máfia de Cuba (6-12)" onclick="updateResult()"> Máfia de Cuba (6-12)</label><br>
+            <label><input type="checkbox" value="Hollywood 1947 (1-9)" onclick="updateResult()"> Hollywood 1947 (1-9)</label><br>
         </div>
 <br>
        <button onclick="mostrarDiv('8jog')">8 jogadores</button>
@@ -390,7 +400,27 @@ function copyResult() {
             <label><input type="checkbox" value="Telestrations (4-8)" onclick="updateResult()"> Telestrations (4-8)</label><br>
             <label><input type="checkbox" value="Ito (2-8)" onclick="updateResult()"> Ito (2-8)</label><br>
             <label><input type="checkbox" value="Dreadful Circus (4-8)" onclick="updateResult()"> Dreadful Circus (4-8)</label><br>
-            <label><input type="checkbox" value="Máfia de Cuba (6-12)" onclick="updateResult()"> Máfia de Cuba (6-12)</label>
+            <label><input type="checkbox" value="Máfia de Cuba (6-12)" onclick="updateResult()"> Máfia de Cuba (6-12)</label><br>
+            <label><input type="checkbox" value="Hollywood 1947 (1-9)" onclick="updateResult()"> Hollywood 1947 (1-9)</label><br>
+        </div>
+<br>
+       <button onclick="mostrarDiv('9jog')">9 jogadores</button>
+        <div id="9jog" class="category hidden">
+            <h2>9 Jogadores</h2>
+            <label><input type="checkbox" value="Black Stories (2+)" onclick="updateResult()"> Black Stories (2+)</label><br>
+            <label><input type="checkbox" value="Pega em 6 (2-10)" onclick="updateResult()"> Pega em 6 (2-10)</label><br>
+            <label><input type="checkbox" value="Concept (2+)" onclick="updateResult()"> Concept (2+)</label><br>
+            <label><input type="checkbox" value="Coup (2-10)" onclick="updateResult()"> Coup (2-10)</label><br>
+            <label><input type="checkbox" value="Exploding Kittens (2-10)" onclick="updateResult()"> Exploding Kittens (2-10)</label><br>
+            <label><input type="checkbox" value="Saboteur (3-10)" onclick="updateResult()"> Saboteur (3-10)</label><br>
+            <label><input type="checkbox" value="Código Secreto (4+)" onclick="updateResult()"> Código Secreto (4+)</label><br>
+            <label><input type="checkbox" value="Deception (4-12)" onclick="updateResult()"> Deception (4-12)</label><br>
+            <label><input type="checkbox" value="The Resistance (5-10)" onclick="updateResult()"> The Resistance (5-10)</label><br>
+            <label><input type="checkbox" value="Time’s Up (4+)" onclick="updateResult()"> Time’s Up (4+)</label><br>
+            <label><input type="checkbox" value="Imagine (2+)" onclick="updateResult()"> Imagine (2+)</label><br>
+            <label><input type="checkbox" value="Sintonia (2+)" onclick="updateResult()"> Sintonia (2+)</label><br>
+            <label><input type="checkbox" value="Máfia de Cuba (6-12)" onclick="updateResult()"> Máfia de Cuba (6-12)</label><br>
+            <label><input type="checkbox" value="Hollywood 1947 (1-9)" onclick="updateResult()"> Hollywood 1947 (1-9)</label><br>
         </div>
 <br>
        <button onclick="mostrarDiv('10jog')">10 jogadores</button>
@@ -408,7 +438,7 @@ function copyResult() {
             <label><input type="checkbox" value="Time’s Up (4+)" onclick="updateResult()"> Time’s Up (4+)</label><br>
             <label><input type="checkbox" value="Imagine (2+)" onclick="updateResult()"> Imagine (2+)</label><br>
             <label><input type="checkbox" value="Sintonia (2+)" onclick="updateResult()"> Sintonia (2+)</label><br>
-            <label><input type="checkbox" value="Máfia de Cuba (6-12)" onclick="updateResult()"> Máfia de Cuba (6-12)</label>
+            <label><input type="checkbox" value="Máfia de Cuba (6-12)" onclick="updateResult()"> Máfia de Cuba (6-12)</label><br>
         </div>
 <br>
        <button onclick="mostrarDiv('11mais')">11 jogadores</button>
@@ -421,7 +451,7 @@ function copyResult() {
             <label><input type="checkbox" value="Time’s Up (4+)" onclick="updateResult()"> Time’s Up (4+)</label><br>
             <label><input type="checkbox" value="Imagine (2+)" onclick="updateResult()"> Imagine (2+)</label><br>
             <label><input type="checkbox" value="Sintonia (2+)" onclick="updateResult()"> Sintonia (2+)</label><br>
-            <label><input type="checkbox" value="Máfia de Cuba (6-12)" onclick="updateResult()"> Máfia de Cuba (6-12)</label>
+            <label><input type="checkbox" value="Máfia de Cuba (6-12)" onclick="updateResult()"> Máfia de Cuba (6-12)</label><br>
         </div>
     </div>
 <hr><br><h2><b><font color="green">Lista de jogos selecionados</b>:</h2><button onclick="copyResult()">Copiar Resultado</button>
