@@ -33,6 +33,11 @@
             border-top: 1px solid #ccc;
             padding-top: 10px;
         }
+
+        /* CSS para ocultar a div por padrão */
+.hidden {
+    display: none;
+}
     </style>
     <script>
         function updateResult() {
@@ -48,18 +53,24 @@
 
             result.textContent = selectedOptions;
         }
+
+        function mostrarDiv(divId) {
+    var div = document.getElementById(divId);
+    div.classList.toggle("hidden");
+}
     </script>
 </head>
 <body>
     <h1>Lista de Seleção de Boardgames</h1>
     <div id="categories">
         <!-- Categorias e checkboxes -->
-        <div class="category">
+        <button onclick="mostrarDiv('1jog')">Clique aqui para mostrar a primeira div</button>
+        <div class="category" id="1jog" class="hidden">
             <h2>1 Jogador</h2>
             <label><input type="checkbox" value="Scooby Doo (1-6)" onclick="updateResult()"> Scooby Doo (1-6)</label><br>
             <label><input type="checkbox" value="Convidados Indesejados (1-8)" onclick="updateResult()"> Convidados Indesejados (1-8)</label>
         </div>
-        <div class="category" style="display: none;">
+        <div class="category">
             <h2>2 Jogadores</h2>
             <label><input type="checkbox" value="Black Stories (2+)" onclick="updateResult()"> Black Stories (2+)</label><br>
             <label><input type="checkbox" value="Timeline (2-8)" onclick="updateResult()"> Timeline (2-8)</label><br>
