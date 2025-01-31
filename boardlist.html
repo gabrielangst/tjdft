@@ -65,19 +65,21 @@
     </style>
     <script>
 
- function updateResult() {
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            const result = document.getElementById('result');
-            let selectedOptions = '';
+function updateResult() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const result = document.getElementById('result');
+    let selectedOptions = '';
 
-            checkboxes.forEach(checkbox => {
-                if (checkbox.checked) {
-                    selectedOptions += checkbox.value + '\n';
-                }
-            });
-
-            result.textContent = selectedOptions;
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            selectedOptions += checkbox.value + '\r\n'; // Adiciona quebra de linha compatível
         }
+    });
+
+    // Define o texto como textContent e innerHTML para maior compatibilidade
+    result.textContent = selectedOptions;
+    result.innerHTML = selectedOptions.replace(/\r\n/g, '<br>'); 
+}
 
  function mostrarDiv(divId) {
     var div = document.getElementById(divId);
@@ -103,6 +105,23 @@
             });
         }
 
+
+function copyResult() {
+            const result = document.getElementById('result');
+            const range = document.createRange();
+            range.selectNodeContents(result);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+
+            try {
+                document.execCommand('copy');                
+            } catch (err) {
+                alert('Não foi possível copiar o texto.');
+            }
+
+            selection.removeAllRanges();
+        }
 
     </script>
 </head>
@@ -405,7 +424,7 @@
             <label><input type="checkbox" value="Máfia de Cuba (6-12)" onclick="updateResult()"> Máfia de Cuba (6-12)</label>
         </div>
     </div>
-<hr><br><h2><b><font color="green">Lista de jogos selecionados</b>:</h2>
+<hr><br><h2><b><font color="green">Lista de jogos selecionados</b>:</h2><button onclick="copyResult()">Copiar Resultado</button>
     <div id="result" class="result"></div>
 </body>
 </html>
