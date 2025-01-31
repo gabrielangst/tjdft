@@ -34,10 +34,15 @@
             cursor: pointer;
             border-radius: 5px;
             transition: background-color 0.3s ease;
+
+&:focus{
+            background: #072440;
+        }
+
         }
         button:hover {
             background-color: #45a049;
-        }
+        }        
         input[type="checkbox"] {
             margin-right: 10px;
         }
@@ -125,8 +130,10 @@
     <button id="copy-button" onclick="copyToClipboard()">Copiar a lista</button>
 
     <script>
-        function filterGames(players, buttonName) {
-            const games = document.querySelectorAll('#games div');
+        function filterGames(players, buttonName) {        
+
+     
+	const games = document.querySelectorAll('#games div');
             const gameList = document.getElementById('game-list');
             gameList.innerHTML = '';
 
@@ -161,6 +168,8 @@
             selectedGamesContainer.appendChild(category);
 
             updateSelectedGames();
+
+
         }
 
         function updateSelectedGames() {
