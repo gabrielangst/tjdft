@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Convidados - Living Park Sul</title>
+    <script>
+        function copiarTexto(texto) {
+            navigator.clipboard.writeText(texto).then(() => {
+                alert("Texto copiado: " + texto);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Lista de Pessoas</h1>
+    <div>
+        <p>1. Gabriel Silva <button onclick="copiarTexto('Gabriel Silva')">Copiar Nome</button></p>
+        <p>CPF: 000.000.000-00 <button onclick="copiarTexto('000.000.000-00')">Copiar CPF</button></p>
+        <p>RG: 0000000 <button onclick="copiarTexto('0000000')">Copiar RG</button></p>
+    </div>
+    <div>
+        <p>2. Maria Oliveira <button onclick="copiarTexto('Maria Oliveira')">Copiar Nome</button></p>
+        <p>CPF: 111.111.111-11 <button onclick="copiarTexto('111.111.111-11')">Copiar CPF</button></p>
+        <p>RG: 1111111 <button onclick="copiarTexto('1111111')">Copiar RG</button></p>
+    </div>
+    <!-- Adicione mais pessoas conforme necessário -->
+</body>
+</html>
