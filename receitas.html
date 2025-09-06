@@ -41,7 +41,7 @@
   <header>
     <h1>Receitas Deliciosas 🍴</h1>
     <p>Escolha um prato para ver os ingredientes e o modo de preparo</p>
-    <select id="menu" onchange="mostrarReceita()"><p>1</p>
+    <select id="menu" onchange="mostrarReceita()"><p>A</p>
       <option value="">-- Selecione --</option>
       <option value="pizza">Pizza</option>
       <option value="waffle">Waffle</option>
@@ -112,7 +112,7 @@
         div.innerHTML = `
           <h2>${receita.titulo}</h2>
           <h3>Ingredientes:</h3>
-          <ul>${receita.ingredientes.map(item => `<ul>${item}</ul>`).join("")}</ul>
+          <ul>${receita.ingredientes.map(item => `<ol type="1">${item}</ol>`).join("")}</ul>
           <h3>Modo de Preparo:</h3>
           <p>${receita.preparo.map(item => `<li>${item}</li>`).join("")}</p>
         `;
