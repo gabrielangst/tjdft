@@ -85,11 +85,13 @@ select {
     <select id="menu" onchange="mostrarReceita()">
       <option value="">-- Selecione --</option>
       <option value="waffleLiege">Waffle de Liège</option>
+      <option value="waffleBrux">Waffle de Bruxelas</option>
       <option value="pizzaFornoPizza">Pizza no Forno de Pizza</option>
       <option value="SaboresPizza">Sabores de Pizza</option>
       <option value="crepe">Crepes</option>
       <option value="cachorroQuente">Cachorro Quente</option>
       <option value="paoCaseiro">Pão Caseiro</option>
+      <option value="macarrao">Macarrão</option>
     </select>
   </header>
 
@@ -193,8 +195,8 @@ select {
           "4) Romeu e Julieta;"
         ],
         preparo: [
-          "",
-          ""         
+          "Sem modo de preparo.",
+          "Para ver detalhes sobre a preparação dos sabores, veja o final da receita normal da pizzas."         
           ]
       },
       
@@ -226,19 +228,66 @@ select {
 "5) Cobrir o Waffle com manteiga, margarina, Nutella, Maple Syrup ou Chocolate em gotas e frutas;"
                   ]
       },
+
+      waffleBrux: {
+        titulo: "Waffle de Bruxelas",
+        ingredientes: [
+          "★ 2 waffles completos",
+          "1 ovo",
+          "1 colher de sopa de margarina/manteiga",
+          "1/2 xícara de farinha de trigo",
+          "<b>2 colheres de açúcar</b>",
+          "<b>100 ml de leite morno</b>",
+          "<b>1 colher de CHÁ rasa de fermento biológico seco</b>",
+          "★ 4 waffles completos",
+          "2 ovos",
+          "1 colher de sopa cheia de margarina/manteiga",
+          "1 xícara de farinha de trigo",
+          "<b>4 colheres de açúcar</b>",
+          "<b>200 ml de leite morno</b>",
+          "<b>1 colher de SOPA rasa de fermento biológico seco</b>"
+           ],
+        preparo: [ 
+          "1) Misturar fermento com leite morno e 2 colheres de açúcar .Aguardar 8 minutos;",
+"2) Misturar com um fuê os outros ingredientes (farinha, manteiga, ovos). Depois, misturar tudo e bater;",
+"3) Utilizando uma concha de feijão, pegue um pouco da massa e vá colocando-a na máquina de waffle até completar os desenhos dos waffles;",
+"4) Abra a máquina de Waffle após cerca de 2 a 3 minutos e verifique se ele já está firme e bem assado;",
+"5) Cobrir o Waffle com manteiga, margarina, Nutella, Maple Syrup ou Chocolate em gotas e frutas;"
+                  ]
+      },
       
       cachorroQuente: {
         titulo: "Cachorro Quente",
         ingredientes: [
-          "Pães de hot dog",
-          "Salsichas",
-          "Molho de tomate",
-          "Milho, ervilha, batata palha",
-          "Mostarda e ketchup"
+          "★ Para 4 pessoas",
+          "1 pacote com 10 salsichas",
+          "Orégano",
+          "Pimenta do reino",
+          "1 ou 2 sachês de molho de tomate (300g a 600g)"
         ],
         preparo: [
-          "Cozinhe as salsichas. Monte o pão com os ingredientes e finalize com os condimentos. Sirva quente!",
-          ""
+          "1) Lavar as salsichas com água (10 salsichas, 1 pacote de salsichas de frango) e fervê-las, mantendo o fogo ligado por 5 minutos após borbulhar;",
+          "2) Em outra panela, ferver o molho de tomate (1 sachê ou 2) com orégano e pimenta do reino. Após ferver, misturar as salsichas fervidas com o molho fervido e servir."
+        ]
+      },
+
+      Macarrao: {
+        titulo: "Macarrão",
+        ingredientes: [
+          "★ 2 pessoas",
+          "165g de macarrão (1/3 da embalagem de 500g)",
+          "165g de carne moída (1/3 da emb. de 500g)",
+          "1/4 de colher de sopa com alho picado",
+          "1/2 colher de sopa de Azeite",
+          "Orégano",
+          "Pimenta do reino",
+          "1 sachê de molho de tomate (360g)"
+        ],
+        preparo: [
+          "1) Em uma panela, coloque 1/2 colher de sopa de azeite e 1/4 de colher de sopa de alho picado, fritando-o por 1 a 2 minutos;",
+          "2) Após, acrescente a carne moída com pimenta do reino e frite a carne por cerca de 3 a 5 minutos;",
+          "3) Após, acrescente o molho de tomate com 50ml de água na panela e misture tudo com o fogo ainda ligado;",
+          "4) Em uma outra panela, deixe a água ferver e depois acrescente a massa e deixe por 8 minutos. Após, misture tudo e sirva."  
         ]
       },
 
@@ -324,7 +373,7 @@ select {
   });
  </script>
 <div style="text-align:center">
-  <p>V25</p>
+  <p>V26</p>
 </div>
 </body>
 </html>
