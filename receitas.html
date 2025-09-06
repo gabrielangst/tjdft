@@ -87,6 +87,7 @@ select {
       <option value="waffleLiege">Waffle de Liège</option>
       <option value="pizzaFornoPizza">Pizza no Forno de Pizza</option>
       <option value="SaboresPizza">Sabores de Pizza</option>
+      <option value="crepe">Crepes</option>
       <option value="cachorroQuente">Cachorro Quente</option>
     </select>
   </header>
@@ -201,7 +202,25 @@ select {
           ""
         ]
       }
-    };
+    },
+      
+     crepe: {
+        titulo: "Crepes",
+        ingredientes: [
+          "1/2 xícara de trigo",
+          "1 ovo",
+          "125ml de leite",
+          "1 pitada de sal"
+        ],
+        preparo: [
+          "1) Junte tudo e bata no liquidificador até a massa ficar cremosa, mas ainda um pouco líquida;",
+          "2)  Depois, despejar a massa no recipiente da crepeira. Ligue a crepeita e deixe por 2 segundos em contato com a massa. Depois retire e aguarde cerca de 30 segundos até poder virar a massa do crepe na crepeira (utilizar a espátula de plástico incluída no equipamento);",
+          "3) Rechear o crepe ainda na crepeira, para aproveitar o calor da máquina para esquentar o recheio;",
+          "4) Retirar o crepe da crepeira e fechar ele em um prato."
+        ]
+      }
+    }; ;
+    
 
     function mostrarReceita() {
       const prato = document.getElementById("menu").value;
@@ -246,7 +265,7 @@ select {
   });
  </script>
 <div style="text-align:center">
-  <p>V18</p>
+  <p>V20</p>
 </div>
 </body>
 </html>
