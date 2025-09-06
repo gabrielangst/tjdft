@@ -118,7 +118,7 @@
         div.innerHTML = `
           <h2>${receita.titulo}</h2>
           <h3>Ingredientes:</h3>
-          <ul>${receita.ingredientes.map(item => `<ol type="1">${item}</ol>`).join("")}</ul>
+          <ul>${receita.ingredientes.map(item => `<li>${item}</li>`).join("")}</ul>
           <h3>Modo de Preparo:</h3>
           <p>${receita.preparo.map(item => `<li>${item}</li>`).join("")}</p>
         `;
