@@ -62,7 +62,7 @@ select {
 <body>
   <header>
     <h1>Receitas Deliciosas 🍴</h1>
-    <p>Escolha um prato para ver os ingredientes e o modo de preparo (v1)</p>
+    <p>Escolha um prato para ver os ingredientes e o modo de preparo (v2)</p>
     <select id="menu" onchange="mostrarReceita()">
       <option value="">-- Selecione --</option>
       <option value="pizza">Pizza</option>
@@ -142,7 +142,7 @@ select {
           <h3>Ingredientes:</h3>
           <ul>${receita.ingredientes.map(item => `<li>${item}</li>`).join("")}</ul>
           <h3>Modo de Preparo:</h3>
-          <p>${receita.preparo.map(item => `${item}`).join("")}</p>
+          <p>${receita.preparo.map(item => `${item}<br>`).join("")}</p>
         `;
       } else {
         div.innerHTML = "";
