@@ -84,8 +84,10 @@ select {
     <h1>Receitas de Casa 🍴</h1>
     <select id="menu" onchange="mostrarReceita()">
       <option value="">-- Selecione --</option>
-      <option value="pizza">Pizza</option>
+      <option value="pizzaFornoPizza">Pizza no Forno de Pizza</option>
       <option value="waffleLiege">Waffle de Liège</option>
+      <option value="pizzaFornoPizza">Pizza no Forno de Pizza</option>
+      <option value="SaboresPizza">Sabores de Pizza</option>
       <option value="cachorroQuente">Cachorro Quente</option>
     </select>
   </header>
@@ -94,8 +96,8 @@ select {
 
   <script>    
     const receitas = {
-      pizza: {
-        titulo: "Pizza Caseira",
+      pizzaFornoPizza: {
+        titulo: "Pizza no Forno de Pizza",
         ingredientes: [
           "★ 1 pizza grande (abrindo na mão- 300g):",
           "2 xícaras de farinha de trigo",
@@ -206,7 +208,7 @@ select {
   });
  </script>
 <div style="text-align:center">
-  <p>V15</p>
+  <p>V16</p>
 </div>
 </body>
 </html>
