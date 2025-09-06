@@ -58,17 +58,24 @@ select {
       padding-left: 20px;
     }
 
-    .especial {
-  color: #e67e22;
+.especial {
+  background-color: #fff3cd;     /* fundo amarelo suave */
+  border: 1px solid #ffc107;     /* borda dourada */
+  padding: 6px 10px;             /* espaçamento interno */
+  border-radius: 6px;            /* cantos arredondados */
+  display: inline-block;         /* permite aplicar padding e borda corretamente */
+  margin: 4px 0;                 /* espaçamento vertical */
   font-weight: bold;
+  color: #8a6d3b;                /* cor do texto */
 }
+
 
   </style>
 </head>
 <body>
   <header>
     <h1>Receitas Deliciosas 🍴</h1>
-    <p>Escolha um prato para ver os ingredientes e o modo de preparo (v5)</p>
+    <p>Escolha um prato para ver os ingredientes e o modo de preparo (v7)</p>
     <select id="menu" onchange="mostrarReceita()">
       <option value="">-- Selecione --</option>
       <option value="pizza">Pizza</option>
@@ -106,19 +113,24 @@ select {
           ]
       },
       waffle: {
-        titulo: "Waffle Crocante",
+        titulo: "Waffle de Liège",
         ingredientes: [
-          "Ingredientes para 1 pizza (abrindo na mão- 300g):",
-          "2 xícaras de farinha de trigo",
-          "1/4 colher de sopa de óleo",
-          "1/2 pitada de sal",
-          "1/4 de xícara de água morna (10s micrd.)",
-          "1/4 colher de sopa de fermento seco",
-          "1 colher de sopa de açúcar"
+          "★ Ingredientes para 1 waffle completo ou 2 waffles incompletos",
+          "1 ovo",
+          "1 colher de sopa de margarina/manteiga",
+          "1/5 de xícara de água",
+          "1/2 xícara de farinha de trigo",
+          "4 colheres de açúcar",
+          "1 pitada de sal",
+          "1/2 colher de CHÁ de fermento químico para bolo (por último)"
            ],
         preparo: [ 
-          "Misture tudo até formar uma massa homogênea. Coloque na máquina de waffle e asse até dourar. Sirva com mel ou frutas.",
-          ""
+          "1) Ligue a máquina de waffle na potência máxima;",
+
+"2) Utilizando um fuê, misture tudo, colocando a colher de chá de fermento químico para bolo por último;",
+"3) Utilizando uma concha de feijão, pegue um pouco da massa (encha a concha 1 vez) e coloque-a na máquina de waffle;",
+"4) Abra a máquina de Waffle após cerca de 4 minutos e verifique se ele já está firme e bem assado;",
+"5) Cobrir o Waffle com manteiga, margarina, Nutella, Maple Syrup ou Chocolate em gotas e frutas;"
                   ]
       },
       cachorroQuente: {
