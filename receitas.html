@@ -59,23 +59,30 @@ select {
     }
 
 .especial {
-  background-color: #fff3cd;     /* fundo amarelo suave */
-  border: 1px solid #ffc107;     /* borda dourada */
-  padding: 6px 10px;             /* espaçamento interno */
-  border-radius: 6px;            /* cantos arredondados */
-  display: inline-block;         /* permite aplicar padding e borda corretamente */
-  margin: 4px 0;                 /* espaçamento vertical */
+  background-color: #fff3cd;
+  border: 1px solid #ffc107;
+  padding: 6px 10px;
+  border-radius: 6px;
+  display: inline-block;
+  margin: 4px 0;
   font-weight: bold;
-  color: #8a6d3b;                /* cor do texto */
+  color: #8a6d3b;
+  transition: background-color 0.2s, color 0.2s;
 }
+
+.especial:active {
+  background-color: #cce5ff; /* azul claro */
+  color: #004085;            /* azul escuro */
+}
+
 
 
   </style>
 </head>
 <body>
   <header>
-    <h1>Receitas Deliciosas 🍴</h1>
-    <p>Escolha um prato para ver os ingredientes e o modo de preparo (v7)</p>
+    <h1>Receitas de Casa 🍴</h1>
+    <p>Escolha um prato para ver os ingredientes e o modo de preparo (v8)</p>
     <select id="menu" onchange="mostrarReceita()">
       <option value="">-- Selecione --</option>
       <option value="pizza">Pizza</option>
@@ -161,7 +168,7 @@ select {
 <ul>
   ${receita.ingredientes.map(item => 
     item.startsWith("★") 
-      ? `<br><span class="especial">${item}</span><br>`  
+      ? `<span class="especial">${item}</span><br><br>`  
       : `<li>${item}</li>`
   ).join("")}
 </ul>
