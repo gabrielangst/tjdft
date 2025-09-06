@@ -81,7 +81,7 @@ select {
 </head>
 <body>
   <header>
-    <h1>Receitas de Casa 🍴 (v11)</h1>
+    <h1>Receitas de Casa 🍴</h1><p>(v12)</p>
     <select id="menu" onchange="mostrarReceita()">
       <option value="">-- Selecione --</option>
       <option value="pizza">Pizza</option>
@@ -175,6 +175,15 @@ select {
           <h3>Modo de Preparo:</h3>
           <p>${receita.preparo.map(item => `${item}<br><br>`).join("")}</p>
         `;
+
+// 🔁 Agora adicionamos os eventos de clique nos spans recém-criados
+    document.querySelectorAll(".especial").forEach(span => {
+      span.addEventListener("click", () => {
+        span.classList.toggle("ativo");
+      });
+    });
+
+        
       } else {
         div.innerHTML = "";
       }
