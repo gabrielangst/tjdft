@@ -70,11 +70,11 @@ select {
   transition: background-color 0.2s, color 0.2s;
 }
 
-.especial:active {
+.especial.ativo {
   background-color: #cce5ff; /* azul claro */
   color: #004085;            /* azul escuro */
+  border-color: #66b0ff;
 }
-
 
 
   </style>
@@ -82,7 +82,7 @@ select {
 <body>
   <header>
     <h1>Receitas de Casa 🍴</h1>
-    <p>Escolha um prato para ver os ingredientes e o modo de preparo (v8)</p>
+    <p>Escolha um prato para ver os ingredientes e o modo de preparo (v9)</p>
     <select id="menu" onchange="mostrarReceita()">
       <option value="">-- Selecione --</option>
       <option value="pizza">Pizza</option>
@@ -94,6 +94,15 @@ select {
   <div class="card" id="receita"></div>
 
   <script>
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".especial").forEach(span => {
+      span.addEventListener("click", () => {
+        span.classList.toggle("ativo");
+      });
+    });
+  });
+    
     const receitas = {
       pizza: {
         titulo: "Pizza Caseira",
