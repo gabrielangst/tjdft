@@ -35,11 +35,15 @@ select {
   margin-bottom: 20px;
 }
 
-.card {
-  padding: 24px;
-  margin-top: 20px;
-  margin-bottom: 40px;
-}
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+
 
     header {
       text-align: center;
@@ -74,7 +78,7 @@ select {
       pizza: {
         titulo: "Pizza Caseira",
         ingredientes: [
-          "Ingredientes para 1 pizza (abrindo na mão- 300g):",
+          "★ Ingredientes para 1 pizza (abrindo na mão- 300g):",
           "2 xícaras de farinha de trigo",
           "1/4 colher de sopa de óleo",
           "1/2 pitada de sal",
@@ -138,7 +142,7 @@ select {
           <h3>Ingredientes:</h3>
           <ul>${receita.ingredientes.map(item => `<li>${item}</li>`).join("")}</ul>
           <h3>Modo de Preparo:</h3>
-          <p>${receita.preparo.map(item => `<li>${item}</li>`).join("")}</p>
+          <p>${receita.preparo.map(item => `${item}`).join("")}</p>
         `;
       } else {
         div.innerHTML = "";
