@@ -115,7 +115,7 @@
           <h3>Ingredientes:</h3>
           <ul>${receita.ingredientes.map(item => `<li>${item}</li>`).join("")}</ul>
           <h3>Modo de Preparo:</h3>
-          <p>${receita.preparo}</p>
+          <p>${receita.preparo.map(item => `<li>${item}</li>`).join("")}</p>
         `;
       } else {
         div.innerHTML = "";
