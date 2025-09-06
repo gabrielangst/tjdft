@@ -62,7 +62,7 @@ select {
 <body>
   <header>
     <h1>Receitas Deliciosas 🍴</h1>
-    <p>Escolha um prato para ver os ingredientes e o modo de preparo (v2)</p>
+    <p>Escolha um prato para ver os ingredientes e o modo de preparo (v3)</p>
     <select id="menu" onchange="mostrarReceita()">
       <option value="">-- Selecione --</option>
       <option value="pizza">Pizza</option>
@@ -82,9 +82,9 @@ select {
           "2 xícaras de farinha de trigo",
           "1/4 colher de sopa de óleo",
           "1/2 pitada de sal",
-          "1/4 de xícara de água morna (10s no microondas)",
-          "1/4 colher de sopa de fermento seco",
-          "1 colher de sopa de açúcar"
+          "<b>1/4 de xícara de água morna (10s no microondas)</b>",
+          "<b>1/4 colher de sopa de fermento seco</b>",
+          "<b>1 colher de sopa de açúca</b>r"
         ],
         preparo: [
           "1) Misture tudo, com exceção da água morna, fermento e açúcar, os quais serão misturados em separado primeiramente;",
@@ -149,7 +149,7 @@ select {
 </ul>
 
           <h3>Modo de Preparo:</h3>
-          <p>${receita.preparo.map(item => `${item}<br>`).join("")}</p>
+          <p>${receita.preparo.map(item => `${item}<br><br>`).join("")}</p>
         `;
       } else {
         div.innerHTML = "";
