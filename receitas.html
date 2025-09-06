@@ -57,12 +57,18 @@ select {
     ul {
       padding-left: 20px;
     }
+
+    .especial {
+  color: #e67e22;
+  font-weight: bold;
+}
+
   </style>
 </head>
 <body>
   <header>
     <h1>Receitas Deliciosas 🍴</h1>
-    <p>Escolha um prato para ver os ingredientes e o modo de preparo (v4)</p>
+    <p>Escolha um prato para ver os ingredientes e o modo de preparo (v5)</p>
     <select id="menu" onchange="mostrarReceita()">
       <option value="">-- Selecione --</option>
       <option value="pizza">Pizza</option>
@@ -143,7 +149,7 @@ select {
 <ul>
   ${receita.ingredientes.map(item => 
     item.startsWith("★") 
-      ? `<br>${item}` 
+      ? `<br><span class="especial">${item}</span><br>`  
       : `<li>${item}</li>`
   ).join("")}
 </ul>
