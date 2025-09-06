@@ -65,7 +65,6 @@
           "1 colher de sopa de açúcar"
         ],
         preparo: [
-          "Misture os ingredientes da massa, deixe descansar por 30 minutos. Abra a massa, adicione o molho e os recheios. Asse por 20 minutos a 200°C.",
           "1) Misture tudo, com exceção da água morna, fermento e açúcar, os quais serão misturados em separado primeiramente;",
 "2) Misturar tudo e acrescentar um pouco de água natural até dar liga e a massa virar uma só;",
 "3) Sovar, adicionando trigo na massa;",
@@ -113,7 +112,7 @@
         div.innerHTML = `
           <h2>${receita.titulo}</h2>
           <h3>Ingredientes:</h3>
-          <ul>${receita.ingredientes.map(item => `<li>${item}</li>`).join("")}</ul>
+          <ul>${receita.ingredientes.map(item => `<ol type="1">${item}</li>`).join("")}</ol>
           <h3>Modo de Preparo:</h3>
           <p>${receita.preparo.map(item => `<li>${item}</li>`).join("")}</p>
         `;
