@@ -82,7 +82,7 @@ select {
 <body>
   <header>
     <h1>Receitas de Casa 🍴</h1>
-    <p>Escolha um prato para ver os ingredientes e o modo de preparo (v9)</p>
+    <p>Escolha um prato para ver os ingredientes e o modo de preparo (v10)</p>
     <select id="menu" onchange="mostrarReceita()">
       <option value="">-- Selecione --</option>
       <option value="pizza">Pizza</option>
@@ -93,16 +93,7 @@ select {
 
   <div class="card" id="receita"></div>
 
-  <script>
-
-  document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".especial").forEach(span => {
-      span.addEventListener("click", () => {
-        span.classList.toggle("ativo");
-      });
-    });
-  });
-    
+  <script>    
     const receitas = {
       pizza: {
         titulo: "Pizza Caseira",
@@ -189,6 +180,14 @@ select {
         div.innerHTML = "";
       }
     }
-  </script>
+ 
+ document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".especial").forEach(span => {
+      span.addEventListener("click", () => {
+        span.classList.toggle("ativo");
+      });
+    });
+  });
+ </script>
 </body>
 </html>
