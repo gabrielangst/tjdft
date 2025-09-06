@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Receitas Deliciosas</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #fff8f0;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    select {
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h2 {
+      margin-top: 0;
+    }
+    ul {
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Receitas Deliciosas 🍴</h1>
+    <p>Escolha um prato para ver os ingredientes e o modo de preparo</p>
+    <select id="menu" onchange="mostrarReceita()">
+      <option value="">-- Selecione --</option>
+      <option value="pizza">Pizza</option>
+      <option value="waffle">Waffle</option>
+      <option value="cachorroQuente">Cachorro Quente</option>
+    </select>
+  </header>
+
+  <div class="card" id="receita"></div>
+
+  <script>
+    const receitas = {
+      pizza: {
+        titulo: "Pizza Caseira",
+        ingredientes: [
+          "2 xícaras de farinha de trigo",
+          "1 colher de fermento biológico",
+          "1/2 xícara de água morna",
+          "Molho de tomate",
+          "Queijo, presunto, tomate, orégano"
+        ],
+        preparo: "Misture os ingredientes da massa, deixe descansar por 30 minutos. Abra a massa, adicione o molho e os recheios. Asse por 20 minutos a 200°C."
+      },
+      waffle: {
+        titulo: "Waffle Crocante",
+        ingredientes: [
+          "2 ovos",
+          "2 xícaras de farinha de trigo",
+          "1 xícara de leite",
+          "2 colheres de açúcar",
+          "1 colher de fermento"
+        ],
+        preparo: "Misture tudo até formar uma massa homogênea. Coloque na máquina de waffle e asse até dourar. Sirva com mel ou frutas."
+      },
+      cachorroQuente: {
+        titulo: "Cachorro Quente Tradicional",
+        ingredientes: [
+          "Pães de hot dog",
+          "Salsichas",
+          "Molho de tomate",
+          "Milho, ervilha, batata palha",
+          "Mostarda e ketchup"
+        ],
+        preparo: "Cozinhe as salsichas. Monte o pão com os ingredientes e finalize com os condimentos. Sirva quente!"
+      }
+    };
+
+    function mostrarReceita() {
+      const prato = document.getElementById("menu").value;
+      const receita = receitas[prato];
+      const div = document.getElementById("receita");
+
+      if (receita) {
+        div.innerHTML = `
+          <h2>${receita.titulo}</h2>
+          <h3>Ingredientes:</h3>
+          <ul>${receita.ingredientes.map(item => `<li>${item}</li>`).join("")}</ul>
+          <h3>Modo de Preparo:</h3>
+          <p>${receita.preparo}</p>
+        `;
+      } else {
+        div.innerHTML = "";
+      }
+    }
+  </script>
+</body>
+</html>
