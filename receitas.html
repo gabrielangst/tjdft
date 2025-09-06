@@ -140,7 +140,14 @@ select {
         div.innerHTML = `
           <h2>${receita.titulo}</h2>
           <h3>Ingredientes:</h3>
-          <ul>${receita.ingredientes.map(item => `<li>${item}</li>`).join("")}</ul>
+<ul>
+  ${receita.ingredientes.map(item => 
+    item.startsWith("★") 
+      ? `<br>${item.slice(1).trim()}` 
+      : `<li>${item}</li>`
+  ).join("")}
+</ul>
+
           <h3>Modo de Preparo:</h3>
           <p>${receita.preparo.map(item => `${item}<br>`).join("")}</p>
         `;
