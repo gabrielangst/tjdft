@@ -77,6 +77,28 @@ select {
 }
 
 
+ .toggle {
+  background-color: #f8f9fa;
+  border: 1px solid #ccc;
+  padding: 12px;
+  width: 100%;
+  text-align: left;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.conteudo {
+  display: none;
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #fff;
+  border-left: 3px solid #ffc107;
+}
+   
+
+
   </style>
 </head>
 <body>
@@ -389,7 +411,12 @@ select {
       }
     }; 
     
+function toggleSecao(id) {
+  const secao = document.getElementById(id);
+  secao.style.display = secao.style.display === "none" || secao.style.display === "" ? "block" : "none";
+}
 
+    
     function mostrarReceita() {
       const prato = document.getElementById("menu").value;
       const receita = receitas[prato];
@@ -397,19 +424,29 @@ select {
 
       if (receita) {
         div.innerHTML = `
-          <h2>${receita.titulo}</h2>
-          <h3>Ingredientes:</h3>
-<ul>
-  ${receita.ingredientes.map(item => 
-    item.startsWith("★") 
-      ? `<span class="especial">${item}</span><br><br>`  
-      : `<li>${item}</li>`
-  ).join("")}
-</ul>
-<br>
-          <h3>Modo de Preparo:</h3>
-          <p>${receita.preparo.map(item => `${item}<br><br>`).join("")}</p>
-        `;
+  <h2>${receita.titulo}</h2>
+
+  <div class="secao">
+    <button class="toggle" onclick="toggleSecao('ingredientes')">🍽️ Ingredientes</button>
+    <div id="ingredientes" class="conteudo">
+      ${receita.ingredientes.map(item =>
+        item.startsWith("★")
+          ? `<span class="especial">${item}</span><br><br>`
+          : `<li>${item}</li>`
+      ).join("")}
+    </div>
+  </div>
+
+  <div class="secao">
+    <button class="toggle" onclick="toggleSecao('preparo')">🧑‍🍳 Modo de Preparo</button>
+    <div id="preparo" class="conteudo">
+      ${Array.isArray(receita.preparo)
+        ? receita.preparo.map(item => `<p>${item}</p>`).join("")
+        : `<p>${receita.preparo}</p>`}
+    </div>
+  </div>
+`;
+
 
 // 🔁 Agora adicionamos os eventos de clique nos spans recém-criados
     document.querySelectorAll(".especial").forEach(span => {
@@ -433,7 +470,7 @@ select {
   });
  </script>
 <div style="text-align:center">
-  <p>V33</p>
+  <p>V34</p>
 </div>
 </body>
 </html>
