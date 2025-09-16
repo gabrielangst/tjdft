@@ -97,6 +97,11 @@ select {
   border-left: 3px solid #fffaeb;
 }
    
+.toggle.ativo {
+  background-color: #d4edda; /* verde claro */
+  color: #155724;            /* verde escuro */
+  border-color: #28a745;
+}
 
 
   </style>
@@ -417,8 +422,19 @@ select {
     
 function toggleSecao(id) {
   const secao = document.getElementById(id);
-  secao.style.display = secao.style.display === "none" || secao.style.display === "" ? "block" : "none";
+  const botao = document.querySelector(`button[onclick="toggleSecao('${id}')"]`);
+
+  const isOpen = secao.style.display === "block";
+
+  // Alterna visibilidade
+  secao.style.display = isOpen ? "none" : "block";
+
+  // Alterna classe visual no botão
+  if (botao) {
+    botao.classList.toggle("ativo", !isOpen);
+  }
 }
+
 
     
 function mostrarReceita() {
@@ -496,7 +512,7 @@ function mostrarReceita() {
     
  </script>
 <div style="text-align:center">
-  <p>V39</p>
+  <p>V40</p>
 </div>
 </body>
 </html>
