@@ -92,10 +92,10 @@
   <label for="pessoas">🙋 Número de pessoas:</label>
   <input type="number" id="pessoas" min="1" placeholder="Ex: 10" style="width: 200px"/>
 
-  <label for="fatiasSalgadas">🍕 Fatias <b>salgadas</b> por pessoa:</label>
+  <label for="fatiasSalgadas">Fatias <b>salgadas</b> por pessoa:</label>
   <input type="number" id="fatiasSalgadas" min="1" value="3" style="width: 200px"/>
 
-  <label for="fatiasDoces">🍕 Fatias <b>doces</b> por pessoa:</label>
+  <label for="fatiasDoces">Fatias <b>doces</b> por pessoa:</label>
   <input type="number" id="fatiasDoces" min="0" value="2" style="width: 200px"/>
 
   <button onclick="calcularPizza()">Calcular Ingredientes</button>
@@ -142,8 +142,17 @@ function calcularPizza() {
 
   const ingredientesTotais = {};
   for (let ingrediente in ingredientesPorPizza) {
-    ingredientesTotais[ingrediente] = (ingredientesPorPizza[ingrediente] * totalPizzas).toFixed(2);
+  const total = ingredientesPorPizza[ingrediente] * totalPizzas;
+
+  if (ingrediente === "farinha") {
+    const kg = (total / 1000).toFixed(1); // transforma em kg com 1 casa decimal
+    const pacotes = Math.ceil(total / 1000); // número de pacotes de 1kg
+    ingredientesTotais[ingrediente] = `${kg} kg (${pacotes} pacote${pacotes > 1 ? "s" : ""})`;
+  } else {
+    ingredientesTotais[ingrediente] = total.toFixed(2);
   }
+}
+
 
   resultado.innerHTML = `
     <h3>Para ${pessoas} pessoas: <h1>${totalPizzas} pizzas</h1></h3>
@@ -167,6 +176,6 @@ function calcularPizza() {
 }
 
   </script>
-<p>V8</p>
+<p>V10</p>
 </body>
 </html>
