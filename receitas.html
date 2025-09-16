@@ -423,15 +423,13 @@ function toggleSecao(id) {
   const botao = document.querySelector(`button[onclick="toggleSecao('${id}')"]`);
 
   const isOpen = secao.style.display === "block";
-
-  // Alterna visibilidade
   secao.style.display = isOpen ? "none" : "block";
 
-  // Alterna classe visual no botão
   if (botao) {
     botao.classList.toggle("ativo", !isOpen);
   }
 }
+
 
 
     
@@ -448,17 +446,16 @@ function mostrarReceita() {
     receita.ingredientes.forEach(item => {
       if (item.startsWith("★")) {
         if (blocoAtual.length > 0) blocos.push(blocoAtual);
-        blocoAtual = [item]; // inicia novo bloco
+        blocoAtual = [item];
       } else {
         blocoAtual.push(item);
       }
     });
-    if (blocoAtual.length > 0) blocos.push(blocoAtual); // adiciona o último bloco
+    if (blocoAtual.length > 0) blocos.push(blocoAtual);
 
-    // 🔧 Renderizar cada bloco como seção expansível
     const htmlIngredientes = blocos.map((bloco, index) => {
       const id = `ingredienteBloco${index}`;
-      const titulo = bloco[0]; // linha com ★
+      const titulo = bloco[0];
       const itens = bloco.slice(1).map(i => `<li>${i}</li>`).join("");
 
       return `
@@ -471,10 +468,34 @@ function mostrarReceita() {
       `;
     }).join("");
 
-    // 🔧 Renderizar modo de preparo
-    const htmlPreparo = Array.isArray(receita.preparo)
-      ? receita.preparo.map(item => `<p>${item}</p>`).join("")
-      : `<p>${receita.preparo}</p>`;
+    // 🔁 Agrupar preparo por blocos que começam com ★
+    let blocosPreparo = [];
+    let blocoAtualPreparo = [];
+
+    receita.preparo.forEach(item => {
+      if (item.startsWith("★")) {
+        if (blocoAtualPreparo.length > 0) blocosPreparo.push(blocoAtualPreparo);
+        blocoAtualPreparo = [item];
+      } else {
+        blocoAtualPreparo.push(item);
+      }
+    });
+    if (blocoAtualPreparo.length > 0) blocosPreparo.push(blocoAtualPreparo);
+
+    const htmlPreparo = blocosPreparo.map((bloco, index) => {
+      const id = `preparoBloco${index}`;
+      const titulo = bloco[0];
+      const passos = bloco.slice(1).map(p => `<p>${p}</p>`).join("");
+
+      return `
+        <div class="secao">
+          <button class="toggle" onclick="toggleSecao('${id}')">${titulo}</button>
+          <div id="${id}" class="conteudo">
+            ${passos}
+          </div>
+        </div>
+      `;
+    }).join("");
 
     // 🔧 Inserir tudo no HTML
     div.innerHTML = `
@@ -495,7 +516,7 @@ function mostrarReceita() {
       </div>
     `;
 
-    // 🔁 Ativar cliques nos ingredientes especiais (★)
+    // 🔁 Ativar cliques nos ingredientes especiais
     document.querySelectorAll(".especial").forEach(span => {
       span.addEventListener("click", () => {
         span.classList.toggle("ativo");
@@ -507,10 +528,11 @@ function mostrarReceita() {
 }
 
 
+
     
  </script>
 <div style="text-align:center">
-  <p>V42</p>
+  <p>V43</p>
 </div>
 </body>
 </html>
