@@ -114,6 +114,9 @@
 
       const pizzasSalgadas = Math.ceil(totalFatiasSalgadas / fatiasPorPizza);
       const pizzasDoces = Math.ceil(totalFatiasDoces / fatiasPorPizza);
+      const sobraSalgadas = (pizzasSalgadas * fatiasPorPizza) - totalFatiasSalgadas;
+      const sobraDoces = (pizzasDoces * fatiasPorPizza) - totalFatiasDoces;
+
       const totalPizzas = pizzasSalgadas + pizzasDoces;
 
       const ingredientesPorPizza = {
@@ -134,6 +137,12 @@
         <h3>Para ${pessoas} pessoas:</h3>
         <p>🍕 ${pizzasSalgadas} pizzas salgadas</p>
         <p>🍕 ${pizzasDoces} pizzas doces</p>
+        <h4>Sobra de fatias:</h4>
+         <ul>
+          <li>Salgadas: ${sobraSalgadas} fatias</li>
+          <li>Doces: ${sobraDoces} fatias</li>
+        </ul>
+
         <h4>Ingredientes totais para ${totalPizzas} pizzas:</h4>
         <ul>
           <li>Farinha de trigo: ${ingredientesTotais.farinha} xícaras</li>
@@ -146,5 +155,6 @@
       `;
     }
   </script>
+<p>V3</p>
 </body>
 </html>
