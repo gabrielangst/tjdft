@@ -482,20 +482,43 @@ function mostrarReceita() {
     });
     if (blocoAtualPreparo.length > 0) blocosPreparo.push(blocoAtualPreparo);
 
-    const htmlPreparo = blocosPreparo.map((bloco, index) => {
-      const id = `preparoBloco${index}`;
-      const titulo = bloco[0];
-      const passos = bloco.slice(1).map(p => `<p>${p}</p>`).join("");
+  let htmlPreparo = "";
 
-      return `
-        <div class="secao">
-          <button class="toggle" onclick="toggleSecao('${id}')">${titulo}</button>
-          <div id="${id}" class="conteudo">
-            ${passos}
-          </div>
+// Verifica se há variações com ★
+const temVariacoesPreparo = receita.preparo.some(item => item.startsWith("★"));
+
+if (temVariacoesPreparo) {
+  let blocosPreparo = [];
+  let blocoAtualPreparo = [];
+
+  receita.preparo.forEach(item => {
+    if (item.startsWith("★")) {
+      if (blocoAtualPreparo.length > 0) blocosPreparo.push(blocoAtualPreparo);
+      blocoAtualPreparo = [item];
+    } else {
+      blocoAtualPreparo.push(item);
+    }
+  });
+  if (blocoAtualPreparo.length > 0) blocosPreparo.push(blocoAtualPreparo);
+
+  htmlPreparo = blocosPreparo.map((bloco, index) => {
+    const id = `preparoBloco${index}`;
+    const titulo = bloco[0];
+    const passos = bloco.slice(1).map(p => `<p>${p}</p>`).join("");
+
+    return `
+      <div class="secao">
+        <button class="toggle" onclick="toggleSecao('${id}')">${titulo}</button>
+        <div id="${id}" class="conteudo">
+          ${passos}
         </div>
-      `;
-    }).join("");
+      </div>
+    `;
+  }).join("");
+} else {
+  htmlPreparo = receita.preparo.map(item => `<p>${item}</p>`).join("");
+}
+
 
     // 🔧 Inserir tudo no HTML
     div.innerHTML = `
@@ -532,7 +555,7 @@ function mostrarReceita() {
     
  </script>
 <div style="text-align:center">
-  <p>V43</p>
+  <p>V44</p>
 </div>
 </body>
 </html>
