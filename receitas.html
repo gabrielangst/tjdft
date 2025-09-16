@@ -94,7 +94,7 @@ select {
   margin-top: 10px;
   padding: 10px;
   background-color: #fff;
-  border-left: 3px solid #ffc107;
+  border-left: 3px solid #fffaeb;
 }
    
 
@@ -468,9 +468,26 @@ function toggleSecao(id) {
       });
     });
   });
+
+// Salva o prato selecionado sempre que muda
+document.getElementById("menu").addEventListener("change", () => {
+  const pratoSelecionado = document.getElementById("menu").value;
+  localStorage.setItem("pratoSelecionado", pratoSelecionado);
+});
+
+// Ao carregar a página, restaura a seleção e mostra a receita
+window.addEventListener("load", () => {
+  const pratoSalvo = localStorage.getItem("pratoSelecionado");
+  if (pratoSalvo) {
+    document.getElementById("menu").value = pratoSalvo;
+    mostrarReceita();
+  }
+});
+
+    
  </script>
 <div style="text-align:center">
-  <p>V34</p>
+  <p>V35</p>
 </div>
 </body>
 </html>
