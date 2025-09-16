@@ -86,75 +86,87 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🍕 Calculadora de Pizza</h1>
-    <label for="pessoas">Número de pessoas:</label>
-    <input type="number" id="pessoas" min="1" placeholder="Ex: 10" style="width: 200px"/>
-    <button onclick="calcularPizza()" style="width: 250px">Calcular Ingredientes</button>
+<div class="container">
+  <h1>🍕 Calculadora de Pizza</h1>
 
-    <div id="resultado" class="resultado"></div>
-  </div>
+  <label for="pessoas">Número de pessoas:</label>
+  <input type="number" id="pessoas" min="1" placeholder="Ex: 10" />
+
+  <label for="fatiasSalgadas">Fatias salgadas por pessoa:</label>
+  <input type="number" id="fatiasSalgadas" min="1" value="3" />
+
+  <label for="fatiasDoces">Fatias doces por pessoa:</label>
+  <input type="number" id="fatiasDoces" min="0" value="2" />
+
+  <button onclick="calcularPizza()">Calcular Ingredientes</button>
+
+  <div id="resultado" class="resultado"></div>
+</div>
+
 
   <script>
-    function calcularPizza() {
-      const pessoas = parseInt(document.getElementById("pessoas").value);
-      const resultado = document.getElementById("resultado");
+function calcularPizza() {
+  const pessoas = parseInt(document.getElementById("pessoas").value);
+  const fatiasSalgadasPorPessoa = parseInt(document.getElementById("fatiasSalgadas").value);
+  const fatiasDocesPorPessoa = parseInt(document.getElementById("fatiasDoces").value);
+  const resultado = document.getElementById("resultado");
 
-      if (isNaN(pessoas) || pessoas <= 0) {
-        resultado.innerHTML = "<p>Informe um número válido de pessoas.</p>";
-        return;
-      }
+  if (
+    isNaN(pessoas) || pessoas <= 0 ||
+    isNaN(fatiasSalgadasPorPessoa) || fatiasSalgadasPorPessoa < 0 ||
+    isNaN(fatiasDocesPorPessoa) || fatiasDocesPorPessoa < 0
+  ) {
+    resultado.innerHTML = "<p>Preencha todos os campos corretamente.</p>";
+    return;
+  }
 
-      const fatiasPorPizza = 8;
-      const fatiasSalgadasPorPessoa = 3;
-      const fatiasDocesPorPessoa = 2;
+  const fatiasPorPizza = 8;
+  const totalFatiasSalgadas = pessoas * fatiasSalgadasPorPessoa;
+  const totalFatiasDoces = pessoas * fatiasDocesPorPessoa;
 
-      const totalFatiasSalgadas = pessoas * fatiasSalgadasPorPessoa;
-      const totalFatiasDoces = pessoas * fatiasDocesPorPessoa;
+  const pizzasSalgadas = Math.ceil(totalFatiasSalgadas / fatiasPorPizza);
+  const pizzasDoces = Math.ceil(totalFatiasDoces / fatiasPorPizza);
+  const totalPizzas = pizzasSalgadas + pizzasDoces;
 
-      const pizzasSalgadas = Math.ceil(totalFatiasSalgadas / fatiasPorPizza);
-      const pizzasDoces = Math.ceil(totalFatiasDoces / fatiasPorPizza);
-      const sobraSalgadas = (pizzasSalgadas * fatiasPorPizza) - totalFatiasSalgadas;
-      const sobraDoces = (pizzasDoces * fatiasPorPizza) - totalFatiasDoces;
+  const sobraSalgadas = (pizzasSalgadas * fatiasPorPizza) - totalFatiasSalgadas;
+  const sobraDoces = (pizzasDoces * fatiasPorPizza) - totalFatiasDoces;
 
-      const totalPizzas = pizzasSalgadas + pizzasDoces;
+  const ingredientesPorPizza = {
+    farinha: 2,
+    oleo: 0.25,
+    sal: 0.5,
+    agua: 0.25,
+    fermento: 0.25,
+    acucar: 1
+  };
 
-      const ingredientesPorPizza = {
-        farinha: 2,
-        oleo: 0.25,
-        sal: 0.5,
-        agua: 0.25,
-        fermento: 0.25,
-        acucar: 1
-      };
+  const ingredientesTotais = {};
+  for (let ingrediente in ingredientesPorPizza) {
+    ingredientesTotais[ingrediente] = (ingredientesPorPizza[ingrediente] * totalPizzas).toFixed(2);
+  }
 
-      const ingredientesTotais = {};
-      for (let ingrediente in ingredientesPorPizza) {
-        ingredientesTotais[ingrediente] = (ingredientesPorPizza[ingrediente] * totalPizzas).toFixed(2);
-      }
+  resultado.innerHTML = `
+    <h3>Para ${pessoas} pessoas:</h3>
+    <p>🍕 ${pizzasSalgadas} pizzas salgadas</p>
+    <p>🍕 ${pizzasDoces} pizzas doces</p>
+    <h4>Sobra de fatias:</h4>
+    <ul>
+      <li>Salgadas: ${sobraSalgadas} fatias</li>
+      <li>Doces: ${sobraDoces} fatias</li>
+    </ul>
+    <h4>Ingredientes totais para ${totalPizzas} pizzas:</h4>
+    <ul>
+      <li>Farinha de trigo: ${ingredientesTotais.farinha} xícaras</li>
+      <li>Óleo: ${ingredientesTotais.oleo} colheres de sopa</li>
+      <li>Sal: ${ingredientesTotais.sal} pitadas</li>
+      <li>Água morna: ${ingredientesTotais.agua} xícaras</li>
+      <li>Fermento seco: ${ingredientesTotais.fermento} colheres de sopa</li>
+      <li>Açúcar: ${ingredientesTotais.acucar} colheres de sopa</li>
+    </ul>
+  `;
+}
 
-      resultado.innerHTML = `
-        <h3>Para ${pessoas} pessoas:</h3>
-        <p>🍕 ${pizzasSalgadas} pizzas salgadas</p>
-        <p>🍕 ${pizzasDoces} pizzas doces</p>
-        <h4>Sobra de fatias:</h4>
-         <ul>
-          <li>Salgadas: ${sobraSalgadas} fatias</li>
-          <li>Doces: ${sobraDoces} fatias</li>
-        </ul>
-
-        <h4>Ingredientes totais para ${totalPizzas} pizzas:</h4>
-        <ul>
-          <li>Farinha de trigo: ${ingredientesTotais.farinha} xícaras</li>
-          <li>Óleo: ${ingredientesTotais.oleo} colheres de sopa</li>
-          <li>Sal: ${ingredientesTotais.sal} pitadas</li>
-          <li>Água morna: ${ingredientesTotais.agua} xícaras</li>
-          <li>Fermento seco: ${ingredientesTotais.fermento} colheres de sopa</li>
-          <li>Açúcar: ${ingredientesTotais.acucar} colheres de sopa</li>
-        </ul>
-      `;
-    }
   </script>
-<p>V3</p>
+<p>V4</p>
 </body>
 </html>
