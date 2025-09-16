@@ -109,7 +109,7 @@ select {
 <body>
   <header>
     <h1>Receitas de Casa 🍴</h1>
-    <select id="menu" onchange="mostrarReceita()" style="width: 200px">
+    <select id="menu" onchange="mostrarReceita()" style="width: 250px">
       <option value="">-- Selecione --</option>
       <option value="waffleLiege">Waffle de Liège</option>
       <option value="waffleBrux">Waffle de Bruxelas</option>
@@ -126,9 +126,6 @@ select {
     <button onclick="mostrarReceita()" style="padding: 10px 10px; margin-left: 5px; font-size: 16px;">
     🔄
   </button>
-   <button onclick="https://gabrielangst.github.io/tjdft/pizzacalc.html" style="padding: 10px 10px; margin-left: 5px; font-size: 16px;">
-    🖩
-  </button> 
 
   </header>
 
@@ -139,6 +136,8 @@ select {
       pizzaFornoPizza: {
         titulo: "Pizza no Forno de Pizza",
         ingredientes: [
+          "<a href='https://gabrielangst.github.io/tjdft/pizzacalc.html">Calculadora de pizza</a>",
+          "",
           "★ BROTINHO (abrindo na mão-170g):",
           "1/2 (broto) ou 1 (média) xícara de trigo",
           "Uma “pitada” de óleo",
@@ -558,7 +557,7 @@ if (temVariacoesPreparo) {
     
  </script>
 <div style="text-align:center">
-  <p>V44</p>
+  <p>V45</p>
 </div>
 </body>
 </html>
