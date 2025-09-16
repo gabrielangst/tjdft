@@ -421,77 +421,82 @@ function toggleSecao(id) {
 }
 
     
-    function mostrarReceita() {
-      const prato = document.getElementById("menu").value;
-      const receita = receitas[prato];
-      const div = document.getElementById("receita");
+function mostrarReceita() {
+  const prato = document.getElementById("menu").value;
+  const receita = receitas[prato];
+  const div = document.getElementById("receita");
 
-      if (receita) {
-        div.innerHTML = `
-  <h2>${receita.titulo}</h2>
+  if (receita) {
+    // 🔁 Agrupar ingredientes por blocos que começam com ★
+    let blocos = [];
+    let blocoAtual = [];
 
-  <div class="secao">
-    <button class="toggle" onclick="toggleSecao('ingredientes')">🍽️ Ingredientes</button>
-    <div id="ingredientes" class="conteudo">
-      ${receita.ingredientes.map(item =>
-        item.startsWith("★")
-          ? `<span class="especial">${item}</span><br><br>`
-          : `<li>${item}</li>`
-      ).join("")}
-    </div>
-  </div>
-
-  <div class="secao">
-    <button class="toggle" onclick="toggleSecao('preparo')">🧑‍🍳 Modo de Preparo</button>
-    <div id="preparo" class="conteudo">
-      ${Array.isArray(receita.preparo)
-        ? receita.preparo.map(item => `<p>${item}</p>`).join("")
-        : `<p>${receita.preparo}</p>`}
-    </div>
-  </div>
-`;
-
-
-// 🔁 Agora adicionamos os eventos de clique nos spans recém-criados
-    document.querySelectorAll(".especial").forEach(span => {
-      span.addEventListener("click", () => {
-        span.classList.toggle("ativo");
-      });
-    });
-
-        
+    receita.ingredientes.forEach(item => {
+      if (item.startsWith("★")) {
+        if (blocoAtual.length > 0) blocos.push(blocoAtual);
+        blocoAtual = [item]; // inicia novo bloco
       } else {
-        div.innerHTML = "";
+        blocoAtual.push(item);
       }
-    }
- 
- document.addEventListener("DOMContentLoaded", () => {
+    });
+    if (blocoAtual.length > 0) blocos.push(blocoAtual); // adiciona o último bloco
+
+    // 🔧 Renderizar cada bloco como seção expansível
+    const htmlIngredientes = blocos.map((bloco, index) => {
+      const id = `ingredienteBloco${index}`;
+      const titulo = bloco[0]; // linha com ★
+      const itens = bloco.slice(1).map(i => `<li>${i}</li>`).join("");
+
+      return `
+        <div class="secao">
+          <button class="toggle" onclick="toggleSecao('${id}')">${titulo}</button>
+          <div id="${id}" class="conteudo">
+            <ul>${itens}</ul>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    // 🔧 Renderizar modo de preparo
+    const htmlPreparo = Array.isArray(receita.preparo)
+      ? receita.preparo.map(item => `<p>${item}</p>`).join("")
+      : `<p>${receita.preparo}</p>`;
+
+    // 🔧 Inserir tudo no HTML
+    div.innerHTML = `
+      <h2>${receita.titulo}</h2>
+
+      <div class="secao">
+        <button class="toggle" onclick="toggleSecao('ingredientes')">🍽️ Ingredientes</button>
+        <div id="ingredientes" class="conteudo">
+          ${htmlIngredientes}
+        </div>
+      </div>
+
+      <div class="secao">
+        <button class="toggle" onclick="toggleSecao('preparo')">🧑‍🍳 Modo de Preparo</button>
+        <div id="preparo" class="conteudo">
+          ${htmlPreparo}
+        </div>
+      </div>
+    `;
+
+    // 🔁 Ativar cliques nos ingredientes especiais (★)
     document.querySelectorAll(".especial").forEach(span => {
       span.addEventListener("click", () => {
         span.classList.toggle("ativo");
       });
     });
-  });
-
-// Salva o prato selecionado sempre que muda
-document.getElementById("menu").addEventListener("change", () => {
-  const pratoSelecionado = document.getElementById("menu").value;
-  localStorage.setItem("pratoSelecionado", pratoSelecionado);
-});
-
-// Ao carregar a página, restaura a seleção e mostra a receita
-window.addEventListener("load", () => {
-  const pratoSalvo = localStorage.getItem("pratoSelecionado");
-  if (pratoSalvo) {
-    document.getElementById("menu").value = pratoSalvo;
-    mostrarReceita();
+  } else {
+    div.innerHTML = "";
   }
-});
+}
+
 
     
  </script>
 <div style="text-align:center">
-  <p>V38</p>
+  <p>V39</p>
 </div>
 </body>
 </html>
