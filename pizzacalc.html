@@ -132,7 +132,7 @@ function calcularPizza() {
   const sobraDoces = (pizzasDoces * fatiasPorPizza) - totalFatiasDoces;
 
   const ingredientesPorPizza = {
-    farinha: 120,
+    farinha: 150,
     oleo: 0.25,
     sal: 0.5,
     agua: 0.25,
@@ -146,7 +146,7 @@ function calcularPizza() {
   }
 
   resultado.innerHTML = `
-    <h3>Para ${pessoas} pessoas: ${totalPizzas} pizzas</h3>
+    <h3>Para ${pessoas} pessoas: <h1>${totalPizzas} pizzas</h1></h3>
     <p>◍ ${pizzasSalgadas} pizzas salgadas</p>
     <p>◍ ${pizzasDoces} pizzas doces</p>
     <h4>Sobra de fatias:</h4>
@@ -167,6 +167,6 @@ function calcularPizza() {
 }
 
   </script>
-<p>V7</p>
+<p>V8</p>
 </body>
 </html>
