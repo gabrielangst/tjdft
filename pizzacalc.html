@@ -1,56 +1,150 @@
-<h2>Calculadora de Ingredientes para Pizza</h2>
-<label for="pessoas">Número de pessoas:</label>
-<input type="number" id="pessoas" min="1" />
-<button onclick="calcularPizza()">Calcular</button>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Pizza</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #fff8f0;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
 
-<div id="resultado"></div>
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
 
-<script>
-function calcularPizza() {
-  const pessoas = parseInt(document.getElementById("pessoas").value);
-  if (isNaN(pessoas) || pessoas <= 0) {
-    document.getElementById("resultado").innerHTML = "<p>Informe um número válido de pessoas.</p>";
-    return;
-  }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-  const fatiasPorPizza = 8;
-  const fatiasSalgadasPorPessoa = 3;
-  const fatiasDocesPorPessoa = 2;
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 8px;
+    }
 
-  const totalFatiasSalgadas = pessoas * fatiasSalgadasPorPessoa;
-  const totalFatiasDoces = pessoas * fatiasDocesPorPessoa;
+    input[type="number"] {
+      width: 100%;
+      padding: 12px;
+      font-size: 18px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin-bottom: 16px;
+    }
 
-  const pizzasSalgadas = Math.ceil(totalFatiasSalgadas / fatiasPorPizza);
-  const pizzasDoces = Math.ceil(totalFatiasDoces / fatiasPorPizza);
-  const totalPizzas = pizzasSalgadas + pizzasDoces;
+    button {
+      width: 100%;
+      padding: 14px;
+      font-size: 18px;
+      background-color: #ff7043;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
 
-  const ingredientesPorPizza = {
-    farinha: 2,
-    oleo: 0.25,
-    sal: 0.5,
-    agua: 0.25,
-    fermento: 0.25,
-    acucar: 1
-  };
+    button:hover {
+      background-color: #e64a19;
+    }
 
-  const ingredientesTotais = {};
-  for (let ingrediente in ingredientesPorPizza) {
-    ingredientesTotais[ingrediente] = (ingredientesPorPizza[ingrediente] * totalPizzas).toFixed(2);
-  }
+    .resultado {
+      margin-top: 20px;
+      background: #fefefe;
+      padding: 16px;
+      border-radius: 8px;
+      border-left: 4px solid #ff7043;
+    }
 
-  document.getElementById("resultado").innerHTML = `
-    <h3>Resultado para ${pessoas} pessoas:</h3>
-    <p>🍕 ${pizzasSalgadas} pizzas salgadas</p>
-    <p>🍕 ${pizzasDoces} pizzas doces</p>
-    <h4>Ingredientes totais para ${totalPizzas} pizzas:</h4>
-    <ul>
-      <li>Farinha de trigo: ${ingredientesTotais.farinha} xícaras</li>
-      <li>Óleo: ${ingredientesTotais.oleo} colheres de sopa</li>
-      <li>Sal: ${ingredientesTotais.sal} pitadas</li>
-      <li>Água morna: ${ingredientesTotais.agua} xícaras</li>
-      <li>Fermento seco: ${ingredientesTotais.fermento} colheres de sopa</li>
-      <li>Açúcar: ${ingredientesTotais.acucar} colheres de sopa</li>
-    </ul>
-  `;
-}
-</script>
+    ul {
+      padding-left: 20px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+
+      .container {
+        padding: 16px;
+      }
+
+      button {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🍕 Calculadora de Pizza</h1>
+    <label for="pessoas">Número de pessoas:</label>
+    <input type="number" id="pessoas" min="1" placeholder="Ex: 10" style="width: 200px"/>
+    <button onclick="calcularPizza()" style="width: 250px">Calcular Ingredientes</button>
+
+    <div id="resultado" class="resultado"></div>
+  </div>
+
+  <script>
+    function calcularPizza() {
+      const pessoas = parseInt(document.getElementById("pessoas").value);
+      const resultado = document.getElementById("resultado");
+
+      if (isNaN(pessoas) || pessoas <= 0) {
+        resultado.innerHTML = "<p>Informe um número válido de pessoas.</p>";
+        return;
+      }
+
+      const fatiasPorPizza = 8;
+      const fatiasSalgadasPorPessoa = 3;
+      const fatiasDocesPorPessoa = 2;
+
+      const totalFatiasSalgadas = pessoas * fatiasSalgadasPorPessoa;
+      const totalFatiasDoces = pessoas * fatiasDocesPorPessoa;
+
+      const pizzasSalgadas = Math.ceil(totalFatiasSalgadas / fatiasPorPizza);
+      const pizzasDoces = Math.ceil(totalFatiasDoces / fatiasPorPizza);
+      const totalPizzas = pizzasSalgadas + pizzasDoces;
+
+      const ingredientesPorPizza = {
+        farinha: 2,
+        oleo: 0.25,
+        sal: 0.5,
+        agua: 0.25,
+        fermento: 0.25,
+        acucar: 1
+      };
+
+      const ingredientesTotais = {};
+      for (let ingrediente in ingredientesPorPizza) {
+        ingredientesTotais[ingrediente] = (ingredientesPorPizza[ingrediente] * totalPizzas).toFixed(2);
+      }
+
+      resultado.innerHTML = `
+        <h3>Para ${pessoas} pessoas:</h3>
+        <p>🍕 ${pizzasSalgadas} pizzas salgadas</p>
+        <p>🍕 ${pizzasDoces} pizzas doces</p>
+        <h4>Ingredientes totais para ${totalPizzas} pizzas:</h4>
+        <ul>
+          <li>Farinha de trigo: ${ingredientesTotais.farinha} xícaras</li>
+          <li>Óleo: ${ingredientesTotais.oleo} colheres de sopa</li>
+          <li>Sal: ${ingredientesTotais.sal} pitadas</li>
+          <li>Água morna: ${ingredientesTotais.agua} xícaras</li>
+          <li>Fermento seco: ${ingredientesTotais.fermento} colheres de sopa</li>
+          <li>Açúcar: ${ingredientesTotais.acucar} colheres de sopa</li>
+        </ul>
+      `;
+    }
+  </script>
+</body>
+</html>
