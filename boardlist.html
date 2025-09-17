@@ -72,10 +72,21 @@
         #copy-button {
             margin-top: 20px;
         }
+
+.main-wrapper {
+  max-width: 1200px; /* ou o valor que se encaixa melhor no seu layout */
+  margin: 0 auto;    /* centraliza horizontalmente */
+  padding: 20px;     /* opcional, para dar respiro */
+}
+
+	   
     </style>
 </head>
 <body>
-    <h1>🎲 Lista de Boardgames</h1>
+
+<div class="main-wrapper">
+
+	<h1>🎲 Lista de Boardgames</h1>
     <h4>15/04/2025, 08:52</h4>
     <div id="game-container">
         <button onclick="filterGames(1, '1 jogador')">1 jogador</button>
@@ -145,6 +156,8 @@
     </div>
 
     <button id="copy-button" onclick="copyToClipboard()">Copiar a lista</button>
+
+</div>
 
     <script>
         function filterGames(players, buttonName) {        
@@ -225,6 +238,7 @@ this.blur();
     </script>
 </body>
 </html>
+
 
 
 
