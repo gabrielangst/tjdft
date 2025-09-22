@@ -122,6 +122,7 @@ select {
       <option value="Espetinho">Espetinho</option>
       <option value="Arroz">Arroz</option>
       <option value="pinkL">Pink Lemonade</option>
+      <option value="IsaPanqueca">Isa Panqueca de Banana</option>      
     </select>
     <button onclick="mostrarReceita()" style="padding: 10px 10px; margin-left: 5px; font-size: 16px;">
     🔄
@@ -306,6 +307,23 @@ select {
         preparo: [
           "1) Lavar as salsichas com água (10 salsichas, 1 pacote de salsichas de frango) e fervê-las, mantendo o fogo ligado por 5 minutos após borbulhar;",
           "2) Em outra panela, ferver o molho de tomate (1 sachê ou 2) com orégano e pimenta do reino. Após ferver, misturar as salsichas fervidas com o molho fervido e servir."
+        ]
+      },
+
+
+      IsaPanqueca: {
+        titulo: "Panqueca de Banana (Isa)",
+        ingredientes: [
+          "★ Para 1 panqueca completa",
+          "1 ovo",
+          "1 banana",
+          "2 colheres de sopa de aveia",
+          "1 colher de tapioca (opcional)"
+        ],
+        preparo: [
+          "1) Untar a frigideira com margarina/manteiga;",
+          "2) Em um recipiente, misturar todos os ingredientes;"
+          "3) Colocar na frigideira quente por cerca de 1 minuto e virar por mais 1 minuto."
         ]
       },
 
@@ -558,7 +576,7 @@ if (temVariacoesPreparo) {
     
  </script>
 <div style="text-align:center">
-  <p>V49</p>
+  <p>V50</p>
 </div>
 </body>
 </html>
