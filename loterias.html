@@ -67,6 +67,9 @@ button {
   <a href="https://loterias.caixa.gov.br/Paginas/Lotomania.aspx" target="_blank" style="font-size: 14px; margin-left: 10px;">🔗 Ver resultados</a>
 </h3>
 
+  <h2>Último Resultado (API)</h2>
+  <div id="lotomania">Carregando Lotomania...</div><br>
+    
     <label>Números sorteados (sem espaços):</label>
     <textarea id="sorteados-lotomania" placeholder="Ex: 091015161724..."></textarea>
 
@@ -89,6 +92,9 @@ button {
   <a href="https://loterias.caixa.gov.br/Paginas/Mega-Sena.aspx" target="_blank" style="font-size: 14px; margin-left: 10px;">🔗 Ver resultados</a>
 </h3>
 
+  <h2>Último Resultado (API)</h2>
+  <div id="megasena">Carregando Mega-Sena...</div><br>
+    
     <label>Números sorteados (sem espaços):</label>
     <textarea id="sorteados-mega1" placeholder="Ex: 051015202530"></textarea>
 
@@ -129,6 +135,34 @@ function tratarColagem(e, campoId) {
   campo.value += textoLimpo;
 }
 
+async function buscarResultado(loteria, elementoId) {
+      try {
+        const url = `https://loteriascaixa-api.herokuapp.com/api/${loteria}/latest`;
+        const resposta = await fetch(url);
+        const dados = await resposta.json();
+
+        // Verifica os campos disponíveis
+        console.log(`Dados da ${loteria}:`, dados);
+
+        const dezenas = dados.dezenas?.join(', ') || 'Não disponível';
+        const concurso = dados.numero || dados.concurso || 'Não informado';
+        const data = dados.data || dados.dataApuracao || 'Data não disponível';
+
+        document.getElementById(elementoId).innerHTML = `
+          Concurso: ${concurso} <br>
+          Data: ${data} <br>
+          Números sorteados: ${dezenas}
+        `;
+      } catch (erro) {
+        document.getElementById(elementoId).innerText = 'Erro ao carregar os dados.';
+        console.error(`Erro ao buscar ${loteria}:`, erro);
+      }
+    }
+
+    buscarResultado('megasena', 'megasena');
+    buscarResultado('lotomania', 'lotomania');
+
+    
   </script>
-V3</body>
+V4</body>
 </html>
