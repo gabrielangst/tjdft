@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Verificador de Apostas</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    textarea { width: 100%; height: 100px; margin-bottom: 10px; }
+    button { padding: 10px 20px; font-size: 16px; }
+    .resultado { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h2>Verificador de Apostas - Lotomania / Mega-Sena</h2>
+
+  <label for="sorteados">Números sorteados (separados por espaço):</label>
+  <textarea id="sorteados" placeholder="Ex: 01 15 23 37 42 55"></textarea>
+
+  <label for="apostas">Suas apostas (uma por linha, números separados por espaço):</label>
+  <textarea id="apostas" placeholder="Ex:\n01 02 03 04 05 06\n15 23 42 55 60 70"></textarea>
+
+  <button onclick="verificarApostas()">Verificar acertos</button>
+
+  <div class="resultado" id="resultado"></div>
+
+  <script>
+    function verificarApostas() {
+      const sorteados = document.getElementById('sorteados').value.trim().split(/\s+/);
+      const apostas = document.getElementById('apostas').value.trim().split('\n');
+      const resultadoDiv = document.getElementById('resultado');
+      resultadoDiv.innerHTML = '';
+
+      apostas.forEach((linha, index) => {
+        const numeros = linha.trim().split(/\s+/);
+        const acertos = numeros.filter(n => sorteados.includes(n));
+        const total = acertos.length;
+        resultadoDiv.innerHTML += `<p><strong>Aposta ${index + 1}:</strong> ${linha}<br>
+        ➤ Acertos (${total}): ${acertos.join(', ') || 'Nenhum'}</p>`;
+      });
+    }
+  </script>
+</body>
+</html>
