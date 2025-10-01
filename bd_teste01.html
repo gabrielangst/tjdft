@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -74,6 +75,26 @@
       margin: 15px 0;
       padding: 10px 15px;
       border-radius: 5px;
+      position: relative;
+    }
+
+    .comment-actions {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.8em;
+      margin-left: 5px;
+      color: var(--accent);
+    }
+
+    .icon-btn:hover {
+      color: #2980b9;
     }
 
     @media (max-width: 600px) {
@@ -99,9 +120,7 @@
     <h3>Escreva seu comentário:</h3>
     <textarea id="commentInput" rows="4" placeholder="Digite aqui..."></textarea>
     <button id="sendBtn">Enviar</button>
-
     <button id="clearBtn" style="background-color:#e74c3c; margin-left:10px;">Apagar todos</button>
-
 
     <div id="comments">
       <h3>Comentários recentes:</h3>
@@ -110,26 +129,20 @@
   </div>
 
   <script type="module">
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
-    import { getDatabase, ref, push, onValue, set } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+    import { getDatabase, ref, push, onValue, set, remove, update } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+    const firebaseConfig = {
+      apiKey: "AIzaSyAULek1GNLkA0FiXhfIaDf1v-XrZuvtrZA",
+      authDomain: "aprendizado-01-comentarios.firebaseapp.com",
+      databaseURL: "https://aprendizado-01-comentarios-default-rtdb.firebaseio.com",
+      projectId: "aprendizado-01-comentarios",
+      storageBucket: "aprendizado-01-comentarios.appspot.com",
+      messagingSenderId: "1095732851381",
+      appId: "1:1095732851381:web:860b77e4c52a2e0bbb84fc"
+    };
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyAULek1GNLkA0FiXhfIaDf1v-XrZuvtrZA",
-  authDomain: "aprendizado-01-comentarios.firebaseapp.com",
-  databaseURL: "https://aprendizado-01-comentarios-default-rtdb.firebaseio.com",
-  projectId: "aprendizado-01-comentarios",
-  storageBucket: "aprendizado-01-comentarios.firebasestorage.app",
-  messagingSenderId: "1095732851381",
-  appId: "1:1095732851381:web:860b77e4c52a2e0bbb84fc"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+    const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
     document.getElementById("sendBtn").addEventListener("click", () => {
@@ -145,44 +158,63 @@ const app = initializeApp(firebaseConfig);
     });
 
     const commentList = document.getElementById("commentList");
-   
-function formatDate(timestamp) {
-  const date = new Date(timestamp);
-  return date.toLocaleString('pt-BR', {
-    day: '2-digit', month: '2-digit', year: 'numeric',
-    hour: '2-digit', minute: '2-digit'
-  });
-}
 
-    
-    onValue(ref(db, "comments"), snapshot => {
-  commentList.innerHTML = "";
-  const comments = [];
-  snapshot.forEach(child => {
-    const val = child.val();
-    if (val.text && val.text.trim() !== "") {
-      comments.push(val);
+    function formatDate(timestamp) {
+      const date = new Date(timestamp);
+      return date.toLocaleString('pt-BR', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
     }
-  });
 
-  comments.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+    window.deleteComment = function(key) {
+      if (confirm("Deseja realmente excluir este comentário?")) {
+        remove(ref(db, "comments/" + key));
+      }
+    };
 
-comments.forEach(data => {
-  const div = document.createElement("div");
-  div.className = "comment";
-  div.innerHTML = `<strong>${formatDate(data.timestamp)}</strong><br>${data.text}`;
-  commentList.appendChild(div);
-});
+    window.editComment = function(key, oldText) {
+      const newText = prompt("Edite o comentário:", oldText);
+      if (newText !== null && newText.trim() !== "") {
+        update(ref(db, "comments/" + key), {
+          text: newText,
+          timestamp: Date.now()
+        });
+      }
+    };
 
-});
+    onValue(ref(db, "comments"), snapshot => {
+      commentList.innerHTML = "";
+      const comments = [];
+      snapshot.forEach(child => {
+        const val = child.val();
+        if (val.text && val.text.trim() !== "") {
+          comments.push({ key: child.key, ...val });
+        }
+      });
+
+      comments.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+      comments.forEach(data => {
+        const div = document.createElement("div");
+        div.className = "comment";
+        div.innerHTML = `
+          <strong>${formatDate(data.timestamp)}</strong><br>
+          <span id="text-${data.key}">${data.text}</span>
+          <div class="comment-actions">
+            <button class="icon-btn" onclick="editComment('${data.key}', '${data.text.replace(/'/g, "\'")}')" title="Editar">&#9998;</button>
+            <button class="icon-btn" onclick="deleteComment('${data.key}')" title="Excluir">&#128465;</button>
+          </div>
+        `;
+        commentList.appendChild(div);
+      });
+    });
 
     document.getElementById("clearBtn").addEventListener("click", () => {
-  if (confirm("Tem certeza que deseja apagar todos os comentários?")) {
-    set(ref(db, "comments"), null);
-  }
-});
-
-
+      if (confirm("Tem certeza que deseja apagar todos os comentários?")) {
+        set(ref(db, "comments"), null);
+      }
+    });
   </script>
 </body>
 </html>
