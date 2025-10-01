@@ -134,7 +134,7 @@ const app = initializeApp(firebaseConfig);
 
     document.getElementById("sendBtn").addEventListener("click", () => {
       const comment = document.getElementById("commentInput").value;
-      if (comment.trim().length < 3) return;
+      if (comment.trim().length < 1) return;
 
       push(ref(db, "comments"), {
         text: comment,
