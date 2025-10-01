@@ -4,18 +4,13 @@
   <meta charset="UTF-8">
   <title>Comentários Abertos</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- ... -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-  <!-- ... -->
-
   <style>
     :root {
       --bg: #f4f6f8;
       --primary: #2c3e50;
       --accent: #3498db;
       --card: #ffffff;
-      --border: #ddd;
+      --border: #ccc;
     }
 
     body {
@@ -45,29 +40,29 @@
       font-size: 1.1em;
     }
 
-textarea {
-  width: 100%;
-  padding: 10px;
-  font-size: 1em;
-  border: 1px solid var(--border); /* borda clara */
-  border-radius: 5px;
-  resize: vertical;
-  background-color: white; /* fundo branco */
-  color: var(--primary); /* texto escuro */
-}
+    textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      resize: vertical;
+      background-color: white;
+      color: var(--primary);
+    }
 
-button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: var(--accent);
-  color: white;
-  border: 1px solid var(--accent); /* borda visível */
-  border-radius: 5px;
-  font-size: 1em;
-  cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* sombra leve */
-  transition: background 0.3s;
-}
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background-color: var(--accent);
+      color: white;
+      border: 1px solid var(--accent);
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: background 0.3s;
+    }
 
     button:hover {
       background-color: #2980b9;
@@ -111,56 +106,41 @@ button {
     </div>
   </div>
 
-  <script>
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js";
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyAULek1GNLkA0FiXhfIaDf1v-XrZuvtrZA",
-  authDomain: "aprendizado-01-comentarios.firebaseapp.com",
-  databaseURL: "https://aprendizado-01-comentarios-default-rtdb.firebaseio.com",
-  projectId: "aprendizado-01-comentarios",
-  storageBucket: "aprendizado-01-comentarios.firebasestorage.app",
-  messagingSenderId: "1095732851381",
-  appId: "1:1095732851381:web:860b77e4c52a2e0bbb84fc"
-};
+    const firebaseConfig = {
+      apiKey: "SUA_API_KEY",
+      authDomain: "SEU_DOMINIO.firebaseapp.com",
+      databaseURL: "https://SEU_DOMINIO.firebaseio.com",
+      projectId: "SEU_ID",
+      storageBucket: "SEU_BUCKET.appspot.com",
+      messagingSenderId: "SEU_SENDER_ID",
+      appId: "SEU_APP_ID"
+    };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-    const db = firebase.database();
-
-    // ✅ Função global
-    function submitComment() {
+    document.getElementById("sendBtn").addEventListener("click", () => {
       const comment = document.getElementById("commentInput").value;
-      if (comment.trim() === "") return;
+      if (comment.trim().length < 3) return;
 
-      db.ref("comments").push({
+      push(ref(db, "comments"), {
         text: comment,
         timestamp: Date.now()
       });
 
       document.getElementById("commentInput").value = "";
-    }
+    });
 
-    // ✅ Conecta botão via JavaScript
-    document.getElementById("sendBtn").addEventListener("click", submitComment);
-
-    // ✅ Carrega comentários
-    db.ref("comments").on("value", snapshot => {
-      const commentList = document.getElementById("commentList");
+    const commentList = document.getElementById("commentList");
+    onValue(ref(db, "comments"), snapshot => {
       commentList.innerHTML = "";
-
       const comments = [];
-      snapshot.forEach(child => {
-        comments.push(child.val());
-      });
-
-      comments.sort((a, b) => b.timestamp - a.timestamp); // mais recentes primeiro
-
+      snapshot.forEach(child => comments.push(child.val()));
+      comments.sort((a, b) => b.timestamp - a.timestamp);
       comments.forEach(data => {
         const div = document.createElement("div");
         div.className = "comment";
