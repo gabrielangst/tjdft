@@ -1,15 +1,14 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Minha Página com Comentários</title>
+  <title>Comentários Abertos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js"></script>
   <style>
- <style>
     :root {
-      --bg: #f9f9f9;
+      --bg: #f4f6f8;
       --primary: #2c3e50;
       --accent: #3498db;
       --card: #ffffff;
@@ -43,26 +42,29 @@
       font-size: 1.1em;
     }
 
-    textarea {
-      width: 100%;
-      padding: 10px;
-      font-size: 1em;
-      border: 1px solid var(--border);
-      border-radius: 5px;
-      resize: vertical;
-    }
+textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1em;
+  border: 1px solid var(--border); /* borda clara */
+  border-radius: 5px;
+  resize: vertical;
+  background-color: white; /* fundo branco */
+  color: var(--primary); /* texto escuro */
+}
 
-    button {
-      margin-top: 10px;
-      padding: 10px 20px;
-      background-color: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 1em;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
+button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: var(--accent);
+  color: white;
+  border: 1px solid var(--accent); /* borda visível */
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* sombra leve */
+  transition: background 0.3s;
+}
 
     button:hover {
       background-color: #2980b9;
@@ -90,45 +92,37 @@
       }
     }
   </style>
-
-  </style>
 </head>
 <body>
-  <h1>Bem-vindo à minha página!</h1>
-  <p>Este é um exemplo simples de aplicação com Firebase.</p>
+  <div class="container">
+    <h1>Comentários Abertos</h1>
+    <p>Deixe sua opinião abaixo. Não é necessário login!</p>
 
-  <h3>Deixe seu comentário:</h3>
-  <textarea id="commentInput" rows="4" cols="50" placeholder="Escreva aqui..."></textarea><br>
-  <button onclick="submitComment()">Enviar</button>
+    <h3>Escreva seu comentário:</h3>
+    <textarea id="commentInput" rows="4" placeholder="Digite aqui..."></textarea>
+    <button id="sendBtn">Enviar</button>
 
-  <div id="comments">
-    <h3>Comentários:</h3>
-    <div id="commentList"></div>
+    <div id="comments">
+      <h3>Comentários recentes:</h3>
+      <div id="commentList"></div>
+    </div>
   </div>
 
   <script>
-    // 🔧 Configuração do Firebase
-   // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+    const firebaseConfig = {
+      apiKey: "SUA_API_KEY",
+      authDomain: "SEU_DOMINIO.firebaseapp.com",
+      databaseURL: "https://SEU_DOMINIO.firebaseio.com",
+      projectId: "SEU_ID",
+      storageBucket: "SEU_BUCKET.appspot.com",
+      messagingSenderId: "SEU_SENDER_ID",
+      appId: "SEU_APP_ID"
+    };
 
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyAULek1GNLkA0FiXhfIaDf1v-XrZuvtrZA",
-    authDomain: "aprendizado-01-comentarios.firebaseapp.com",
-    databaseURL: "https://aprendizado-01-comentarios-default-rtdb.firebaseio.com",
-    projectId: "aprendizado-01-comentarios",
-    storageBucket: "aprendizado-01-comentarios.firebasestorage.app",
-    messagingSenderId: "1095732851381",
-    appId: "1:1095732851381:web:860b77e4c52a2e0bbb84fc"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
+    const app = firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // 📝 Enviar comentário
+    // ✅ Função global
     function submitComment() {
       const comment = document.getElementById("commentInput").value;
       if (comment.trim() === "") return;
@@ -141,13 +135,22 @@
       document.getElementById("commentInput").value = "";
     }
 
-    // 📥 Carregar comentários
+    // ✅ Conecta botão via JavaScript
+    document.getElementById("sendBtn").addEventListener("click", submitComment);
+
+    // ✅ Carrega comentários
     db.ref("comments").on("value", snapshot => {
       const commentList = document.getElementById("commentList");
       commentList.innerHTML = "";
 
+      const comments = [];
       snapshot.forEach(child => {
-        const data = child.val();
+        comments.push(child.val());
+      });
+
+      comments.sort((a, b) => b.timestamp - a.timestamp); // mais recentes primeiro
+
+      comments.forEach(data => {
         const div = document.createElement("div");
         div.className = "comment";
         div.textContent = data.text;
