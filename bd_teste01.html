@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -54,12 +55,12 @@
 
     button {
       margin-top: 10px;
-      padding: 10px 20px;
+      padding: 6px 10px;
       background-color: var(--accent);
       color: white;
       border: 1px solid var(--accent);
       border-radius: 5px;
-      font-size: 1em;
+      font-size: 0.8em;
       cursor: pointer;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       transition: background 0.3s;
@@ -78,23 +79,14 @@
       position: relative;
     }
 
-    .comment-actions {
-      position: absolute;
-      top: 10px;
-      right: 10px;
+    .comment-buttons {
+      margin-top: 8px;
     }
 
-    .icon-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 0.8em;
-      margin-left: 5px;
-      color: var(--accent);
-    }
-
-    .icon-btn:hover {
-      color: #2980b9;
+    .comment-buttons button {
+      font-size: 0.75em;
+      padding: 4px 8px;
+      margin-right: 5px;
     }
 
     @media (max-width: 600px) {
@@ -201,9 +193,9 @@
         div.innerHTML = `
           <strong>${formatDate(data.timestamp)}</strong><br>
           <span id="text-${data.key}">${data.text}</span>
-          <div class="comment-actions">
-            <button class="icon-btn" onclick="editComment('${data.key}', '${data.text.replace(/'/g, "\'")}')" title="Editar">&#9998;</button>
-            <button class="icon-btn" onclick="deleteComment('${data.key}')" title="Excluir">&#128465;</button>
+          <div class="comment-buttons">
+            <button onclick="editComment('${data.key}', '${data.text.replace(/'/g, "\'")}')" style="background-color:#ffffff;">✏️</button>
+            <button onclick="deleteComment('${data.key}')" style="background-color:#ffffff;">🗑️</button>
           </div>
         `;
         commentList.appendChild(div);
