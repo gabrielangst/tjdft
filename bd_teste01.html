@@ -1,0 +1,84 @@
+<script type="module">
+  
+</script>
+
+
+
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Minha Página com Comentários</title>
+  <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js"></script>
+  <style>
+    body { font-family: sans-serif; margin: 20px; }
+    #comments { margin-top: 30px; }
+    .comment { border-bottom: 1px solid #ccc; padding: 10px 0; }
+  </style>
+</head>
+<body>
+  <h1>Bem-vindo à minha página!</h1>
+  <p>Este é um exemplo simples de aplicação com Firebase.</p>
+
+  <h3>Deixe seu comentário:</h3>
+  <textarea id="commentInput" rows="4" cols="50" placeholder="Escreva aqui..."></textarea><br>
+  <button onclick="submitComment()">Enviar</button>
+
+  <div id="comments">
+    <h3>Comentários:</h3>
+    <div id="commentList"></div>
+  </div>
+
+  <script>
+    // 🔧 Configuração do Firebase
+   // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAULek1GNLkA0FiXhfIaDf1v-XrZuvtrZA",
+    authDomain: "aprendizado-01-comentarios.firebaseapp.com",
+    databaseURL: "https://aprendizado-01-comentarios-default-rtdb.firebaseio.com",
+    projectId: "aprendizado-01-comentarios",
+    storageBucket: "aprendizado-01-comentarios.firebasestorage.app",
+    messagingSenderId: "1095732851381",
+    appId: "1:1095732851381:web:860b77e4c52a2e0bbb84fc"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // 📝 Enviar comentário
+    function submitComment() {
+      const comment = document.getElementById("commentInput").value;
+      if (comment.trim() === "") return;
+
+      db.ref("comments").push({
+        text: comment,
+        timestamp: Date.now()
+      });
+
+      document.getElementById("commentInput").value = "";
+    }
+
+    // 📥 Carregar comentários
+    db.ref("comments").on("value", snapshot => {
+      const commentList = document.getElementById("commentList");
+      commentList.innerHTML = "";
+
+      snapshot.forEach(child => {
+        const data = child.val();
+        const div = document.createElement("div");
+        div.className = "comment";
+        div.textContent = data.text;
+        commentList.appendChild(div);
+      });
+    });
+  </script>
+</body>
+</html>
