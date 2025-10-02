@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planejador de Viagens com Firebase</title>
+    <title>Planejador de Viagens com Realtime Database</title>
     <!-- Incluindo Tailwind CSS para um design moderno e responsivo -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Incluindo a fonte Inter do Google Fonts -->
@@ -280,30 +280,28 @@
         // Importações do Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getDatabase, ref, onValue, set, push, remove, update } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
         // --- INÍCIO DA CONFIGURAÇÃO DO FIREBASE ---
-        // COLE A CONFIGURAÇÃO DO SEU PROJETO FIREBASE AQUI
-        // Você pode encontrar isso no Console do Firebase > Configurações do Projeto (⚙️) > Geral.
         const firebaseConfigManual = {
             apiKey: "AIzaSyBq4B9LCCat5jof2x9g5KN16UCOgnYo364",
             authDomain: "viagensapp-75077.firebaseapp.com",
             projectId: "viagensapp-75077",
             storageBucket: "viagensapp-75077.appspot.com",
             messagingSenderId: "231052282749",
-            appId: "1:231052282749:web:2cd3cca2d77d4112dd1a14"
+            appId: "1:231052282749:web:2cd3cca2d77d4112dd1a14",
+            databaseURL: "https://viagensapp-75077-default-rtdb.firebaseio.com" // Importante para o Realtime Database
         };
         // --- FIM DA CONFIGURAÇÃO DO FIREBASE ---
 
         // Variáveis globais
-        let db, auth, userId, tripsCollection;
-        let tripsData = []; // Cache local dos dados do Firestore
+        let db, auth, userId, tripsRef;
+        let tripsData = []; 
         let currentTripId = null;
-        let onConfirmAction = () => {}; // Armazena a ação a ser executada na confirmação
+        let onConfirmAction = () => {};
 
         // Configuração e inicialização do Firebase
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        // O código tentará usar a configuração automática primeiro, e se não encontrar, usará a manual.
         const firebaseConfig = (typeof __firebase_config !== 'undefined' && __firebase_config)
                                 ? JSON.parse(__firebase_config)
                                 : firebaseConfigManual;
@@ -311,15 +309,14 @@
         if (firebaseConfig && firebaseConfig.apiKey !== "COLE_SUA_API_KEY_AQUI") {
             try {
                 const app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
+                db = getDatabase(app);
                 auth = getAuth(app);
-                setLogLevel('debug');
 
                 onAuthStateChanged(auth, async (user) => {
                     if (user) {
                         userId = user.uid;
                         console.log("User authenticated with UID:", userId);
-                        tripsCollection = collection(db, 'artifacts', appId, 'users', userId, 'trips');
+                        tripsRef = ref(db, `artifacts/${appId}/users/${userId}/trips`);
                         setupTripsListener();
                     } else {
                         console.log("No user found, attempting to sign in...");
@@ -337,11 +334,11 @@
 
             } catch (error) {
                 console.error("Firebase initialization failed:", error);
-                document.getElementById('trips-list').innerHTML = `<p class="col-span-full text-center text-red-500">Erro ao conectar ao Firebase. Verifique a configuração.</p>`;
+                document.getElementById('trips-list').innerHTML = `<p class="col-span-full text-center text-red-500">Erro ao conectar ao Firebase.</p>`;
             }
         } else {
             console.error("Firebase config is not available.");
-            document.getElementById('trips-list').innerHTML = `<p class="col-span-full text-center text-red-500">Configuração do Firebase não encontrada. Por favor, adicione suas credenciais no script.</p>`;
+            document.getElementById('trips-list').innerHTML = `<p class="col-span-full text-center text-red-500">Configuração do Firebase não encontrada.</p>`;
         }
         
         // --- FUNÇÕES DE RENDERIZAÇÃO ---
@@ -383,7 +380,7 @@
         function renderTripDetails(tripId) {
             const trip = tripsData.find(t => t.id === tripId);
             if (!trip) {
-                showTripsView(); // Se a viagem for deletada enquanto a vemos, volta para a lista
+                showTripsView();
                 return;
             }
             
@@ -410,12 +407,13 @@
         function renderDetailList(elementId, items, itemTemplate, emptyMessage) {
             const listElement = document.getElementById(elementId);
             listElement.innerHTML = '';
-            items = items || []; // Garante que é um array
-            if (items.length === 0) {
+            // No Realtime Database, um array vazio pode vir como 'undefined'.
+            const itemsArray = items ? Object.values(items) : [];
+            if (itemsArray.length === 0) {
                 listElement.innerHTML = `<p class="text-slate-500 text-sm">${emptyMessage}</p>`;
                 return;
             }
-            items.forEach((item, index) => {
+            itemsArray.forEach((item, index) => {
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'flex justify-between items-center border-l-4 border-slate-200 pl-4 py-2';
                 itemDiv.innerHTML = itemTemplate(item, index);
@@ -424,19 +422,20 @@
         }
         
         function setupTripsListener() {
-            if (!tripsCollection) return;
-            onSnapshot(tripsCollection, (snapshot) => {
-                tripsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                console.log("Updated data from Firestore:", tripsData);
+            if (!tripsRef) return;
+            onValue(tripsRef, (snapshot) => {
+                const data = snapshot.val();
+                // Converte o objeto do RTDB em um array que a UI entende
+                tripsData = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
+                console.log("Updated data from Realtime Database:", tripsData);
                 
-                // Decide o que renderizar baseado na tela atual
                 if (document.getElementById('details-view').classList.contains('hidden')) {
                     renderTrips();
                 } else if(currentTripId) {
                     renderTripDetails(currentTripId);
                 }
             }, error => {
-                console.error("Error listening to trips collection:", error);
+                console.error("Error listening to Realtime Database:", error);
             });
         }
 
@@ -459,7 +458,6 @@
                 const trip = tripsData.find(t => t.id === currentTripId);
                 if (trip) {
                     const imageUrlInput = document.getElementById('trip-image-url');
-                    // Não pré-preenche se for uma imagem de placeholder
                     if (trip.imageUrl && !trip.imageUrl.startsWith('https://placehold.co')) {
                         imageUrlInput.value = trip.imageUrl;
                     } else {
@@ -483,11 +481,11 @@
             const form = document.getElementById(modalId).querySelector('form');
             if (form) form.reset();
             if (modalId === 'confirm-delete-modal') {
-                onConfirmAction = () => {}; // Reseta a ação ao fechar
+                onConfirmAction = () => {};
             }
         }
         
-        // --- AÇÕES DO FIRESTORE ---
+        // --- AÇÕES DO REALTIME DATABASE ---
 
         function showConfirmDelete(message, onConfirm) {
             document.getElementById('confirm-delete-message').innerText = message;
@@ -495,7 +493,7 @@
             openModal('confirm-delete-modal');
         }
 
-        async function addOrUpdateDetail(formId, category) {
+        async function addDetail(category) {
             if (!currentTripId) return;
 
             const trip = tripsData.find(t => t.id === currentTripId);
@@ -510,17 +508,22 @@
                 newItem = { name: document.getElementById('lodging-name').value, address: document.getElementById('lodging-address').value };
             }
 
-            const tripRef = doc(db, 'artifacts', appId, 'users', userId, 'trips', currentTripId);
-            await updateDoc(tripRef, { [category]: arrayUnion(newItem) });
+            // Pega a lista existente ou cria uma nova
+            const currentItems = trip[category] ? [...Object.values(trip[category])] : [];
+            currentItems.push(newItem);
+
+            const updates = {};
+            updates[`/${currentTripId}/${category}`] = currentItems;
+            await update(tripsRef, updates);
             closeModal(`add-${category.slice(0, -1)}-modal`);
         }
         
         window.deleteTrip = async (event, tripId) => {
-            event.stopPropagation(); // Impede que o clique abra a tela de detalhes
+            event.stopPropagation();
             showConfirmDelete('Tem certeza que deseja excluir esta viagem?', async () => {
-                await deleteDoc(doc(db, 'artifacts', appId, 'users', userId, 'trips', tripId));
+                const tripToDeleteRef = ref(db, `artifacts/${appId}/users/${userId}/trips/${tripId}`);
+                await remove(tripToDeleteRef);
                 closeModal('confirm-delete-modal');
-                // Se estivermos na visualização de detalhes da viagem excluída, volte
                 if (currentTripId === tripId) {
                     showTripsView();
                 }
@@ -530,14 +533,18 @@
         window.deleteDetailItem = async (category, index) => {
             if (!currentTripId) return;
             const trip = tripsData.find(t => t.id === currentTripId);
-            if (!trip || !trip[category] || !trip[category][index]) return;
+            if (!trip || !trip[category]) return;
+
+            // Transforma o objeto em array, remove o item e atualiza
+            const currentItems = Object.values(trip[category]);
+            const itemToRemove = currentItems[index];
             
-            const itemToRemove = trip[category][index];
-            showConfirmDelete('Tem certeza que deseja excluir este item?', async () => {
-                const tripRef = doc(db, 'artifacts', appId, 'users', userId, 'trips', currentTripId);
-                await updateDoc(tripRef, { [category]: arrayRemove(itemToRemove) });
+            showConfirmDelete(`Tem certeza que deseja excluir o item "${itemToRemove.company || itemToRemove.from || itemToRemove.name}"?`, async () => {
+                currentItems.splice(index, 1);
+                const updates = {};
+                updates[`/${currentTripId}/${category}`] = currentItems;
+                await update(tripsRef, updates);
                 closeModal('confirm-delete-modal');
-                 // O onSnapshot vai cuidar de re-renderizar
             });
         }
 
@@ -551,42 +558,42 @@
                 startDate: document.getElementById('trip-start-date').value,
                 endDate: document.getElementById('trip-end-date').value,
                 imageUrl: `https://placehold.co/600x400/a3e635/1e293b?text=${encodeURIComponent(tripName)}`,
+                // Inicializa as listas para evitar problemas
                 flights: [], trains: [], lodging: []
             };
-            await addDoc(tripsCollection, newTrip);
+            const newTripRef = push(tripsRef);
+            await set(newTripRef, newTrip);
             closeModal('add-trip-modal');
         });
 
-        document.getElementById('add-flight-form').addEventListener('submit', (e) => { e.preventDefault(); addOrUpdateDetail('add-flight-form', 'flights'); });
-        document.getElementById('add-train-form').addEventListener('submit', (e) => { e.preventDefault(); addOrUpdateDetail('add-train-form', 'trains'); });
-        document.getElementById('add-lodging-form').addEventListener('submit', (e) => { e.preventDefault(); addOrUpdateDetail('add-lodging-form', 'lodging'); });
+        document.getElementById('add-flight-form').addEventListener('submit', (e) => { e.preventDefault(); addDetail('flights'); });
+        document.getElementById('add-train-form').addEventListener('submit', (e) => { e.preventDefault(); addDetail('trains'); });
+        document.getElementById('add-lodging-form').addEventListener('submit', (e) => { e.preventDefault(); addDetail('lodging'); });
 
-        // Listener para o formulário de edição de imagem
         document.getElementById('edit-image-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             if (!currentTripId) return;
             const newImageUrl = document.getElementById('trip-image-url').value;
-            const tripRef = doc(db, 'artifacts', appId, 'users', userId, 'trips', currentTripId);
-            await updateDoc(tripRef, { imageUrl: newImageUrl });
+            const updates = {};
+            updates[`/${currentTripId}/imageUrl`] = newImageUrl;
+            await update(tripsRef, updates);
             closeModal('edit-image-modal');
         });
 
-        // Listener para o formulário de edição da viagem
         document.getElementById('edit-trip-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             if (!currentTripId) return;
-            const updatedData = {
+            const updates = {
                 name: document.getElementById('edit-trip-name').value,
                 destination: document.getElementById('edit-trip-destination').value,
                 startDate: document.getElementById('edit-trip-start-date').value,
                 endDate: document.getElementById('edit-trip-end-date').value,
             };
-            const tripRef = doc(db, 'artifacts', appId, 'users', userId, 'trips', currentTripId);
-            await updateDoc(tripRef, updatedData);
+            const tripToUpdateRef = ref(db, `artifacts/${appId}/users/${userId}/trips/${currentTripId}`);
+            await update(tripToUpdateRef, updates);
             closeModal('edit-trip-modal');
         });
 
-        // Listener para o botão de confirmação de exclusão
         document.getElementById('confirm-delete-btn').addEventListener('click', () => {
             if (typeof onConfirmAction === 'function') {
                 onConfirmAction();
@@ -602,4 +609,3 @@
     </script>
 </body>
 </html>
-
