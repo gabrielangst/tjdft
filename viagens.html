@@ -85,6 +85,14 @@
                 </div>
             </header>
 
+            <!-- Painel de Roteiro -->
+            <section id="itinerary-panel" class="mb-8 bg-white p-6 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-semibold mb-4">Roteiro da Viagem</h2>
+                <div id="itinerary-list" class="space-y-4">
+                    <!-- Itens do roteiro serão inseridos aqui -->
+                </div>
+            </section>
+
             <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Seção de Voos -->
                 <section class="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg">
@@ -276,7 +284,7 @@
 
     <!-- Modal: Adicionar Transporte -->
      <div id="add-transport-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
-        <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-md m-4">
+        <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-lg m-4 overflow-y-auto max-h-screen">
             <h3 class="text-2xl font-semibold mb-6">Adicionar Transporte</h3>
             <form id="add-transport-form" class="space-y-4">
                 <div>
@@ -287,6 +295,26 @@
                         <option value="Ônibus">Ônibus</option>
                         <option value="Outro">Outro</option>
                     </select>
+                </div>
+                 <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="transport-departure-date" class="block text-sm font-medium text-slate-600">Data de Embarque/Retirada</label>
+                        <input type="date" id="transport-departure-date" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                    </div>
+                    <div>
+                        <label for="transport-departure-time" class="block text-sm font-medium text-slate-600">Horário</label>
+                        <input type="time" id="transport-departure-time" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                    </div>
+                </div>
+                 <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="transport-arrival-date" class="block text-sm font-medium text-slate-600">Data de Chegada/Devolução</label>
+                        <input type="date" id="transport-arrival-date" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                    </div>
+                    <div>
+                        <label for="transport-arrival-time" class="block text-sm font-medium text-slate-600">Horário</label>
+                        <input type="time" id="transport-arrival-time" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                    </div>
                 </div>
                  <div>
                     <label for="transport-origin" class="block text-sm font-medium text-slate-600">Origem</label>
@@ -351,7 +379,7 @@
     
     <!-- Modal: Editar Transporte -->
     <div id="edit-transport-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
-        <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-md m-4">
+        <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-lg m-4 overflow-y-auto max-h-screen">
             <h3 class="text-2xl font-semibold mb-6">Editar Transporte</h3>
             <form id="edit-transport-form" class="space-y-4">
                 <div>
@@ -362,6 +390,26 @@
                         <option value="Ônibus">Ônibus</option>
                         <option value="Outro">Outro</option>
                     </select>
+                </div>
+                 <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="edit-transport-departure-date" class="block text-sm font-medium text-slate-600">Data de Embarque/Retirada</label>
+                        <input type="date" id="edit-transport-departure-date" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                    </div>
+                    <div>
+                        <label for="edit-transport-departure-time" class="block text-sm font-medium text-slate-600">Horário</label>
+                        <input type="time" id="edit-transport-departure-time" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                    </div>
+                </div>
+                 <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="edit-transport-arrival-date" class="block text-sm font-medium text-slate-600">Data de Chegada/Devolução</label>
+                        <input type="date" id="edit-transport-arrival-date" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                    </div>
+                    <div>
+                        <label for="edit-transport-arrival-time" class="block text-sm font-medium text-slate-600">Horário</label>
+                        <input type="time" id="edit-transport-arrival-time" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                    </div>
                 </div>
                  <div>
                     <label for="edit-transport-origin" class="block text-sm font-medium text-slate-600">Origem</label>
@@ -579,6 +627,8 @@
             document.getElementById('details-title').innerText = trip.name;
             document.getElementById('details-dates').innerText = `${formatDate(trip.startDate)} a ${formatDate(trip.endDate)}`;
 
+            renderItinerary(trip);
+
             renderDetailList('flights-list', trip.flights, (item, index, arr) => `
                 <div class="flex-grow">
                     <p class="font-bold text-sm ${item.legType === 'ida' ? 'text-blue-600' : 'text-cyan-600'}">${item.legType === 'ida' ? 'Voo de Ida' : 'Voo de Volta'}</p>
@@ -608,6 +658,10 @@
                  <div class="flex-grow">
                     <p class="font-bold text-sm text-green-600">${item.type || 'Transporte'}</p>
                     ${ (item.from && item.to) ? `<p class="font-semibold">${item.from} → ${item.to}</p>` : '' }
+                    <p class="text-xs text-slate-500 mt-1">
+                        Saída: ${formatDate(item.departureDate)} ${item.departureTime} <br>
+                        Chegada: ${formatDate(item.arrivalDate)} ${item.arrivalTime}
+                    </p>
                     ${item.description ? `<p class="text-sm text-slate-500 mt-1 whitespace-pre-wrap">${item.description}</p>` : ''}
                 </div>
                 <div class="flex items-center">
@@ -778,6 +832,10 @@
             document.getElementById('edit-transport-origin').value = transport.from;
             document.getElementById('edit-transport-destination').value = transport.to;
             document.getElementById('edit-transport-description').value = transport.description;
+            document.getElementById('edit-transport-departure-date').value = transport.departureDate;
+            document.getElementById('edit-transport-departure-time').value = transport.departureTime;
+            document.getElementById('edit-transport-arrival-date').value = transport.arrivalDate;
+            document.getElementById('edit-transport-arrival-time').value = transport.arrivalTime;
             
             // Trigger change event to set optional fields correctly
             document.getElementById('edit-transport-type').dispatchEvent(new Event('change'));
@@ -835,7 +893,11 @@
                     type: document.getElementById('transport-type').value,
                     from: document.getElementById('transport-origin').value, 
                     to: document.getElementById('transport-destination').value,
-                    description: document.getElementById('transport-description').value
+                    description: document.getElementById('transport-description').value,
+                    departureDate: document.getElementById('transport-departure-date').value,
+                    departureTime: document.getElementById('transport-departure-time').value,
+                    arrivalDate: document.getElementById('transport-arrival-date').value,
+                    arrivalTime: document.getElementById('transport-arrival-time').value,
                 };
             } else if (category === 'lodging') {
                 newItem = { 
@@ -992,6 +1054,10 @@
                 from: document.getElementById('edit-transport-origin').value,
                 to: document.getElementById('edit-transport-destination').value,
                 description: document.getElementById('edit-transport-description').value,
+                departureDate: document.getElementById('edit-transport-departure-date').value,
+                departureTime: document.getElementById('edit-transport-departure-time').value,
+                arrivalDate: document.getElementById('edit-transport-arrival-date').value,
+                arrivalTime: document.getElementById('edit-transport-arrival-time').value,
             };
 
             const currentTransport = trip.transport ? [...Object.values(trip.transport)] : [];
