@@ -37,6 +37,15 @@
         .trip-card:hover .trip-card-delete-button {
             opacity: 1;
         }
+        /* Estilos para o seletor de ícones */
+        .icon-picker-option {
+            transition: all 0.2s ease-in-out;
+        }
+        .icon-picker-option.selected {
+            border-color: #3b82f6; /* blue-500 */
+            background-color: #dbeafe; /* blue-100 */
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800">
@@ -55,19 +64,7 @@
                 </button>
             </header>
 
-            <main id="trips-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"><div class="trip-card bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer transform hover:-translate-y-1 transition-transform duration-300 relative">
-                    <button onclick="deleteTrip(event, 'default-app-id')" class="trip-card-delete-button absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg>
-                    </button>
-                    <div class="h-48 bg-cover bg-center" style="background-image: url('https://www.melhoresdestinos.com.br/wp-content/uploads/2022/06/miami-e-orlando-capa-02-2022.jpg')"></div>
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold text-slate-900">Disney 2026</h3>
-                        <p class="text-slate-500 mt-1">Miami e Orlando</p>
-                        <div class="mt-4 text-sm font-medium text-slate-600">
-                           9 de abr. de 2026 - 20 de abr. de 2026
-                        </div>
-                    </div>
-                </div></main>
+            <main id="trips-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></main>
         </div>
 
         <div id="details-view" class="hidden">
@@ -91,9 +88,15 @@
             </header>
 
             <section id="itinerary-panel" class="mb-8 bg-white p-6 rounded-xl shadow-lg">
-                <h2 class="text-2xl font-semibold mb-4">Roteiro da Viagem</h2>
-                <div id="itinerary-list" class="space-y-4">
-                    </div>
+                <div class="flex justify-between items-center cursor-pointer" onclick="toggleItineraryPanel()">
+                    <h2 class="text-2xl font-semibold">Roteiro da Viagem (Resumo)</h2>
+                    <button id="toggle-itinerary-btn" class="flex items-center gap-2 font-semibold text-blue-600">
+                        <span>Mostrar Roteiro</span>
+                        <svg id="itinerary-toggle-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down transition-transform duration-300"><path d="m6 9 6 6 6-6"/></svg>
+                    </button>
+                </div>
+                <div id="itinerary-list" class="space-y-4 mt-4 hidden border-t pt-4">
+                </div>
             </section>
 
             <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -125,6 +128,12 @@
                     <div id="lodging-list" class="space-y-4"></div>
                 </section>
             </main>
+
+            <section id="daily-itinerary-panel" class="mt-8 bg-white p-6 rounded-xl shadow-lg">
+                <h2 class="text-2xl font-semibold mb-4">Roteiro por Dia</h2>
+                <div id="daily-itinerary-list" class="space-y-6">
+                </div>
+            </section>
         </div>
     </div>
 
@@ -217,7 +226,7 @@
             </form>
         </div>
     </div>
-
+    
     <div id="edit-flight-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
         <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-lg m-4 overflow-y-auto max-h-screen">
             <h3 class="text-2xl font-semibold mb-6">Editar Voo</h3>
@@ -277,8 +286,8 @@
             </form>
         </div>
     </div>
-
-    <div id="add-transport-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
+    
+     <div id="add-transport-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
         <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-lg m-4 overflow-y-auto max-h-screen">
             <h3 class="text-2xl font-semibold mb-6">Adicionar Transporte</h3>
             <form id="add-transport-form" class="space-y-4">
@@ -330,8 +339,8 @@
             </form>
         </div>
     </div>
-
-    <div id="add-lodging-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
+    
+     <div id="add-lodging-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
         <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-lg m-4 overflow-y-auto max-h-screen">
             <h3 class="text-2xl font-semibold mb-6">Adicionar Hospedagem</h3>
             <form id="add-lodging-form" class="space-y-4">
@@ -423,7 +432,7 @@
             </form>
         </div>
     </div>
-
+    
     <div id="edit-lodging-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
         <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-lg m-4 overflow-y-auto max-h-screen">
             <h3 class="text-2xl font-semibold mb-6">Editar Hospedagem</h3>
@@ -463,8 +472,8 @@
             </form>
         </div>
     </div>
-
-    <div id="edit-image-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
+    
+     <div id="edit-image-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
         <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-md m-4">
             <h3 class="text-2xl font-semibold mb-6">Alterar Imagem da Viagem</h3>
             <form id="edit-image-form" class="space-y-4">
@@ -479,7 +488,7 @@
             </form>
         </div>
     </div>
-
+    
     <div id="edit-trip-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
         <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-md m-4">
             <h3 class="text-2xl font-semibold mb-6">Editar Informações da Viagem</h3>
@@ -509,7 +518,7 @@
             </form>
         </div>
     </div>
-
+    
     <div id="confirm-delete-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
         <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-sm m-4">
             <h3 class="text-xl font-semibold mb-4">Confirmar Exclusão</h3>
@@ -521,14 +530,81 @@
         </div>
     </div>
 
+    <div id="add-activity-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
+        <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-lg m-4 overflow-y-auto max-h-screen">
+            <h3 class="text-2xl font-semibold mb-6">Adicionar Atividade</h3>
+            <form id="add-activity-form" class="space-y-4">
+                <input type="hidden" id="activity-date">
+                <input type="hidden" id="activity-icon" value="passeio"> <div>
+                    <label for="activity-time" class="block text-sm font-medium text-slate-600">Horário</label>
+                    <input type="time" id="activity-time" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                </div>
+                <div>
+                    <label for="activity-type" class="block text-sm font-medium text-slate-600">Tipo de Atividade</label>
+                    <select id="activity-type" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                        <option value="Passeio">Passeio</option>
+                        <option value="Restaurante">Restaurante</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="activity-description" class="block text-sm font-medium text-slate-600">Descrição</label>
+                    <textarea id="activity-description" rows="3" placeholder="Ex: Visita ao Coliseu" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-600">Ícone</label>
+                    <div id="add-icon-picker" class="mt-2 flex flex-wrap gap-2">
+                    </div>
+                </div>
+                <div class="pt-6 flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('add-activity-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-semibold">Salvar Atividade</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="edit-activity-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
+        <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-lg m-4 overflow-y-auto max-h-screen">
+            <h3 class="text-2xl font-semibold mb-6">Editar Atividade</h3>
+            <form id="edit-activity-form" class="space-y-4">
+                <input type="hidden" id="edit-activity-id">
+                <input type="hidden" id="edit-activity-icon">
+                <div>
+                    <label for="edit-activity-time" class="block text-sm font-medium text-slate-600">Horário</label>
+                    <input type="time" id="edit-activity-time" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                </div>
+                <div>
+                    <label for="edit-activity-type" class="block text-sm font-medium text-slate-600">Tipo de Atividade</label>
+                    <select id="edit-activity-type" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                        <option value="Passeio">Passeio</option>
+                        <option value="Restaurante">Restaurante</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="edit-activity-description" class="block text-sm font-medium text-slate-600">Descrição</label>
+                    <textarea id="edit-activity-description" rows="3" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-600">Ícone</label>
+                    <div id="edit-icon-picker" class="mt-2 flex flex-wrap gap-2">
+                    </div>
+                </div>
+                <div class="pt-6 flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('edit-activity-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-semibold">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
     <script type="module">
         // Importações do Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getDatabase, ref, onValue, set, push, remove, update } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
-        // --- INÍCIO DA CONFIGURAÇÃO DO FIREBASE ---
-        // Insira suas credenciais do Firebase aqui
         const firebaseConfigManual = {
             apiKey: "AIzaSyBq4B9LCCat5jof2x9g5KN16UCOgnYo364",
             authDomain: "viagensapp-75077.firebaseapp.com",
@@ -538,8 +614,7 @@
             appId: "1:231052282749:web:2cd3cca2d77d4112dd1a14",
             databaseURL: "https://viagensapp-75077-default-rtdb.firebaseio.com"
         };
-        // --- FIM DA CONFIGURAÇÃO DO FIREBASE ---
-
+        
         // Variáveis globais
         let db, tripsRef;
         let tripsData = []; 
@@ -547,27 +622,48 @@
         let currentEditingItemIndex = null;
         let onConfirmAction = () => {};
 
-        // Configuração e inicialização do Firebase
+        // --- FUNÇÃO UTILITÁRIA ---
+        function formatDate(dateString, options = { day: 'numeric', month: 'short', year: 'numeric' }) {
+            if(!dateString) return 'Data indefinida';
+            const date = new Date(dateString + 'T00:00:00Z');
+            return date.toLocaleDateString('pt-BR', { timeZone: 'UTC', ...options });
+        }
+
+        const ICONS = {
+            flight: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>`,
+            transport_departure: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l4-4-4-4"/><path d="M14 5v2a3 3 0 0 1-3 3H5a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h6a3 3 0 0 1 3 3v2"/></svg>`,
+            transport_arrival: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15v5"/><path d="M9 12H3V5a2 2 0 0 1 2-2h4"/><path d="m14.2 12.6 7.2 7.2-2.8 2.8-7.2-7.2-2.8 2.8-4.4-4.4 2.8-2.8 4.4 4.4Z"/></svg>`,
+            lodging_checkin: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+            lodging_checkout: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>`,
+            passeio: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`,
+            restaurante: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8"/><path d="M15 15 3.3 3.3a4.2 4.2 0 0 0 0 6l7.3 7.3c.7.7 2 .7 2.8 0L15 15Zm0 0 7 7"/><path d="m2.1 2.1 6.4 6.4"/></svg>`,
+            outro: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12a10.06 10.06 1 0 0-20 0Z"/><path d="M12 12v8a2 2 0 0 0 4 0"/><path d="M12 2v1"/></svg>`,
+            basketball: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0-10 10c0 .2 0 .5.1.7"/><path d="M22 12a10 10 0 0 0-10-10c-.2 0-.5 0-.7.1"/><path d="M2 12h20"/><path d="M12 22a10 10 0 0 0 10-10c0-.2 0-.5-.1-.7"/><path d="M2 12a10 10 0 0 0 10 10c.2 0 .5 0 .7-.1"/></svg>`,
+            building: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>`,
+            pool: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6c.9.5 2.2 1 3.5 1s2.6-.5 3.5-1 2.2 1 3.5 1 2.6-.5 3.5-1"/><path d="M3 12c.9.5 2.2 1 3.5 1s2.6-.5 3.5-1 2.2 1 3.5 1 2.6-.5 3.5-1"/><path d="M3 18c.9.5 2.2 1 3.5 1s2.6-.5 3.5-1 2.2 1 3.5 1 2.6-.5 3.5-1"/></svg>`,
+            landmark: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="22"/><line x1="6" x2="6" y1="18"/><line x1="18" x2="18" y1="18"/><path d="M12 22V10"/><path d="m18 10-6-8-6 8"/><path d="M3 10h18"/></svg>`,
+            shopping: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>`,
+            music: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`,
+            park: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14c-1-1-1-4 0-5 1-1 4-1 5 0 1 1 1 4 0 5-1 1-4 1-5 0Z"/><path d="m12.5 2.5.8 2.3.5 1.4.9.4.5.2 2.3.8.4.9.2.5 1.4.5.8 2.3.9.4.2.5.5 1.4 2.3.8.4.9.5.2.5 1.4.8 2.3-.9.4-.2.5-.5 1.4-2.3.8-1.4.5-.4.9-.8 2.3-.2.5-.5 1.4-.8 2.3-1.4.5-.9.4-.4.9-2.3.8-.5.2-.5 1.4-.8 2.3-.4.9-.2.5-.5 1.4z"/></svg>`,
+            default: `<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`
+        };
+
         const firebaseConfig = (typeof __firebase_config !== 'undefined' && __firebase_config)
                                 ? JSON.parse(__firebase_config)
                                 : firebaseConfigManual;
 
-        if (firebaseConfig && firebaseConfig.apiKey !== "COLE_SUA_API_KEY_AQUI") {
+        if (firebaseConfig && firebaseConfig.apiKey) {
             try {
                 const app = initializeApp(firebaseConfig);
                 db = getDatabase(app);
-
-                // O caminho no banco de dados agora é público e compartilhado
                 tripsRef = ref(db, 'public_trips');
-                setupTripsListener();
-
+                setupTripsListener(); 
+                setupIconPickers();
             } catch (error) {
                 console.error("Firebase initialization failed:", error);
-                document.getElementById('trips-list').innerHTML = `<p class="col-span-full text-center text-red-500">Erro ao conectar ao Firebase.</p>`;
             }
         } else {
             console.error("Firebase config is not available.");
-            document.getElementById('trips-list').innerHTML = `<p class="col-span-full text-center text-red-500">Configuração do Firebase não encontrada.</p>`;
         }
         
         // --- FUNÇÕES DE RENDERIZAÇÃO ---
@@ -606,9 +702,6 @@
             });
         }
         
-        // =================================================================================
-        // FUNÇÃO ADICIONADA PARA CORRIGIR O ERRO
-        // =================================================================================
         function renderTripDetails(tripId) {
             currentTripId = tripId;
             const trip = tripsData.find(t => t.id === tripId);
@@ -618,15 +711,21 @@
                 showTripsView();
                 return;
             }
+            
+            const itineraryList = document.getElementById('itinerary-list');
+            const toggleBtn = document.getElementById('toggle-itinerary-btn');
+            const toggleIcon = document.getElementById('itinerary-toggle-icon');
+            itineraryList.classList.add('hidden');
+            toggleBtn.querySelector('span').textContent = 'Mostrar Roteiro';
+            toggleIcon.classList.remove('rotate-180');
 
-            // Popula o cabeçalho
+
             document.getElementById('details-title').textContent = trip.name;
             document.getElementById('details-dates').textContent = `${formatDate(trip.startDate)} - ${formatDate(trip.endDate)}`;
-
-            // Renderiza o roteiro
+            
             renderItinerary(trip);
+            renderDailyItinerary(trip);
 
-            // Template para a lista de voos
             const flightTemplate = (flight, index, allFlights) => `
                 <div>
                     <p class="font-semibold text-slate-800">${flight.origin} → ${flight.destination}</p>
@@ -654,7 +753,6 @@
             `;
             renderDetailList('flights-list', trip.flights, flightTemplate, 'Nenhum voo adicionado.');
 
-            // Template para a lista de transportes
             const transportTemplate = (item, index, allTransport) => `
                 <div>
                     <p class="font-semibold text-slate-800">${item.type}</p>
@@ -682,7 +780,6 @@
             `;
             renderDetailList('transport-list', trip.transport, transportTemplate, 'Nenhum transporte adicionado.');
 
-            // Template para a lista de hospedagens
             const lodgingTemplate = (item, index, allLodging) => `
                 <div>
                     <p class="font-semibold text-slate-800">${item.name}</p>
@@ -710,94 +807,71 @@
             `;
             renderDetailList('lodging-list', trip.lodging, lodgingTemplate, 'Nenhuma hospedagem adicionada.');
         }
-        // =================================================================================
-        // FIM DA FUNÇÃO ADICIONADA
-        // =================================================================================
         
         function renderItinerary(trip) {
             const itineraryList = document.getElementById('itinerary-list');
             itineraryList.innerHTML = '';
-
             const events = [];
 
-            // 1. Collect flights
             if (trip.flights) {
                 Object.values(trip.flights).forEach(flight => {
-                    events.push({
-                        dateTime: new Date(`${flight.date}T${flight.departureTime}`),
-                        type: 'flight',
-                        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plane w-6 h-6"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>`,
-                        title: `Voo ${flight.company} ${flight.code}`,
-                        description: `${flight.origin} → ${flight.destination}`
-                    });
+                    if (flight.date && flight.departureTime) {
+                        events.push({
+                            dateTime: new Date(`${flight.date}T${flight.departureTime}`),
+                            icon: `<div class="w-12 h-12 flex-shrink-0 rounded-full flex items-center justify-center bg-blue-100 text-blue-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plane w-6 h-6"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg></div>`,
+                            title: `Voo ${flight.company} ${flight.code}`,
+                            description: `${flight.origin} → ${flight.destination}`
+                        });
+                    }
                 });
             }
-
-            // 2. Collect transports
             if (trip.transport) {
                 Object.values(trip.transport).forEach(item => {
-                    let icon;
-                    switch(item.type) {
-                        case 'Trem':
-                            icon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-train-front w-6 h-6"><path d="M8 3.1c.9 1.4 1.5 3.3 1.5 5.4c0 2.4-1 4.5-2 5.5"/><path d="M16.5 8.5c0-2.1.6-3.9 1.5-5.4"/><path d="M5 14h14"/><path d="M5 18h14"/><path d="M17 18a1 1 0 0 1-1 1h-8a1 1 0 0 1-1-1v-4a5 5 0 0 1 5-5a5 5 0 0 1 5 5v4Z"/><path d="M8 7a1 1 0 0 0-1 1v2"/><path d="M17 7a1 1 0 0 1-1 1v2"/><path d="M7 14v4"/><path d="M17 14v4"/></svg>`;
-                            break;
-                        case 'Carro Alugado':
-                             icon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-car w-6 h-6"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7s-1.3.3-1.8.7C9.3 8.6 8 10 8 10s-2.7.6-4.5.8c-.8.2-1.5 1-1.5 1.9v3c0 .6.4 1 1 1h2"/><path d="M8 17a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-2Z"/><path d="M17 17a1 1 0 0 0 1-1h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1h-3a1 1 0 0 0-1 1v2Z"/><path d="M6 16v-3"/><path d="M18 16v-3"/><path d="M12 16V8"/><path d="M14 9h-4"/><path d="M10 16h4"/></svg>`;
-                            break;
-                         case 'Ônibus':
-                            icon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bus w-6 h-6"><path d="M8 6v6"/><path d="M16 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/></svg>`;
-                            break;
-                        default:
-                            icon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-move-right w-6 h-6"><path d="M18 8L22 12L18 16"/><path d="M2 12H22"/></svg>`;
+                    if (item.departureDate && item.departureTime) {
+                        let iconSvg;
+                        switch(item.type) {
+                            case 'Trem': iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-train-track w-6 h-6"><path d="M2 17 17 2"/><path d="m2 14 8 8"/><path d="m5 11 8 8"/><path d="m8 8 8 8"/><path d="m11 5 8 8"/><path d="M14 2 22 10"/><path d="M7 21 22 6"/><path d="m15 15 5 5"/><path d="M3 21 21 3"/></svg>`; break;
+                            case 'Carro Alugado': iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-car w-6 h-6"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7s-1.3.3-1.8.7C9.3 8.6 8 10 8 10s-2.7.6-4.5.8c-.8.2-1.5 1-1.5 1.9v3c0 .6.4 1 1 1h2"/><path d="M8 17a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-2Z"/><path d="M17 17a1 1 0 0 0 1-1h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1h-3a1 1 0 0 0-1 1v2Z"/><path d="M6 16v-3"/><path d="M18 16v-3"/><path d="M12 16V8"/><path d="M14 9h-4"/><path d="M10 16h4"/></svg>`; break;
+                            case 'Ônibus': iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bus w-6 h-6"><path d="M8 6v6"/><path d="M16 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/></svg>`; break;
+                            default: iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-move-right w-6 h-6"><path d="M18 8L22 12L18 16"/><path d="M2 12H22"/></svg>`;
+                        }
+                        events.push({
+                            dateTime: new Date(`${item.departureDate}T${item.departureTime}`),
+                            icon: `<div class="w-12 h-12 flex-shrink-0 rounded-full flex items-center justify-center bg-slate-200 text-slate-600">${iconSvg}</div>`,
+                            title: `${item.type}`, description: `${item.from ? `${item.from} → ` : ''}${item.to ? item.to : ''}`
+                        });
                     }
-
-                    events.push({
-                        dateTime: new Date(`${item.departureDate}T${item.departureTime}`),
-                        type: 'transport',
-                        icon,
-                        title: `${item.type}`,
-                        description: `${item.from ? `${item.from} → ` : ''}${item.to ? item.to : ''}`
-                    });
                 });
             }
-
-            // 3. Collect lodgings (check-in and check-out)
             if (trip.lodging) {
                 Object.values(trip.lodging).forEach(item => {
-                    events.push({
-                        dateTime: new Date(`${item.checkinDate}T${item.checkinTime}`),
-                        type: 'lodging-in',
-                        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-in w-6 h-6"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>`,
-                        title: `Check-in: ${item.name}`,
-                        description: item.address
-                    });
-                    events.push({
-                        dateTime: new Date(`${item.checkoutDate}T${item.checkoutTime}`),
-                        type: 'lodging-out',
-                        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out w-6 h-6"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>`,
-                        title: `Check-out: ${item.name}`,
-                        description: item.address
-                    });
+                    if (item.checkinDate && item.checkinTime) {
+                        events.push({
+                            dateTime: new Date(`${item.checkinDate}T${item.checkinTime}`),
+                            icon: `<div class="w-12 h-12 flex-shrink-0 rounded-full flex items-center justify-center bg-slate-200 text-slate-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-home w-6 h-6"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>`,
+                            title: `Check-in: ${item.name}`, description: item.address
+                        });
+                    }
+                    if (item.checkoutDate && item.checkoutTime) {
+                        events.push({
+                            dateTime: new Date(`${item.checkoutDate}T${item.checkoutTime}`),
+                            icon: `<div class="w-12 h-12 flex-shrink-0 rounded-full flex items-center justify-center bg-slate-200 text-slate-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out w-6 h-6"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg></div>`,
+                            title: `Check-out: ${item.name}`, description: item.address
+                        });
+                    }
                 });
             }
-
-            // 4. Sort all events by date and time
             events.sort((a, b) => a.dateTime - b.dateTime);
-
-            // 5. Render events
             if (events.length === 0) {
-                itineraryList.innerHTML = `<p class="text-slate-500 text-sm">Nenhum evento no roteiro. Adicione voos, transportes e hospedagens para começar.</p>`;
+                itineraryList.innerHTML = `<p class="text-slate-500 text-sm">Nenhum evento no roteiro.</p>`;
                 return;
             }
-
             events.forEach(event => {
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'flex items-start space-x-4';
                 itemDiv.innerHTML = `
                     <div class="flex flex-col items-center">
-                        <div class="w-12 h-12 flex-shrink-0 rounded-full flex items-center justify-center bg-slate-200 text-slate-600">
-                            ${event.icon}
-                        </div>
+                        ${event.icon}
                          <span class="text-xs font-bold text-slate-500 mt-1">${String(event.dateTime.getHours()).padStart(2, '0')}:${String(event.dateTime.getMinutes()).padStart(2, '0')}</span>
                     </div>
                     <div>
@@ -807,6 +881,98 @@
                 `;
                 itineraryList.appendChild(itemDiv);
             });
+        }
+        
+        function renderDailyItinerary(trip) {
+            const container = document.getElementById('daily-itinerary-list');
+            container.innerHTML = '';
+            
+            if (!trip.startDate || !trip.endDate) { return; }
+
+            const allEvents = [];
+            
+            if (trip.flights) {
+                Object.values(trip.flights).forEach(f => {
+                    if (f.date && f.departureTime) allEvents.push({ dateTime: new Date(`${f.date}T${f.departureTime}`), description: `Voo ${f.company}: ${f.origin} → ${f.destination}`, isEditable: false, icon: ICONS.flight });
+                });
+            }
+            if (trip.transport) {
+                Object.values(trip.transport).forEach(t => {
+                    if (t.departureDate && t.departureTime) allEvents.push({ dateTime: new Date(`${t.departureDate}T${t.departureTime}`), description: `Saída do Transporte (${t.type})`, isEditable: false, icon: ICONS.transport_departure });
+                    if (t.arrivalDate && t.arrivalTime) allEvents.push({ dateTime: new Date(`${t.arrivalDate}T${t.arrivalTime}`), description: `Chegada do Transporte (${t.type})`, isEditable: false, icon: ICONS.transport_arrival });
+                });
+            }
+            if (trip.lodging) {
+                Object.values(trip.lodging).forEach(l => {
+                    if (l.checkinDate && l.checkinTime) allEvents.push({ dateTime: new Date(`${l.checkinDate}T${l.checkinTime}`), description: `Check-in: ${l.name}`, isEditable: false, icon: ICONS.lodging_checkin });
+                    if (l.checkoutDate && l.checkoutTime) allEvents.push({ dateTime: new Date(`${l.checkoutDate}T${l.checkoutTime}`), description: `Check-out: ${l.name}`, isEditable: false, icon: ICONS.lodging_checkout });
+                });
+            }
+            if (trip.activities) {
+                Object.values(trip.activities).forEach(a => {
+                    const activityIcon = ICONS[a.icon] || (a.type === 'Passeio' ? ICONS.passeio : a.type === 'Restaurante' ? ICONS.restaurante : ICONS.outro);
+                    if(a.date && a.time) allEvents.push({ id: a.id, dateTime: new Date(`${a.date}T${a.time}`), description: a.description, isEditable: true, icon: activityIcon });
+                });
+            }
+
+            allEvents.sort((a,b) => a.dateTime - b.dateTime);
+
+            const groupedByDay = allEvents.reduce((acc, event) => {
+                const date = new Date(event.dateTime);
+                date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+                const day = date.toISOString().split('T')[0];
+                if (!acc[day]) acc[day] = [];
+                acc[day].push(event);
+                return acc;
+            }, {});
+
+            let currentDate = new Date(trip.startDate + 'T00:00:00Z');
+            const endDate = new Date(trip.endDate + 'T23:59:59Z');
+
+            while(currentDate <= endDate) {
+                const dayKey = currentDate.toISOString().split('T')[0];
+                const dayEvents = groupedByDay[dayKey] || [];
+                
+                const dayPanel = document.createElement('div');
+                dayPanel.className = 'border-t pt-4';
+                
+                let eventsHtml = dayEvents.map(event => `
+                    <div class="flex items-center justify-between gap-4 py-2">
+                        <div class="flex items-center gap-3 flex-1 min-w-0">
+                            <span class="font-bold text-sm w-12 text-right flex-shrink-0">${event.dateTime.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})}</span>
+                            <div class="flex items-center gap-2 text-slate-500 flex-shrink-0">${event.icon || ''}</div>
+                            <p class="text-sm text-slate-700 truncate" title="${event.description}">${event.description}</p>
+                        </div>
+                        ${event.isEditable ? `
+                        <div class="flex gap-2 items-center flex-shrink-0">
+                            <button onclick="openEditActivityModal('${event.id}')" class="text-slate-500 hover:text-blue-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                            </button>
+                            <button onclick="deleteActivity('${event.id}')" class="text-slate-500 hover:text-red-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                            </button>
+                        </div>
+                        ` : ''}
+                    </div>
+                `).join('');
+
+                if (dayEvents.length === 0) {
+                    eventsHtml = '<p class="text-sm text-slate-400 py-2 ml-20">Nenhuma atividade para este dia.</p>';
+                }
+
+                dayPanel.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-bold text-lg text-slate-800">${formatDate(dayKey, {weekday: 'long', day: 'numeric', month: 'long'})}</h3>
+                        <button onclick="openAddActivityModal('${dayKey}')" class="flex items-center gap-1 text-sm bg-blue-50 text-blue-600 font-semibold px-3 py-1 rounded-md hover:bg-blue-100 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            Adicionar Atividade
+                        </button>
+                    </div>
+                    <div>${eventsHtml}</div>
+                `;
+                container.appendChild(dayPanel);
+                currentDate.setUTCDate(currentDate.getUTCDate() + 1);
+            }
         }
         
         function renderDetailList(elementId, items, itemTemplate, emptyMessage) {
@@ -830,7 +996,6 @@
             onValue(tripsRef, (snapshot) => {
                 const data = snapshot.val();
                 tripsData = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
-                console.log("Updated data from Realtime Database:", tripsData);
                 
                 if (document.getElementById('details-view').classList.contains('hidden')) {
                     renderTrips();
@@ -847,6 +1012,46 @@
             });
         }
 
+        function setupIconPickers() {
+            const iconOptions = {
+                passeio: ICONS.passeio, restaurante: ICONS.restaurante, outro: ICONS.outro,
+                basketball: ICONS.basketball, building: ICONS.building, pool: ICONS.pool,
+                landmark: ICONS.landmark, shopping: ICONS.shopping, music: ICONS.music, park: ICONS.park
+            };
+
+            const populatePicker = (pickerId) => {
+                const picker = document.getElementById(pickerId);
+                picker.innerHTML = '';
+                for (const [name, svg] of Object.entries(iconOptions)) {
+                    const option = document.createElement('div');
+                    option.className = 'icon-picker-option cursor-pointer p-2 border-2 border-slate-200 rounded-full';
+                    option.dataset.icon = name;
+                    option.innerHTML = svg.replace('w-4 h-4', 'w-5 h-5');
+                    picker.appendChild(option);
+                }
+            };
+
+            const handlePickerClick = (e, formId) => {
+                const target = e.target.closest('.icon-picker-option');
+                if (!target) return;
+
+                const iconName = target.dataset.icon;
+                const picker = target.parentElement;
+                const hiddenInput = document.getElementById(formId);
+
+                hiddenInput.value = iconName;
+
+                picker.querySelectorAll('.icon-picker-option').forEach(opt => opt.classList.remove('selected'));
+                target.classList.add('selected');
+            };
+
+            populatePicker('add-icon-picker');
+            populatePicker('edit-icon-picker');
+
+            document.getElementById('add-icon-picker').addEventListener('click', (e) => handlePickerClick(e, 'activity-icon'));
+            document.getElementById('edit-icon-picker').addEventListener('click', (e) => handlePickerClick(e, 'edit-activity-icon'));
+        }
+        
         // --- CONTROLE DE NAVEGAÇÃO, MODAIS E FORMULÁRIOS ---
         window.showTripsView = () => {
             document.getElementById('trips-view').classList.remove('hidden');
@@ -888,28 +1093,31 @@
             document.getElementById(modalId).classList.replace('flex', 'hidden');
             const form = document.getElementById(modalId).querySelector('form');
             if (form) form.reset();
-            if (modalId === 'confirm-delete-modal') {
-                onConfirmAction = () => {};
-            }
-             if (modalId === 'add-transport-modal' || modalId === 'edit-transport-modal') {
-                const formId = modalId === 'add-transport-modal' ? '' : 'edit-';
-                const transportOriginInput = document.getElementById(`${formId}transport-origin`);
-                const transportDestinationInput = document.getElementById(`${formId}transport-destination`);
-                transportOriginInput.required = true;
-                transportDestinationInput.required = true;
-                transportOriginInput.parentElement.querySelector('label').innerText = 'Origem';
-                transportDestinationInput.parentElement.querySelector('label').innerText = 'Destino';
-            }
+            if (modalId === 'confirm-delete-modal') onConfirmAction = () => {};
         }
+        
+        window.toggleItineraryPanel = () => {
+            const itineraryList = document.getElementById('itinerary-list');
+            const toggleBtn = document.getElementById('toggle-itinerary-btn');
+            const toggleIcon = document.getElementById('itinerary-toggle-icon');
+            const isHidden = itineraryList.classList.contains('hidden');
+            if (isHidden) {
+                itineraryList.classList.remove('hidden');
+                toggleBtn.querySelector('span').textContent = 'Ocultar Roteiro';
+                toggleIcon.classList.add('rotate-180');
+            } else {
+                itineraryList.classList.add('hidden');
+                toggleBtn.querySelector('span').textContent = 'Mostrar Roteiro';
+                toggleIcon.classList.remove('rotate-180');
+            }
+        };
         
         window.openEditFlightModal = (index) => {
             if (!currentTripId) return;
             const trip = tripsData.find(t => t.id === currentTripId);
             const flight = trip?.flights ? Object.values(trip.flights)[index] : null;
             if (!flight) return;
-
             currentEditingItemIndex = index;
-
             document.getElementById('edit-flight-leg-type').value = flight.legType;
             document.getElementById('edit-flight-date').value = flight.date;
             document.getElementById('edit-flight-departure-time').value = flight.departureTime;
@@ -919,7 +1127,6 @@
             document.getElementById('edit-flight-company').value = flight.company;
             document.getElementById('edit-flight-code').value = flight.code;
             document.getElementById('edit-flight-type').value = flight.flightType;
-            
             openModal('edit-flight-modal');
         }
 
@@ -928,9 +1135,7 @@
             const trip = tripsData.find(t => t.id === currentTripId);
             const transport = trip?.transport ? Object.values(trip.transport)[index] : null;
             if (!transport) return;
-
             currentEditingItemIndex = index;
-
             document.getElementById('edit-transport-type').value = transport.type;
             document.getElementById('edit-transport-origin').value = transport.from;
             document.getElementById('edit-transport-destination').value = transport.to;
@@ -939,10 +1144,7 @@
             document.getElementById('edit-transport-departure-time').value = transport.departureTime;
             document.getElementById('edit-transport-arrival-date').value = transport.arrivalDate;
             document.getElementById('edit-transport-arrival-time').value = transport.arrivalTime;
-            
-            // Trigger change event to set optional fields correctly
             document.getElementById('edit-transport-type').dispatchEvent(new Event('change'));
-
             openModal('edit-transport-modal');
         }
         
@@ -951,16 +1153,13 @@
             const trip = tripsData.find(t => t.id === currentTripId);
             const lodging = trip?.lodging ? Object.values(trip.lodging)[index] : null;
             if (!lodging) return;
-
             currentEditingItemIndex = index;
-
             document.getElementById('edit-lodging-name').value = lodging.name;
             document.getElementById('edit-lodging-address').value = lodging.address;
             document.getElementById('edit-lodging-checkin-date').value = lodging.checkinDate;
             document.getElementById('edit-lodging-checkin-time').value = lodging.checkinTime;
             document.getElementById('edit-lodging-checkout-date').value = lodging.checkoutDate;
             document.getElementById('edit-lodging-checkout-time').value = lodging.checkoutTime;
-
             openModal('edit-lodging-modal');
         }
 
@@ -974,60 +1173,29 @@
 
         async function addDetail(category) {
             if (!currentTripId) return;
-
             const trip = tripsData.find(t => t.id === currentTripId);
             if (!trip) return;
-
             let newItem = {};
             if (category === 'flights') {
                 newItem = { 
-                    legType: document.getElementById('flight-leg-type').value,
-                    date: document.getElementById('flight-date').value,
-                    departureTime: document.getElementById('flight-departure-time').value,
-                    arrivalTime: document.getElementById('flight-arrival-time').value,
-                    origin: document.getElementById('flight-origin').value,
-                    destination: document.getElementById('flight-destination').value,
-                    company: document.getElementById('flight-company').value,
-                    code: document.getElementById('flight-code').value,
-                    flightType: document.getElementById('flight-type').value,
+                    legType: document.getElementById('flight-leg-type').value, date: document.getElementById('flight-date').value, departureTime: document.getElementById('flight-departure-time').value, arrivalTime: document.getElementById('flight-arrival-time').value, origin: document.getElementById('flight-origin').value, destination: document.getElementById('flight-destination').value, company: document.getElementById('flight-company').value, code: document.getElementById('flight-code').value, flightType: document.getElementById('flight-type').value,
                 };
             } else if (category === 'transport') {
                 newItem = { 
-                    type: document.getElementById('transport-type').value,
-                    from: document.getElementById('transport-origin').value, 
-                    to: document.getElementById('transport-destination').value,
-                    description: document.getElementById('transport-description').value,
-                    departureDate: document.getElementById('transport-departure-date').value,
-                    departureTime: document.getElementById('transport-departure-time').value,
-                    arrivalDate: document.getElementById('transport-arrival-date').value,
-                    arrivalTime: document.getElementById('transport-arrival-time').value,
+                    type: document.getElementById('transport-type').value, from: document.getElementById('transport-origin').value, to: document.getElementById('transport-destination').value, description: document.getElementById('transport-description').value, departureDate: document.getElementById('transport-departure-date').value, departureTime: document.getElementById('transport-departure-time').value, arrivalDate: document.getElementById('transport-arrival-date').value, arrivalTime: document.getElementById('transport-arrival-time').value,
                 };
             } else if (category === 'lodging') {
                 newItem = { 
-                    name: document.getElementById('lodging-name').value, 
-                    address: document.getElementById('lodging-address').value,
-                    checkinDate: document.getElementById('lodging-checkin-date').value,
-                    checkinTime: document.getElementById('lodging-checkin-time').value,
-                    checkoutDate: document.getElementById('lodging-checkout-date').value,
-                    checkoutTime: document.getElementById('lodging-checkout-time').value,
+                    name: document.getElementById('lodging-name').value, address: document.getElementById('lodging-address').value, checkinDate: document.getElementById('lodging-checkin-date').value, checkinTime: document.getElementById('lodging-checkin-time').value, checkoutDate: document.getElementById('lodging-checkout-date').value, checkoutTime: document.getElementById('lodging-checkout-time').value,
                 };
             }
-
             const currentItems = trip[category] ? [...Object.values(trip[category])] : [];
             currentItems.push(newItem);
-
             const updates = {};
             updates[`/${currentTripId}/${category}`] = currentItems;
             await update(tripsRef, updates);
-
-            let modalIdToClose;
-            if (category === 'flights') modalIdToClose = 'add-flight-modal';
-            else if (category === 'transport') modalIdToClose = 'add-transport-modal';
-            else if (category === 'lodging') modalIdToClose = 'add-lodging-modal';
-            
-            if (modalIdToClose) {
-                closeModal(modalIdToClose);
-            }
+            let modalIdToClose = category === 'flights' ? 'add-flight-modal' : (category === 'transport' ? 'add-transport-modal' : 'add-lodging-modal');
+            if (modalIdToClose) closeModal(modalIdToClose);
         }
         
         window.deleteTrip = async (event, tripId) => {
@@ -1043,9 +1211,7 @@
             if (!currentTripId) return;
             const trip = tripsData.find(t => t.id === currentTripId);
             if (!trip || !trip[category]) return;
-
             const currentItems = Object.values(trip[category]);
-            
             showConfirmDelete(`Tem certeza que deseja excluir o item?`, async () => {
                 currentItems.splice(index, 1);
                 const updates = {};
@@ -1059,19 +1225,56 @@
             if (!currentTripId) return;
             const trip = tripsData.find(t => t.id === currentTripId);
             const items = trip[category] ? [...Object.values(trip[category])] : [];
-
             const newIndex = direction === 'up' ? index - 1 : index + 1;
             if (newIndex < 0 || newIndex >= items.length) return;
-
-            // Swap elements
             [items[index], items[newIndex]] = [items[newIndex], items[index]];
-
             const updates = {};
             updates[`/${currentTripId}/${category}`] = items;
             await update(tripsRef, updates);
         }
+        
+        window.openAddActivityModal = (date) => {
+            document.getElementById('activity-date').value = date;
+            const picker = document.getElementById('add-icon-picker');
+            const hiddenInput = document.getElementById('activity-icon');
+            hiddenInput.value = 'passeio'; // Reset to default
+            picker.querySelectorAll('.icon-picker-option').forEach(opt => opt.classList.remove('selected'));
+            picker.querySelector('[data-icon="passeio"]').classList.add('selected');
+            openModal('add-activity-modal');
+        };
 
-        // Listeners dos formulários
+        window.deleteActivity = (activityId) => {
+            showConfirmDelete('Tem certeza que deseja excluir esta atividade?', async () => {
+                const trip = tripsData.find(t => t.id === currentTripId);
+                const currentActivities = trip.activities ? Object.values(trip.activities) : [];
+                const updatedActivities = currentActivities.filter(a => a.id !== activityId);
+                const updates = { [`/${currentTripId}/activities`]: updatedActivities };
+                await update(tripsRef, updates);
+                closeModal('confirm-delete-modal');
+            });
+        };
+
+        window.openEditActivityModal = (activityId) => {
+            const trip = tripsData.find(t => t.id === currentTripId);
+            const activity = Object.values(trip.activities).find(a => a.id === activityId);
+            if (activity) {
+                document.getElementById('edit-activity-id').value = activity.id;
+                document.getElementById('edit-activity-time').value = activity.time;
+                document.getElementById('edit-activity-type').value = activity.type;
+                document.getElementById('edit-activity-description').value = activity.description;
+                document.getElementById('edit-activity-icon').value = activity.icon;
+
+                const picker = document.getElementById('edit-icon-picker');
+                picker.querySelectorAll('.icon-picker-option').forEach(opt => opt.classList.remove('selected'));
+                const selectedIcon = picker.querySelector(`[data-icon="${activity.icon}"]`);
+                if(selectedIcon) selectedIcon.classList.add('selected');
+                
+                openModal('edit-activity-modal');
+            }
+        };
+
+
+        // --- LISTENERS DOS FORMULÁRIOS ---
         document.getElementById('add-trip-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             const tripName = document.getElementById('trip-name').value;
@@ -1081,7 +1284,6 @@
                 startDate: document.getElementById('trip-start-date').value,
                 endDate: document.getElementById('trip-end-date').value,
                 imageUrl: `https://placehold.co/600x400/a3e635/1e293b?text=${encodeURIComponent(tripName)}`,
-                flights: [], transport: [], lodging: []
             };
             const newTripRef = push(tripsRef);
             await set(newTripRef, newTrip);
@@ -1096,8 +1298,7 @@
             e.preventDefault();
             if (!currentTripId) return;
             const newImageUrl = document.getElementById('trip-image-url').value;
-            const updates = {};
-            updates[`/${currentTripId}/imageUrl`] = newImageUrl;
+            const updates = { [`/${currentTripId}/imageUrl`]: newImageUrl };
             await update(tripsRef, updates);
             closeModal('edit-image-modal');
         });
@@ -1106,10 +1307,7 @@
             e.preventDefault();
             if (!currentTripId) return;
             const updates = {
-                name: document.getElementById('edit-trip-name').value,
-                destination: document.getElementById('edit-trip-destination').value,
-                startDate: document.getElementById('edit-trip-start-date').value,
-                endDate: document.getElementById('edit-trip-end-date').value,
+                name: document.getElementById('edit-trip-name').value, destination: document.getElementById('edit-trip-destination').value, startDate: document.getElementById('edit-trip-start-date').value, endDate: document.getElementById('edit-trip-end-date').value,
             };
             const tripToUpdateRef = ref(db, `public_trips/${currentTripId}`);
             await update(tripToUpdateRef, updates);
@@ -1119,29 +1317,14 @@
         document.getElementById('edit-flight-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             if (currentTripId === null || currentEditingItemIndex === null) return;
-
-            const trip = tripsData.find(t => t.id === currentTripId);
-            if (!trip) return;
-
+            const trip = tripsData.find(t => t.id === currentTripId); if (!trip) return;
             const updatedFlight = {
-                legType: document.getElementById('edit-flight-leg-type').value,
-                date: document.getElementById('edit-flight-date').value,
-                departureTime: document.getElementById('edit-flight-departure-time').value,
-                arrivalTime: document.getElementById('edit-flight-arrival-time').value,
-                origin: document.getElementById('edit-flight-origin').value,
-                destination: document.getElementById('edit-flight-destination').value,
-                company: document.getElementById('edit-flight-company').value,
-                code: document.getElementById('edit-flight-code').value,
-                flightType: document.getElementById('edit-flight-type').value,
+                legType: document.getElementById('edit-flight-leg-type').value, date: document.getElementById('edit-flight-date').value, departureTime: document.getElementById('edit-flight-departure-time').value, arrivalTime: document.getElementById('edit-flight-arrival-time').value, origin: document.getElementById('edit-flight-origin').value, destination: document.getElementById('edit-flight-destination').value, company: document.getElementById('edit-flight-company').value, code: document.getElementById('edit-flight-code').value, flightType: document.getElementById('edit-flight-type').value,
             };
-
             const currentFlights = trip.flights ? [...Object.values(trip.flights)] : [];
             currentFlights[currentEditingItemIndex] = updatedFlight;
-
-            const updates = {};
-            updates[`/${currentTripId}/flights`] = currentFlights;
+            const updates = { [`/${currentTripId}/flights`]: currentFlights };
             await update(tripsRef, updates);
-            
             closeModal('edit-flight-modal');
             currentEditingItemIndex = null;
         });
@@ -1149,27 +1332,14 @@
         document.getElementById('edit-transport-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             if (currentTripId === null || currentEditingItemIndex === null) return;
-            const trip = tripsData.find(t => t.id === currentTripId);
-            if (!trip) return;
-
+            const trip = tripsData.find(t => t.id === currentTripId); if (!trip) return;
             const updatedTransport = {
-                type: document.getElementById('edit-transport-type').value,
-                from: document.getElementById('edit-transport-origin').value,
-                to: document.getElementById('edit-transport-destination').value,
-                description: document.getElementById('edit-transport-description').value,
-                departureDate: document.getElementById('edit-transport-departure-date').value,
-                departureTime: document.getElementById('edit-transport-departure-time').value,
-                arrivalDate: document.getElementById('edit-transport-arrival-date').value,
-                arrivalTime: document.getElementById('edit-transport-arrival-time').value,
+                type: document.getElementById('edit-transport-type').value, from: document.getElementById('edit-transport-origin').value, to: document.getElementById('edit-transport-destination').value, description: document.getElementById('edit-transport-description').value, departureDate: document.getElementById('edit-transport-departure-date').value, departureTime: document.getElementById('edit-transport-departure-time').value, arrivalDate: document.getElementById('edit-transport-arrival-date').value, arrivalTime: document.getElementById('edit-transport-arrival-time').value,
             };
-
             const currentTransport = trip.transport ? [...Object.values(trip.transport)] : [];
             currentTransport[currentEditingItemIndex] = updatedTransport;
-
-            const updates = {};
-            updates[`/${currentTripId}/transport`] = currentTransport;
+            const updates = { [`/${currentTripId}/transport`]: currentTransport };
             await update(tripsRef, updates);
-            
             closeModal('edit-transport-modal');
             currentEditingItemIndex = null;
         });
@@ -1177,33 +1347,59 @@
         document.getElementById('edit-lodging-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             if (currentTripId === null || currentEditingItemIndex === null) return;
-            const trip = tripsData.find(t => t.id === currentTripId);
-            if (!trip) return;
-
+            const trip = tripsData.find(t => t.id === currentTripId); if (!trip) return;
             const updatedLodging = {
-                name: document.getElementById('edit-lodging-name').value,
-                address: document.getElementById('edit-lodging-address').value,
-                checkinDate: document.getElementById('edit-lodging-checkin-date').value,
-                checkinTime: document.getElementById('edit-lodging-checkin-time').value,
-                checkoutDate: document.getElementById('edit-lodging-checkout-date').value,
-                checkoutTime: document.getElementById('edit-lodging-checkout-time').value,
+                name: document.getElementById('edit-lodging-name').value, address: document.getElementById('edit-lodging-address').value, checkinDate: document.getElementById('edit-lodging-checkin-date').value, checkinTime: document.getElementById('edit-lodging-checkin-time').value, checkoutDate: document.getElementById('edit-lodging-checkout-date').value, checkoutTime: document.getElementById('edit-lodging-checkout-time').value,
             };
-
             const currentLodging = trip.lodging ? [...Object.values(trip.lodging)] : [];
             currentLodging[currentEditingItemIndex] = updatedLodging;
-
-            const updates = {};
-            updates[`/${currentTripId}/lodging`] = currentLodging;
+            const updates = { [`/${currentTripId}/lodging`]: currentLodging };
             await update(tripsRef, updates);
-            
             closeModal('edit-lodging-modal');
             currentEditingItemIndex = null;
         });
 
-        document.getElementById('confirm-delete-btn').addEventListener('click', () => {
-            if (typeof onConfirmAction === 'function') {
-                onConfirmAction();
+        document.getElementById('add-activity-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const trip = tripsData.find(t => t.id === currentTripId);
+            const newActivity = {
+                id: Date.now().toString(),
+                date: document.getElementById('activity-date').value,
+                time: document.getElementById('activity-time').value,
+                type: document.getElementById('activity-type').value,
+                description: document.getElementById('activity-description').value,
+                icon: document.getElementById('activity-icon').value,
+            };
+            const currentActivities = trip.activities ? [...Object.values(trip.activities)] : [];
+            currentActivities.push(newActivity);
+            const updates = { [`/${currentTripId}/activities`]: currentActivities };
+            await update(tripsRef, updates);
+            closeModal('add-activity-modal');
+        });
+
+        document.getElementById('edit-activity-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const trip = tripsData.find(t => t.id === currentTripId);
+            const activityId = document.getElementById('edit-activity-id').value;
+            const currentActivities = trip.activities ? Object.values(trip.activities) : [];
+            const activityIndex = currentActivities.findIndex(a => a.id === activityId);
+            
+            if (activityIndex > -1) {
+                currentActivities[activityIndex] = {
+                    ...currentActivities[activityIndex],
+                    time: document.getElementById('edit-activity-time').value,
+                    type: document.getElementById('edit-activity-type').value,
+                    description: document.getElementById('edit-activity-description').value,
+                    icon: document.getElementById('edit-activity-icon').value,
+                };
+                const updates = { [`/${currentTripId}/activities`]: currentActivities };
+                await update(tripsRef, updates);
             }
+            closeModal('edit-activity-modal');
+        });
+
+        document.getElementById('confirm-delete-btn').addEventListener('click', () => {
+            if (typeof onConfirmAction === 'function') onConfirmAction();
         });
 
         function handleTransportTypeChange(selectElement) {
@@ -1212,30 +1408,17 @@
             const destinationInput = form.querySelector('[id$="transport-destination"]');
             const originLabel = originInput.parentElement.querySelector('label');
             const destinationLabel = destinationInput.parentElement.querySelector('label');
-
             if (selectElement.value === 'Carro Alugado') {
-                originInput.required = false;
-                destinationInput.required = false;
-                originLabel.innerText = 'Origem (Opcional)';
-                destinationLabel.innerText = 'Destino (Opcional)';
+                originInput.required = false; destinationInput.required = false;
+                originLabel.innerText = 'Origem (Opcional)'; destinationLabel.innerText = 'Destino (Opcional)';
             } else {
-                originInput.required = true;
-                destinationInput.required = true;
-                originLabel.innerText = 'Origem';
-                destinationLabel.innerText = 'Destino';
+                originInput.required = true; destinationInput.required = true;
+                originLabel.innerText = 'Origem'; destinationLabel.innerText = 'Destino';
             }
         }
         
         document.getElementById('transport-type').addEventListener('change', (e) => handleTransportTypeChange(e.target));
         document.getElementById('edit-transport-type').addEventListener('change', (e) => handleTransportTypeChange(e.target));
-
-
-        // --- FUNÇÕES UTILITÁRIAS ---
-        function formatDate(dateString) {
-            if(!dateString) return 'Data indefinida';
-            const date = new Date(dateString + 'T00:00:00');
-            return date.toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' });
-        }
     </script>
-</body>
-</html>
+
+</body></html>
