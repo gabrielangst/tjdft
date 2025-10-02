@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Planejador de Viagens Colaborativo</title>
     <!-- Incluindo Tailwind CSS para um design moderno e responsivo -->
-    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Incluindo a fonte Inter do Google Fonts -->
-    <link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
-    <link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
-    <link href="[https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap)" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         body {
@@ -54,7 +54,7 @@
                     <p class="text-slate-500 mt-1">Planeje e organize suas próximas aventuras em conjunto.</p>
                 </div>
                 <button onclick="openModal('add-trip-modal')" class="mt-4 sm:mt-0 flex items-center justify-center gap-2 bg-blue-600 text-white font-semibold px-5 py-3 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300">
-                    <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-circle"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="16"/><line x1="8" x2="16" y1="12" y2="12"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-circle"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="16"/><line x1="8" x2="16" y1="12" y2="12"/></svg>
                     <span>Nova Viagem</span>
                 </button>
             </header>
@@ -68,18 +68,18 @@
         <div id="details-view" class="hidden">
             <header class="mb-8">
                 <button onclick="showTripsView()" class="flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium mb-4 transition-colors">
-                     <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
                     Voltar para todas as viagens
                 </button>
                 <h1 id="details-title" class="text-4xl font-bold text-slate-900"></h1>
                 <p id="details-dates" class="text-slate-500 mt-1"></p>
                 <div class="flex items-center gap-2 mt-4">
                     <button onclick="openModal('edit-image-modal')" class="flex items-center gap-2 text-sm bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-lg hover:bg-slate-300 transition-colors">
-                        <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
                         <span>Alterar Imagem</span>
                     </button>
                     <button onclick="openModal('edit-trip-modal')" class="flex items-center gap-2 text-sm bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-lg hover:bg-slate-300 transition-colors">
-                        <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
                         <span>Editar Viagem</span>
                     </button>
                 </div>
@@ -91,7 +91,7 @@
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-2xl font-semibold">Voos</h2>
                         <button onclick="openModal('add-flight-modal')" class="flex items-center justify-center w-10 h-10 bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200 transition-colors">
-                            <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                         </button>
                     </div>
                     <div id="flights-list" class="space-y-4"></div>
@@ -101,7 +101,7 @@
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-2xl font-semibold">Transporte</h2>
                         <button onclick="openModal('add-transport-modal')" class="flex items-center justify-center w-10 h-10 bg-green-100 text-green-600 rounded-full hover:bg-green-200 transition-colors">
-                             <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                         </button>
                     </div>
                     <div id="transport-list" class="space-y-4"></div>
@@ -111,7 +111,7 @@
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-2xl font-semibold">Hospedagens</h2>
                         <button onclick="openModal('add-lodging-modal')" class="flex items-center justify-center w-10 h-10 bg-purple-100 text-purple-600 rounded-full hover:bg-purple-200 transition-colors">
-                             <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                         </button>
                     </div>
                     <div id="lodging-list" class="space-y-4"></div>
@@ -431,7 +431,7 @@
             <form id="edit-image-form" class="space-y-4">
                  <div>
                     <label for="trip-image-url" class="block text-sm font-medium text-slate-600">URL da Nova Imagem</label>
-                    <input type="url" id="trip-image-url" placeholder="[https://exemplo.com/imagem.jpg](https://exemplo.com/imagem.jpg)" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                    <input type="url" id="trip-image-url" placeholder="https://exemplo.com/imagem.jpg" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
                 <div class="pt-6 flex justify-end gap-3">
                     <button type="button" onclick="closeModal('edit-image-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
@@ -487,8 +487,8 @@
 
     <script type="module">
         // Importações do Firebase
-        import { initializeApp } from "[https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js](https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js)";
-        import { getDatabase, ref, onValue, set, push, remove, update } from "[https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js](https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js)";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getDatabase, ref, onValue, set, push, remove, update } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
         // --- INÍCIO DA CONFIGURAÇÃO DO FIREBASE ---
         const firebaseConfigManual = {
@@ -498,7 +498,7 @@
             storageBucket: "viagensapp-75077.appspot.com",
             messagingSenderId: "231052282749",
             appId: "1:231052282749:web:2cd3cca2d77d4112dd1a14",
-            databaseURL: "[https://viagensapp-75077-default-rtdb.firebaseio.com](https://viagensapp-75077-default-rtdb.firebaseio.com)"
+            databaseURL: "https://viagensapp-75077-default-rtdb.firebaseio.com"
         };
         // --- FIM DA CONFIGURAÇÃO DO FIREBASE ---
 
@@ -553,7 +553,7 @@
                 
                 tripCard.innerHTML = `
                     <button onclick="deleteTrip(event, '${trip.id}')" class="trip-card-delete-button absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors">
-                        <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
                     </button>
                     <div class="h-48 bg-cover bg-center" style="background-image: url('${trip.imageUrl}')"></div>
                     <div class="p-6">
@@ -591,14 +591,14 @@
                 <div class="flex items-center">
                     <div class="flex flex-col mr-1">
                         <button onclick="reorderDetailItem('flights', ${index}, 'up')" class="p-1 text-slate-400 hover:text-slate-800 disabled:opacity-25" ${index === 0 ? 'disabled' : ''}>
-                            <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-up"><path d="m18 15-6-6-6 6"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-up"><path d="m18 15-6-6-6 6"/></svg>
                         </button>
                         <button onclick="reorderDetailItem('flights', ${index}, 'down')" class="p-1 text-slate-400 hover:text-slate-800 disabled:opacity-25" ${index === arr.length - 1 ? 'disabled' : ''}>
-                            <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
                         </button>
                     </div>
                     <button onclick="openEditFlightModal(${index})" class="text-blue-600 hover:text-blue-800 p-1">
-                        <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
                     </button>
                     <button onclick="deleteDetailItem('flights', ${index})" class="text-red-500 hover:text-red-700 p-1 text-2xl font-bold">&times;</button>
                 </div>
@@ -613,14 +613,14 @@
                 <div class="flex items-center">
                     <div class="flex flex-col mr-1">
                         <button onclick="reorderDetailItem('transport', ${index}, 'up')" class="p-1 text-slate-400 hover:text-slate-800 disabled:opacity-25" ${index === 0 ? 'disabled' : ''}>
-                            <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-up"><path d="m18 15-6-6-6 6"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-up"><path d="m18 15-6-6-6 6"/></svg>
                         </button>
                         <button onclick="reorderDetailItem('transport', ${index}, 'down')" class="p-1 text-slate-400 hover:text-slate-800 disabled:opacity-25" ${index === arr.length - 1 ? 'disabled' : ''}>
-                            <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
                         </button>
                     </div>
                     <button onclick="openEditTransportModal(${index})" class="text-green-600 hover:text-green-800 p-1">
-                        <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
                     </button>
                     <button onclick="deleteDetailItem('transport', ${index})" class="text-red-500 hover:text-red-700 p-1 text-2xl font-bold">&times;</button>
                 </div>
@@ -638,14 +638,14 @@
                 <div class="flex items-center">
                     <div class="flex flex-col mr-1">
                         <button onclick="reorderDetailItem('lodging', ${index}, 'up')" class="p-1 text-slate-400 hover:text-slate-800 disabled:opacity-25" ${index === 0 ? 'disabled' : ''}>
-                            <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-up"><path d="m18 15-6-6-6 6"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-up"><path d="m18 15-6-6-6 6"/></svg>
                         </button>
                         <button onclick="reorderDetailItem('lodging', ${index}, 'down')" class="p-1 text-slate-400 hover:text-slate-800 disabled:opacity-25" ${index === arr.length - 1 ? 'disabled' : ''}>
-                            <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
                         </button>
                     </div>
                     <button onclick="openEditLodgingModal(${index})" class="text-purple-600 hover:text-purple-800 p-1">
-                        <svg xmlns="[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
                     </button>
                     <button onclick="deleteDetailItem('lodging', ${index})" class="text-red-500 hover:text-red-700 p-1 text-2xl font-bold">&times;</button>
                 </div>
@@ -709,7 +709,7 @@
                 const trip = tripsData.find(t => t.id === currentTripId);
                 if (trip) {
                     const imageUrlInput = document.getElementById('trip-image-url');
-                    if (trip.imageUrl && !trip.imageUrl.startsWith('[https://placehold.co](https://placehold.co)')) {
+                    if (trip.imageUrl && !trip.imageUrl.startsWith('https://placehold.co')) {
                         imageUrlInput.value = trip.imageUrl;
                     } else {
                         imageUrlInput.value = '';
@@ -899,9 +899,7 @@
             if (newIndex < 0 || newIndex >= items.length) return;
 
             // Swap elements
-            const temp = items[index];
-            items[index] = items[newIndex];
-            items[newIndex] = temp;
+            [items[index], items[newIndex]] = [items[newIndex], items[index]];
 
             const updates = {};
             updates[`/${currentTripId}/${category}`] = items;
