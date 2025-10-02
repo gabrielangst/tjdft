@@ -616,96 +616,101 @@
             });
         }
         
-        function renderTripDetails(tripId) {
-            const trip = tripsData.find(t => t.id === tripId);
-            if (!trip) {
-                showTripsView();
+        function renderItinerary(trip) {
+            const itineraryList = document.getElementById('itinerary-list');
+            itineraryList.innerHTML = '';
+
+            const events = [];
+
+            // 1. Collect flights
+            if (trip.flights) {
+                Object.values(trip.flights).forEach(flight => {
+                    events.push({
+                        dateTime: new Date(`${flight.date}T${flight.departureTime}`),
+                        type: 'flight',
+                        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plane w-6 h-6"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>`,
+                        title: `Voo ${flight.company} ${flight.code}`,
+                        description: `${flight.origin} → ${flight.destination}`
+                    });
+                });
+            }
+
+            // 2. Collect transports
+            if (trip.transport) {
+                Object.values(trip.transport).forEach(item => {
+                    let icon;
+                    switch(item.type) {
+                        case 'Trem':
+                            icon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-train-front w-6 h-6"><path d="M8 3.1c.9 1.4 1.5 3.3 1.5 5.4c0 2.4-1 4.5-2 5.5"/><path d="M16.5 8.5c0-2.1.6-3.9 1.5-5.4"/><path d="M5 14h14"/><path d="M5 18h14"/><path d="M17 18a1 1 0 0 1-1 1h-8a1 1 0 0 1-1-1v-4a5 5 0 0 1 5-5a5 5 0 0 1 5 5v4Z"/><path d="M8 7a1 1 0 0 0-1 1v2"/><path d="M17 7a1 1 0 0 1-1 1v2"/><path d="M7 14v4"/><path d="M17 14v4"/></svg>`;
+                            break;
+                        case 'Carro Alugado':
+                             icon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-car w-6 h-6"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7s-1.3.3-1.8.7C9.3 8.6 8 10 8 10s-2.7.6-4.5.8c-.8.2-1.5 1-1.5 1.9v3c0 .6.4 1 1 1h2"/><path d="M8 17a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-2Z"/><path d="M17 17a1 1 0 0 0 1-1h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1h-3a1 1 0 0 0-1 1v2Z"/><path d="M6 16v-3"/><path d="M18 16v-3"/><path d="M12 16V8"/><path d="M14 9h-4"/><path d="M10 16h4"/></svg>`;
+                            break;
+                         case 'Ônibus':
+                            icon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bus w-6 h-6"><path d="M8 6v6"/><path d="M16 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><path d="M9 18h5"/><circle cx="16" cy="18" r="2"/></svg>`;
+                            break;
+                        default:
+                            icon = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-move-right w-6 h-6"><path d="M18 8L22 12L18 16"/><path d="M2 12H22"/></svg>`;
+                    }
+
+                    events.push({
+                        dateTime: new Date(`${item.departureDate}T${item.departureTime}`),
+                        type: 'transport',
+                        icon,
+                        title: `${item.type}`,
+                        description: `${item.from ? `${item.from} → ` : ''}${item.to ? item.to : ''}`
+                    });
+                });
+            }
+
+            // 3. Collect lodgings (check-in and check-out)
+            if (trip.lodging) {
+                Object.values(trip.lodging).forEach(item => {
+                    events.push({
+                        dateTime: new Date(`${item.checkinDate}T${item.checkinTime}`),
+                        type: 'lodging-in',
+                        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-in w-6 h-6"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>`,
+                        title: `Check-in: ${item.name}`,
+                        description: item.address
+                    });
+                    events.push({
+                        dateTime: new Date(`${item.checkoutDate}T${item.checkoutTime}`),
+                        type: 'lodging-out',
+                        icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out w-6 h-6"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>`,
+                        title: `Check-out: ${item.name}`,
+                        description: item.address
+                    });
+                });
+            }
+
+            // 4. Sort all events by date and time
+            events.sort((a, b) => a.dateTime - b.dateTime);
+
+            // 5. Render events
+            if (events.length === 0) {
+                itineraryList.innerHTML = `<p class="text-slate-500 text-sm">Nenhum evento no roteiro. Adicione voos, transportes e hospedagens para começar.</p>`;
                 return;
             }
-            
-            currentTripId = trip.id;
-            document.getElementById('details-title').innerText = trip.name;
-            document.getElementById('details-dates').innerText = `${formatDate(trip.startDate)} a ${formatDate(trip.endDate)}`;
 
-            renderItinerary(trip);
-
-            renderDetailList('flights-list', trip.flights, (item, index, arr) => `
-                <div class="flex-grow">
-                    <p class="font-bold text-sm ${item.legType === 'ida' ? 'text-blue-600' : 'text-cyan-600'}">${item.legType === 'ida' ? 'Voo de Ida' : 'Voo de Volta'}</p>
-                    <p class="font-semibold">${item.company} ${item.code}</p>
-                    <p class="text-sm text-slate-600">${item.origin} → ${item.destination}</p>
-                    <p class="text-xs text-slate-500 mt-1">
-                        ${formatDate(item.date)} | ${item.departureTime} - ${item.arrivalTime} | ${item.flightType}
-                    </p>
-                </div>
-                <div class="flex items-center">
-                    <div class="flex flex-col mr-1">
-                        <button onclick="reorderDetailItem('flights', ${index}, 'up')" class="p-1 text-slate-400 hover:text-slate-800 disabled:opacity-25" ${index === 0 ? 'disabled' : ''}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-up"><path d="m18 15-6-6-6 6"/></svg>
-                        </button>
-                        <button onclick="reorderDetailItem('flights', ${index}, 'down')" class="p-1 text-slate-400 hover:text-slate-800 disabled:opacity-25" ${index === arr.length - 1 ? 'disabled' : ''}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
-                        </button>
+            events.forEach(event => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'flex items-start space-x-4';
+                itemDiv.innerHTML = `
+                    <div class="flex flex-col items-center">
+                        <div class="w-12 h-12 flex-shrink-0 rounded-full flex items-center justify-center bg-slate-200 text-slate-600">
+                            ${event.icon}
+                        </div>
+                         <span class="text-xs font-bold text-slate-500 mt-1">${String(event.dateTime.getHours()).padStart(2, '0')}:${String(event.dateTime.getMinutes()).padStart(2, '0')}</span>
                     </div>
-                    <button onclick="openEditFlightModal(${index})" class="text-blue-600 hover:text-blue-800 p-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
-                    </button>
-                    <button onclick="deleteDetailItem('flights', ${index})" class="text-red-500 hover:text-red-700 p-1 text-2xl font-bold">&times;</button>
-                </div>
-            `, 'Nenhum voo adicionado.');
-
-            renderDetailList('transport-list', trip.transport, (item, index, arr) => `
-                 <div class="flex-grow">
-                    <p class="font-bold text-sm text-green-600">${item.type || 'Transporte'}</p>
-                    ${ (item.from && item.to) ? `<p class="font-semibold">${item.from} → ${item.to}</p>` : '' }
-                    <p class="text-xs text-slate-500 mt-1">
-                        Saída: ${formatDate(item.departureDate)} ${item.departureTime} <br>
-                        Chegada: ${formatDate(item.arrivalDate)} ${item.arrivalTime}
-                    </p>
-                    ${item.description ? `<p class="text-sm text-slate-500 mt-1 whitespace-pre-wrap">${item.description}</p>` : ''}
-                </div>
-                <div class="flex items-center">
-                    <div class="flex flex-col mr-1">
-                        <button onclick="reorderDetailItem('transport', ${index}, 'up')" class="p-1 text-slate-400 hover:text-slate-800 disabled:opacity-25" ${index === 0 ? 'disabled' : ''}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-up"><path d="m18 15-6-6-6 6"/></svg>
-                        </button>
-                        <button onclick="reorderDetailItem('transport', ${index}, 'down')" class="p-1 text-slate-400 hover:text-slate-800 disabled:opacity-25" ${index === arr.length - 1 ? 'disabled' : ''}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
-                        </button>
+                    <div>
+                        <p class="font-semibold text-slate-800">${formatDate(event.dateTime.toISOString().split('T')[0])} - ${event.title}</p>
+                        <p class="text-sm text-slate-500">${event.description}</p>
                     </div>
-                    <button onclick="openEditTransportModal(${index})" class="text-green-600 hover:text-green-800 p-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
-                    </button>
-                    <button onclick="deleteDetailItem('transport', ${index})" class="text-red-500 hover:text-red-700 p-1 text-2xl font-bold">&times;</button>
-                </div>
-            `, 'Nenhum transporte adicionado.');
-            
-            renderDetailList('lodging-list', trip.lodging, (item, index, arr) => `
-                <div class="flex-grow">
-                    <p class="font-bold">${item.name}</p>
-                    <p class="text-sm text-slate-500">${item.address}</p>
-                    <p class="text-xs text-slate-500 mt-1">
-                        Check-in: ${formatDate(item.checkinDate)} ${item.checkinTime} <br>
-                        Check-out: ${formatDate(item.checkoutDate)} ${item.checkoutTime}
-                    </p>
-                </div>
-                <div class="flex items-center">
-                    <div class="flex flex-col mr-1">
-                        <button onclick="reorderDetailItem('lodging', ${index}, 'up')" class="p-1 text-slate-400 hover:text-slate-800 disabled:opacity-25" ${index === 0 ? 'disabled' : ''}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-up"><path d="m18 15-6-6-6 6"/></svg>
-                        </button>
-                        <button onclick="reorderDetailItem('lodging', ${index}, 'down')" class="p-1 text-slate-400 hover:text-slate-800 disabled:opacity-25" ${index === arr.length - 1 ? 'disabled' : ''}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
-                        </button>
-                    </div>
-                    <button onclick="openEditLodgingModal(${index})" class="text-purple-600 hover:text-purple-800 p-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
-                    </button>
-                    <button onclick="deleteDetailItem('lodging', ${index})" class="text-red-500 hover:text-red-700 p-1 text-2xl font-bold">&times;</button>
-                </div>
-            `, 'Nenhuma hospedagem adicionada.');
+                `;
+                itineraryList.appendChild(itemDiv);
+            });
         }
-
+        
         function renderDetailList(elementId, items, itemTemplate, emptyMessage) {
             const listElement = document.getElementById(elementId);
             listElement.innerHTML = '';
