@@ -282,6 +282,19 @@
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+        // --- INÍCIO DA CONFIGURAÇÃO DO FIREBASE ---
+        // COLE A CONFIGURAÇÃO DO SEU PROJETO FIREBASE AQUI
+        // Você pode encontrar isso no Console do Firebase > Configurações do Projeto (⚙️) > Geral.
+        const firebaseConfigManual = {
+            apiKey: "COLE_SUA_API_KEY_AQUI",
+            authDomain: "COLE_SEU_AUTH_DOMAIN_AQUI",
+            projectId: "COLE_SEU_PROJECT_ID_AQUI",
+            storageBucket: "COLE_SEU_STORAGE_BUCKET_AQUI",
+            messagingSenderId: "COLE_SEU_MESSAGING_SENDER_ID_AQUI",
+            appId: "COLE_SEU_APP_ID_AQUI"
+        };
+        // --- FIM DA CONFIGURAÇÃO DO FIREBASE ---
+
         // Variáveis globais
         let db, auth, userId, tripsCollection;
         let tripsData = []; // Cache local dos dados do Firestore
@@ -290,9 +303,12 @@
 
         // Configuração e inicialização do Firebase
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' && __firebase_config ? JSON.parse(__firebase_config) : null;
+        // O código tentará usar a configuração automática primeiro, e se não encontrar, usará a manual.
+        const firebaseConfig = (typeof __firebase_config !== 'undefined' && __firebase_config)
+                                ? JSON.parse(__firebase_config)
+                                : firebaseConfigManual;
 
-        if (firebaseConfig) {
+        if (firebaseConfig && firebaseConfig.apiKey !== "AIzaSyBq4B9LCCat5jof2x9g5KN16UCOgnYo364") {
             try {
                 const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
@@ -325,7 +341,7 @@
             }
         } else {
             console.error("Firebase config is not available.");
-            document.getElementById('trips-list').innerHTML = `<p class="col-span-full text-center text-red-500">Configuração do Firebase não encontrada.</p>`;
+            document.getElementById('trips-list').innerHTML = `<p class="col-span-full text-center text-red-500">Configuração do Firebase não encontrada. Por favor, adicione suas credenciais no script.</p>`;
         }
         
         // --- FUNÇÕES DE RENDERIZAÇÃO ---
@@ -580,6 +596,7 @@
     </script>
 </body>
 </html>
+
 
 
 
