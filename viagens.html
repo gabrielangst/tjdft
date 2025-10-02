@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planejador de Viagens com Firebase</title>
+    <!-- Incluindo Tailwind CSS para um design moderno e responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Incluindo a fonte Inter do Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Estilo para a barra de rolagem */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.5);
+            transition: opacity 0.3s ease-in-out;
+        }
+        .trip-card-delete-button {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .trip-card:hover .trip-card-delete-button {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+    <div id="app" class="max-w-7xl mx-auto p-4 md:p-8">
+
+        <!-- Tela Principal: Lista de Viagens -->
+        <div id="trips-view">
+            <header class="flex flex-col sm:flex-row justify-between sm:items-center mb-8">
+                <div>
+                    <h1 class="text-4xl font-bold text-slate-900">Minhas Viagens</h1>
+                    <p class="text-slate-500 mt-1">Planeje e organize suas próximas aventuras.</p>
+                </div>
+                <button onclick="openModal('add-trip-modal')" class="mt-4 sm:mt-0 flex items-center justify-center gap-2 bg-blue-600 text-white font-semibold px-5 py-3 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus-circle"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="16"/><line x1="8" x2="16" y1="12" y2="12"/></svg>
+                    <span>Nova Viagem</span>
+                </button>
+            </header>
+
+            <main id="trips-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Os cards de viagem serão inseridos aqui pelo JavaScript -->
+            </main>
+        </div>
+
+        <!-- Tela de Detalhes da Viagem (inicialmente oculta) -->
+        <div id="details-view" class="hidden">
+            <header class="mb-8">
+                <button onclick="showTripsView()" class="flex items-center gap-2 text-slate-600 hover:text-slate-900 font-medium mb-4 transition-colors">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+                    Voltar para todas as viagens
+                </button>
+                <h1 id="details-title" class="text-4xl font-bold text-slate-900"></h1>
+                <p id="details-dates" class="text-slate-500 mt-1"></p>
+                <div class="flex items-center gap-2 mt-4">
+                    <button onclick="openModal('edit-image-modal')" class="flex items-center gap-2 text-sm bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-lg hover:bg-slate-300 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                        <span>Alterar Imagem</span>
+                    </button>
+                    <button onclick="openModal('edit-trip-modal')" class="flex items-center gap-2 text-sm bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-lg hover:bg-slate-300 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                        <span>Editar Viagem</span>
+                    </button>
+                </div>
+            </header>
+
+            <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Seção de Voos -->
+                <section class="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-semibold">Voos</h2>
+                        <button onclick="openModal('add-flight-modal')" class="flex items-center justify-center w-10 h-10 bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        </button>
+                    </div>
+                    <div id="flights-list" class="space-y-4"></div>
+                </section>
+                <!-- Seção de Trens -->
+                <section class="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-semibold">Trens</h2>
+                        <button onclick="openModal('add-train-modal')" class="flex items-center justify-center w-10 h-10 bg-green-100 text-green-600 rounded-full hover:bg-green-200 transition-colors">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        </button>
+                    </div>
+                    <div id="trains-list" class="space-y-4"></div>
+                </section>
+                <!-- Seção de Hospedagens -->
+                <section class="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-semibold">Hospedagens</h2>
+                        <button onclick="openModal('add-lodging-modal')" class="flex items-center justify-center w-10 h-10 bg-purple-100 text-purple-600 rounded-full hover:bg-purple-200 transition-colors">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        </button>
+                    </div>
+                    <div id="lodging-list" class="space-y-4"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modais (inicialmente ocultos) -->
+    <!-- Modal: Adicionar Viagem -->
+    <div id="add-trip-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
+        <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-md m-4">
+            <h3 class="text-2xl font-semibold mb-6">Adicionar Nova Viagem</h3>
+            <form id="add-trip-form" class="space-y-4">
+                <div>
+                    <label for="trip-name" class="block text-sm font-medium text-slate-600">Nome da Viagem</label>
+                    <input type="text" id="trip-name" placeholder="Ex: Férias na Itália" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                <div>
+                    <label for="trip-destination" class="block text-sm font-medium text-slate-600">Destino</label>
+                    <input type="text" id="trip-destination" placeholder="Ex: Roma, Florença, Veneza" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex-1">
+                        <label for="trip-start-date" class="block text-sm font-medium text-slate-600">Data de Início</label>
+                        <input type="date" id="trip-start-date" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                    </div>
+                    <div class="flex-1">
+                        <label for="trip-end-date" class="block text-sm font-medium text-slate-600">Data de Fim</label>
+                        <input type="date" id="trip-end-date" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                    </div>
+                </div>
+                <div class="pt-6 flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('add-trip-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-semibold">Salvar Viagem</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal: Adicionar Voo -->
+     <div id="add-flight-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
+        <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-md m-4">
+            <h3 class="text-2xl font-semibold mb-6">Adicionar Voo</h3>
+            <form id="add-flight-form" class="space-y-4">
+                 <div>
+                    <label class="block text-sm font-medium text-slate-600">Companhia Aérea</label>
+                    <input type="text" id="flight-company" placeholder="Ex: Azul" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-600">Código do Voo</label>
+                    <input type="text" id="flight-code" placeholder="Ex: AD4321" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                <div class="pt-6 flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('add-flight-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-semibold">Adicionar Voo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Adicionar Trem -->
+     <div id="add-train-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
+        <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-md m-4">
+            <h3 class="text-2xl font-semibold mb-6">Adicionar Trem</h3>
+            <form id="add-train-form" class="space-y-4">
+                 <div>
+                    <label class="block text-sm font-medium text-slate-600">Origem</label>
+                    <input type="text" id="train-origin" placeholder="Ex: Roma Termini" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-600">Destino</label>
+                    <input type="text" id="train-destination" placeholder="Ex: Firenze S.M.N." class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                <div class="pt-6 flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('add-train-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-semibold">Adicionar Trem</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Adicionar Hospedagem -->
+     <div id="add-lodging-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
+        <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-md m-4">
+            <h3 class="text-2xl font-semibold mb-6">Adicionar Hospedagem</h3>
+            <form id="add-lodging-form" class="space-y-4">
+                 <div>
+                    <label class="block text-sm font-medium text-slate-600">Nome do Hotel/Local</label>
+                    <input type="text" id="lodging-name" placeholder="Ex: Hotel Coliseu" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-600">Endereço</label>
+                    <input type="text" id="lodging-address" placeholder="Ex: Via Cavour, 123" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                <div class="pt-6 flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('add-lodging-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors font-semibold">Adicionar Hospedagem</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Alterar Imagem -->
+     <div id="edit-image-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
+        <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-md m-4">
+            <h3 class="text-2xl font-semibold mb-6">Alterar Imagem da Viagem</h3>
+            <form id="edit-image-form" class="space-y-4">
+                 <div>
+                    <label for="trip-image-url" class="block text-sm font-medium text-slate-600">URL da Nova Imagem</label>
+                    <input type="url" id="trip-image-url" placeholder="https://exemplo.com/imagem.jpg" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                <div class="pt-6 flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('edit-image-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-semibold">Salvar Imagem</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Editar Viagem -->
+    <div id="edit-trip-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
+        <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-md m-4">
+            <h3 class="text-2xl font-semibold mb-6">Editar Informações da Viagem</h3>
+            <form id="edit-trip-form" class="space-y-4">
+                <div>
+                    <label for="edit-trip-name" class="block text-sm font-medium text-slate-600">Nome da Viagem</label>
+                    <input type="text" id="edit-trip-name" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                </div>
+                <div>
+                    <label for="edit-trip-destination" class="block text-sm font-medium text-slate-600">Destino</label>
+                    <input type="text" id="edit-trip-destination" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex-1">
+                        <label for="edit-trip-start-date" class="block text-sm font-medium text-slate-600">Data de Início</label>
+                        <input type="date" id="edit-trip-start-date" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                    </div>
+                    <div class="flex-1">
+                        <label for="edit-trip-end-date" class="block text-sm font-medium text-slate-600">Data de Fim</label>
+                        <input type="date" id="edit-trip-end-date" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                    </div>
+                </div>
+                <div class="pt-6 flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('edit-trip-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-semibold">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Confirmação de Exclusão -->
+    <div id="confirm-delete-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
+        <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-sm m-4">
+            <h3 class="text-xl font-semibold mb-4">Confirmar Exclusão</h3>
+            <p id="confirm-delete-message" class="text-slate-600 mb-6">Você tem certeza que deseja excluir este item?</p>
+            <div class="flex justify-end gap-3">
+                <button type="button" onclick="closeModal('confirm-delete-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
+                <button id="confirm-delete-btn" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors font-semibold">Excluir</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="module">
+        // Importações do Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Variáveis globais
+        let db, auth, userId, tripsCollection;
+        let tripsData = []; // Cache local dos dados do Firestore
+        let currentTripId = null;
+        let onConfirmAction = () => {}; // Armazena a ação a ser executada na confirmação
+
+        // Configuração e inicialização do Firebase
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' && __firebase_config ? JSON.parse(__firebase_config) : null;
+
+        if (firebaseConfig) {
+            try {
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                setLogLevel('debug');
+
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        console.log("User authenticated with UID:", userId);
+                        tripsCollection = collection(db, 'artifacts', appId, 'users', userId, 'trips');
+                        setupTripsListener();
+                    } else {
+                        console.log("No user found, attempting to sign in...");
+                        try {
+                             if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                                await signInWithCustomToken(auth, __initial_auth_token);
+                            } else {
+                                await signInAnonymously(auth);
+                            }
+                        } catch (error) {
+                            console.error("Anonymous sign-in failed:", error);
+                        }
+                    }
+                });
+
+            } catch (error) {
+                console.error("Firebase initialization failed:", error);
+                document.getElementById('trips-list').innerHTML = `<p class="col-span-full text-center text-red-500">Erro ao conectar ao Firebase. Verifique a configuração.</p>`;
+            }
+        } else {
+            console.error("Firebase config is not available.");
+            document.getElementById('trips-list').innerHTML = `<p class="col-span-full text-center text-red-500">Configuração do Firebase não encontrada.</p>`;
+        }
+        
+        // --- FUNÇÕES DE RENDERIZAÇÃO ---
+
+        function renderTrips() {
+            const tripsList = document.getElementById('trips-list');
+            tripsList.innerHTML = ''; 
+
+            if (tripsData.length === 0) {
+                 tripsList.innerHTML = `<div class="col-span-full text-center p-10 bg-white rounded-lg shadow-sm">
+                    <h3 class="text-xl font-medium text-slate-700">Nenhuma viagem encontrada.</h3>
+                    <p class="text-slate-500 mt-2">Clique em "Nova Viagem" para começar a planejar!</p>
+                </div>`;
+                return;
+            }
+
+            tripsData.forEach(trip => {
+                const tripCard = document.createElement('div');
+                tripCard.className = 'trip-card bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer transform hover:-translate-y-1 transition-transform duration-300 relative';
+                tripCard.onclick = () => showTripDetails(trip.id);
+                
+                tripCard.innerHTML = `
+                    <button onclick="deleteTrip(event, '${trip.id}')" class="trip-card-delete-button absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                    </button>
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('${trip.imageUrl}')"></div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-slate-900">${trip.name}</h3>
+                        <p class="text-slate-500 mt-1">${trip.destination}</p>
+                        <div class="mt-4 text-sm font-medium text-slate-600">
+                           ${formatDate(trip.startDate)} - ${formatDate(trip.endDate)}
+                        </div>
+                    </div>
+                `;
+                tripsList.appendChild(tripCard);
+            });
+        }
+        
+        function renderTripDetails(tripId) {
+            const trip = tripsData.find(t => t.id === tripId);
+            if (!trip) {
+                showTripsView(); // Se a viagem for deletada enquanto a vemos, volta para a lista
+                return;
+            }
+            
+            currentTripId = trip.id;
+            document.getElementById('details-title').innerText = trip.name;
+            document.getElementById('details-dates').innerText = `${formatDate(trip.startDate)} a ${formatDate(trip.endDate)}`;
+
+            renderDetailList('flights-list', trip.flights, (item, index) => `
+                <div><p class="font-bold">${item.company} - ${item.code}</p></div>
+                <button onclick="deleteDetailItem('flights', ${index})" class="text-red-500 hover:text-red-700">&times;</button>
+            `, 'Nenhum voo adicionado.');
+
+            renderDetailList('trains-list', trip.trains, (item, index) => `
+                <div><p class="font-bold">${item.from} → ${item.to}</p><p class="text-sm text-slate-500">${item.code || ''}</p></div>
+                <button onclick="deleteDetailItem('trains', ${index})" class="text-red-500 hover:text-red-700">&times;</button>
+            `, 'Nenhum trem adicionado.');
+            
+            renderDetailList('lodging-list', trip.lodging, (item, index) => `
+                <div><p class="font-bold">${item.name}</p><p class="text-sm text-slate-500">${item.address}</p></div>
+                <button onclick="deleteDetailItem('lodging', ${index})" class="text-red-500 hover:text-red-700">&times;</button>
+            `, 'Nenhuma hospedagem adicionada.');
+        }
+
+        function renderDetailList(elementId, items, itemTemplate, emptyMessage) {
+            const listElement = document.getElementById(elementId);
+            listElement.innerHTML = '';
+            items = items || []; // Garante que é um array
+            if (items.length === 0) {
+                listElement.innerHTML = `<p class="text-slate-500 text-sm">${emptyMessage}</p>`;
+                return;
+            }
+            items.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'flex justify-between items-center border-l-4 border-slate-200 pl-4 py-2';
+                itemDiv.innerHTML = itemTemplate(item, index);
+                listElement.appendChild(itemDiv);
+            });
+        }
+        
+        function setupTripsListener() {
+            if (!tripsCollection) return;
+            onSnapshot(tripsCollection, (snapshot) => {
+                tripsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                console.log("Updated data from Firestore:", tripsData);
+                
+                // Decide o que renderizar baseado na tela atual
+                if (document.getElementById('details-view').classList.contains('hidden')) {
+                    renderTrips();
+                } else if(currentTripId) {
+                    renderTripDetails(currentTripId);
+                }
+            }, error => {
+                console.error("Error listening to trips collection:", error);
+            });
+        }
+
+        // --- CONTROLE DE NAVEGAÇÃO, MODAIS E FORMULÁRIOS ---
+        window.showTripsView = () => {
+            document.getElementById('trips-view').classList.remove('hidden');
+            document.getElementById('details-view').classList.add('hidden');
+            currentTripId = null;
+        }
+
+        window.openModal = (modalId) => {
+            const modal = document.getElementById(modalId);
+            if (modalId === 'edit-image-modal' && currentTripId) {
+                const trip = tripsData.find(t => t.id === currentTripId);
+                if (trip) {
+                    const imageUrlInput = document.getElementById('trip-image-url');
+                    // Não pré-preenche se for uma imagem de placeholder
+                    if (trip.imageUrl && !trip.imageUrl.startsWith('https://placehold.co')) {
+                        imageUrlInput.value = trip.imageUrl;
+                    } else {
+                        imageUrlInput.value = '';
+                    }
+                }
+            } else if (modalId === 'edit-trip-modal' && currentTripId) {
+                const trip = tripsData.find(t => t.id === currentTripId);
+                if (trip) {
+                    document.getElementById('edit-trip-name').value = trip.name;
+                    document.getElementById('edit-trip-destination').value = trip.destination;
+                    document.getElementById('edit-trip-start-date').value = trip.startDate;
+                    document.getElementById('edit-trip-end-date').value = trip.endDate;
+                }
+            }
+            modal.classList.replace('hidden', 'flex');
+        }
+
+        window.closeModal = (modalId) => {
+            document.getElementById(modalId).classList.replace('flex', 'hidden');
+            const form = document.getElementById(modalId).querySelector('form');
+            if (form) form.reset();
+            if (modalId === 'confirm-delete-modal') {
+                onConfirmAction = () => {}; // Reseta a ação ao fechar
+            }
+        }
+        
+        // --- AÇÕES DO FIRESTORE ---
+
+        function showConfirmDelete(message, onConfirm) {
+            document.getElementById('confirm-delete-message').innerText = message;
+            onConfirmAction = onConfirm;
+            openModal('confirm-delete-modal');
+        }
+
+        async function addOrUpdateDetail(formId, category) {
+            if (!currentTripId) return;
+
+            const trip = tripsData.find(t => t.id === currentTripId);
+            if (!trip) return;
+
+            let newItem = {};
+            if (category === 'flights') {
+                newItem = { company: document.getElementById('flight-company').value, code: document.getElementById('flight-code').value };
+            } else if (category === 'trains') {
+                newItem = { from: document.getElementById('train-origin').value, to: document.getElementById('train-destination').value };
+            } else if (category === 'lodging') {
+                newItem = { name: document.getElementById('lodging-name').value, address: document.getElementById('lodging-address').value };
+            }
+
+            const tripRef = doc(db, 'artifacts', appId, 'users', userId, 'trips', currentTripId);
+            await updateDoc(tripRef, { [category]: arrayUnion(newItem) });
+            closeModal(`add-${category.slice(0, -1)}-modal`);
+        }
+        
+        window.deleteTrip = async (event, tripId) => {
+            event.stopPropagation(); // Impede que o clique abra a tela de detalhes
+            showConfirmDelete('Tem certeza que deseja excluir esta viagem?', async () => {
+                await deleteDoc(doc(db, 'artifacts', appId, 'users', userId, 'trips', tripId));
+                closeModal('confirm-delete-modal');
+                // Se estivermos na visualização de detalhes da viagem excluída, volte
+                if (currentTripId === tripId) {
+                    showTripsView();
+                }
+            });
+        }
+
+        window.deleteDetailItem = async (category, index) => {
+            if (!currentTripId) return;
+            const trip = tripsData.find(t => t.id === currentTripId);
+            if (!trip || !trip[category] || !trip[category][index]) return;
+            
+            const itemToRemove = trip[category][index];
+            showConfirmDelete('Tem certeza que deseja excluir este item?', async () => {
+                const tripRef = doc(db, 'artifacts', appId, 'users', userId, 'trips', currentTripId);
+                await updateDoc(tripRef, { [category]: arrayRemove(itemToRemove) });
+                closeModal('confirm-delete-modal');
+                 // O onSnapshot vai cuidar de re-renderizar
+            });
+        }
+
+        // Listeners dos formulários
+        document.getElementById('add-trip-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const tripName = document.getElementById('trip-name').value;
+            const newTrip = {
+                name: tripName,
+                destination: document.getElementById('trip-destination').value,
+                startDate: document.getElementById('trip-start-date').value,
+                endDate: document.getElementById('trip-end-date').value,
+                imageUrl: `https://placehold.co/600x400/a3e635/1e293b?text=${encodeURIComponent(tripName)}`,
+                flights: [], trains: [], lodging: []
+            };
+            await addDoc(tripsCollection, newTrip);
+            closeModal('add-trip-modal');
+        });
+
+        document.getElementById('add-flight-form').addEventListener('submit', (e) => { e.preventDefault(); addOrUpdateDetail('add-flight-form', 'flights'); });
+        document.getElementById('add-train-form').addEventListener('submit', (e) => { e.preventDefault(); addOrUpdateDetail('add-train-form', 'trains'); });
+        document.getElementById('add-lodging-form').addEventListener('submit', (e) => { e.preventDefault(); addOrUpdateDetail('add-lodging-form', 'lodging'); });
+
+        // Listener para o formulário de edição de imagem
+        document.getElementById('edit-image-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            if (!currentTripId) return;
+            const newImageUrl = document.getElementById('trip-image-url').value;
+            const tripRef = doc(db, 'artifacts', appId, 'users', userId, 'trips', currentTripId);
+            await updateDoc(tripRef, { imageUrl: newImageUrl });
+            closeModal('edit-image-modal');
+        });
+
+        // Listener para o formulário de edição da viagem
+        document.getElementById('edit-trip-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            if (!currentTripId) return;
+            const updatedData = {
+                name: document.getElementById('edit-trip-name').value,
+                destination: document.getElementById('edit-trip-destination').value,
+                startDate: document.getElementById('edit-trip-start-date').value,
+                endDate: document.getElementById('edit-trip-end-date').value,
+            };
+            const tripRef = doc(db, 'artifacts', appId, 'users', userId, 'trips', currentTripId);
+            await updateDoc(tripRef, updatedData);
+            closeModal('edit-trip-modal');
+        });
+
+        // Listener para o botão de confirmação de exclusão
+        document.getElementById('confirm-delete-btn').addEventListener('click', () => {
+            if (typeof onConfirmAction === 'function') {
+                onConfirmAction();
+            }
+        });
+
+        // --- FUNÇÕES UTILITÁRIAS ---
+        function formatDate(dateString) {
+            if(!dateString) return 'Data indefinida';
+            const date = new Date(dateString + 'T00:00:00');
+            return date.toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+    </script>
+</body>
+</html>
+
+
+
