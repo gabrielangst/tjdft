@@ -96,15 +96,15 @@
                     </div>
                     <div id="flights-list" class="space-y-4"></div>
                 </section>
-                <!-- Seção de Trens -->
+                <!-- Seção de Transporte -->
                 <section class="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg">
                     <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-2xl font-semibold">Trens</h2>
-                        <button onclick="openModal('add-train-modal')" class="flex items-center justify-center w-10 h-10 bg-green-100 text-green-600 rounded-full hover:bg-green-200 transition-colors">
+                        <h2 class="text-2xl font-semibold">Transporte</h2>
+                        <button onclick="openModal('add-transport-modal')" class="flex items-center justify-center w-10 h-10 bg-green-100 text-green-600 rounded-full hover:bg-green-200 transition-colors">
                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                         </button>
                     </div>
-                    <div id="trains-list" class="space-y-4"></div>
+                    <div id="transport-list" class="space-y-4"></div>
                 </section>
                 <!-- Seção de Hospedagens -->
                 <section class="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg">
@@ -213,22 +213,87 @@
         </div>
     </div>
 
-    <!-- Modal: Adicionar Trem -->
-     <div id="add-train-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
-        <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-md m-4">
-            <h3 class="text-2xl font-semibold mb-6">Adicionar Trem</h3>
-            <form id="add-train-form" class="space-y-4">
-                 <div>
-                    <label for="train-origin" class="block text-sm font-medium text-slate-600">Origem</label>
-                    <input type="text" id="train-origin" placeholder="Ex: Roma Termini" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+    <!-- Modal: Editar Voo -->
+    <div id="edit-flight-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
+        <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-lg m-4 overflow-y-auto max-h-screen">
+            <h3 class="text-2xl font-semibold mb-6">Editar Voo</h3>
+            <form id="edit-flight-form" class="space-y-4">
+                <div>
+                    <label for="edit-flight-leg-type" class="block text-sm font-medium text-slate-600">Trecho</label>
+                    <select id="edit-flight-leg-type" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                        <option value="ida">Ida</option>
+                        <option value="volta">Volta</option>
+                    </select>
                 </div>
                 <div>
-                    <label for="train-destination" class="block text-sm font-medium text-slate-600">Destino</label>
-                    <input type="text" id="train-destination" placeholder="Ex: Firenze S.M.N." class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                    <label for="edit-flight-date" class="block text-sm font-medium text-slate-600">Data do Voo</label>
+                    <input type="date" id="edit-flight-date" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="edit-flight-departure-time" class="block text-sm font-medium text-slate-600">Horário de Saída</label>
+                        <input type="time" id="edit-flight-departure-time" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                    </div>
+                    <div>
+                        <label for="edit-flight-arrival-time" class="block text-sm font-medium text-slate-600">Horário de Chegada</label>
+                        <input type="time" id="edit-flight-arrival-time" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="edit-flight-origin" class="block text-sm font-medium text-slate-600">Cidade de Origem</label>
+                        <input type="text" id="edit-flight-origin" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                    </div>
+                    <div>
+                        <label for="edit-flight-destination" class="block text-sm font-medium text-slate-600">Cidade de Destino</label>
+                        <input type="text" id="edit-flight-destination" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                    </div>
+                </div>
+                <div>
+                    <label for="edit-flight-company" class="block text-sm font-medium text-slate-600">Companhia Aérea</label>
+                    <input type="text" id="edit-flight-company" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="edit-flight-code" class="block text-sm font-medium text-slate-600">Código do Voo</label>
+                        <input type="text" id="edit-flight-code" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                    </div>
+                    <div>
+                        <label for="edit-flight-type" class="block text-sm font-medium text-slate-600">Tipo de Voo</label>
+                        <select id="edit-flight-type" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                            <option>Voo Direto</option>
+                            <option>Com Conexão</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="pt-6 flex justify-end gap-3">
-                    <button type="button" onclick="closeModal('add-train-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
-                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-semibold">Adicionar Trem</button>
+                    <button type="button" onclick="closeModal('edit-flight-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-semibold">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Adicionar Transporte -->
+     <div id="add-transport-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
+        <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-md m-4">
+            <h3 class="text-2xl font-semibold mb-6">Adicionar Transporte</h3>
+            <form id="add-transport-form" class="space-y-4">
+                 <div>
+                    <label for="transport-origin" class="block text-sm font-medium text-slate-600">Origem</label>
+                    <input type="text" id="transport-origin" placeholder="Ex: Roma Termini" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                <div>
+                    <label for="transport-destination" class="block text-sm font-medium text-slate-600">Destino</label>
+                    <input type="text" id="transport-destination" placeholder="Ex: Firenze S.M.N." class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                <div>
+                    <label for="transport-description" class="block text-sm font-medium text-slate-600">Descrição (Opcional)</label>
+                    <textarea id="transport-description" rows="3" placeholder="Ex: Trem #9418, vagão 5, assentos 21, 22" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                </div>
+                <div class="pt-6 flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('add-transport-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-semibold">Adicionar Transporte</button>
                 </div>
             </form>
         </div>
@@ -337,6 +402,7 @@
         let db, tripsRef;
         let tripsData = []; 
         let currentTripId = null;
+        let currentEditingItemIndex = null;
         let onConfirmAction = () => {};
 
         // Configuração e inicialização do Firebase
@@ -418,15 +484,21 @@
                         ${formatDate(item.date)} | ${item.departureTime} - ${item.arrivalTime} | ${item.flightType}
                     </p>
                 </div>
-                <button onclick="deleteDetailItem('flights', ${index})" class="text-red-500 hover:text-red-700 self-start p-1">&times;</button>
+                <div class="flex flex-col">
+                    <button onclick="openEditFlightModal(${index})" class="text-blue-600 hover:text-blue-800 p-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                    </button>
+                    <button onclick="deleteDetailItem('flights', ${index})" class="text-red-500 hover:text-red-700 p-1">&times;</button>
+                </div>
             `, 'Nenhum voo adicionado.');
 
-            renderDetailList('trains-list', trip.trains, (item, index) => `
+            renderDetailList('transport-list', trip.transport, (item, index) => `
                  <div class="flex-grow">
                     <p class="font-bold">${item.from} → ${item.to}</p>
+                    ${item.description ? `<p class="text-sm text-slate-500 mt-1 whitespace-pre-wrap">${item.description}</p>` : ''}
                 </div>
-                <button onclick="deleteDetailItem('trains', ${index})" class="text-red-500 hover:text-red-700 self-start p-1">&times;</button>
-            `, 'Nenhum trem adicionado.');
+                <button onclick="deleteDetailItem('transport', ${index})" class="text-red-500 hover:text-red-700 self-start p-1">&times;</button>
+            `, 'Nenhum transporte adicionado.');
             
             renderDetailList('lodging-list', trip.lodging, (item, index) => `
                 <div class="flex-grow">
@@ -521,6 +593,27 @@
             }
         }
         
+        window.openEditFlightModal = (index) => {
+            if (!currentTripId) return;
+            const trip = tripsData.find(t => t.id === currentTripId);
+            const flight = trip?.flights ? Object.values(trip.flights)[index] : null;
+            if (!flight) return;
+
+            currentEditingItemIndex = index;
+
+            document.getElementById('edit-flight-leg-type').value = flight.legType;
+            document.getElementById('edit-flight-date').value = flight.date;
+            document.getElementById('edit-flight-departure-time').value = flight.departureTime;
+            document.getElementById('edit-flight-arrival-time').value = flight.arrivalTime;
+            document.getElementById('edit-flight-origin').value = flight.origin;
+            document.getElementById('edit-flight-destination').value = flight.destination;
+            document.getElementById('edit-flight-company').value = flight.company;
+            document.getElementById('edit-flight-code').value = flight.code;
+            document.getElementById('edit-flight-type').value = flight.flightType;
+            
+            openModal('edit-flight-modal');
+        }
+
         // --- AÇÕES DO REALTIME DATABASE ---
 
         function showConfirmDelete(message, onConfirm) {
@@ -548,8 +641,12 @@
                     code: document.getElementById('flight-code').value,
                     flightType: document.getElementById('flight-type').value,
                 };
-            } else if (category === 'trains') {
-                newItem = { from: document.getElementById('train-origin').value, to: document.getElementById('train-destination').value };
+            } else if (category === 'transport') {
+                newItem = { 
+                    from: document.getElementById('transport-origin').value, 
+                    to: document.getElementById('transport-destination').value,
+                    description: document.getElementById('transport-description').value
+                };
             } else if (category === 'lodging') {
                 newItem = { name: document.getElementById('lodging-name').value, address: document.getElementById('lodging-address').value };
             }
@@ -578,7 +675,6 @@
             if (!trip || !trip[category]) return;
 
             const currentItems = Object.values(trip[category]);
-            const itemToRemove = currentItems[index];
             
             showConfirmDelete(`Tem certeza que deseja excluir o item?`, async () => {
                 currentItems.splice(index, 1);
@@ -599,7 +695,7 @@
                 startDate: document.getElementById('trip-start-date').value,
                 endDate: document.getElementById('trip-end-date').value,
                 imageUrl: `https://placehold.co/600x400/a3e635/1e293b?text=${encodeURIComponent(tripName)}`,
-                flights: [], trains: [], lodging: []
+                flights: [], transport: [], lodging: []
             };
             const newTripRef = push(tripsRef);
             await set(newTripRef, newTrip);
@@ -607,7 +703,7 @@
         });
 
         document.getElementById('add-flight-form').addEventListener('submit', (e) => { e.preventDefault(); addDetail('flights'); });
-        document.getElementById('add-train-form').addEventListener('submit', (e) => { e.preventDefault(); addDetail('trains'); });
+        document.getElementById('add-transport-form').addEventListener('submit', (e) => { e.preventDefault(); addDetail('transport'); });
         document.getElementById('add-lodging-form').addEventListener('submit', (e) => { e.preventDefault(); addDetail('lodging'); });
 
         document.getElementById('edit-image-form').addEventListener('submit', async function(e) {
@@ -632,6 +728,36 @@
             const tripToUpdateRef = ref(db, `public_trips/${currentTripId}`);
             await update(tripToUpdateRef, updates);
             closeModal('edit-trip-modal');
+        });
+
+        document.getElementById('edit-flight-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            if (currentTripId === null || currentEditingItemIndex === null) return;
+
+            const trip = tripsData.find(t => t.id === currentTripId);
+            if (!trip) return;
+
+            const updatedFlight = {
+                legType: document.getElementById('edit-flight-leg-type').value,
+                date: document.getElementById('edit-flight-date').value,
+                departureTime: document.getElementById('edit-flight-departure-time').value,
+                arrivalTime: document.getElementById('edit-flight-arrival-time').value,
+                origin: document.getElementById('edit-flight-origin').value,
+                destination: document.getElementById('edit-flight-destination').value,
+                company: document.getElementById('edit-flight-company').value,
+                code: document.getElementById('edit-flight-code').value,
+                flightType: document.getElementById('edit-flight-type').value,
+            };
+
+            const currentFlights = trip.flights ? [...Object.values(trip.flights)] : [];
+            currentFlights[currentEditingItemIndex] = updatedFlight;
+
+            const updates = {};
+            updates[`/${currentTripId}/flights`] = currentFlights;
+            await update(tripsRef, updates);
+            
+            closeModal('edit-flight-modal');
+            currentEditingItemIndex = null;
         });
 
         document.getElementById('confirm-delete-btn').addEventListener('click', () => {
