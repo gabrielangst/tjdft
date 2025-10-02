@@ -153,17 +153,57 @@
     </div>
     
     <!-- Modal: Adicionar Voo -->
-     <div id="add-flight-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
-        <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-md m-4">
+    <div id="add-flight-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
+        <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-lg m-4 overflow-y-auto max-h-screen">
             <h3 class="text-2xl font-semibold mb-6">Adicionar Voo</h3>
             <form id="add-flight-form" class="space-y-4">
-                 <div>
-                    <label class="block text-sm font-medium text-slate-600">Companhia Aérea</label>
-                    <input type="text" id="flight-company" placeholder="Ex: Azul" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                <div>
+                    <label for="flight-leg-type" class="block text-sm font-medium text-slate-600">Trecho</label>
+                    <select id="flight-leg-type" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                        <option value="ida">Ida</option>
+                        <option value="volta">Volta</option>
+                    </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-slate-600">Código do Voo</label>
-                    <input type="text" id="flight-code" placeholder="Ex: AD4321" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+                    <label for="flight-date" class="block text-sm font-medium text-slate-600">Data do Voo</label>
+                    <input type="date" id="flight-date" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="flight-departure-time" class="block text-sm font-medium text-slate-600">Horário de Saída</label>
+                        <input type="time" id="flight-departure-time" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                    </div>
+                    <div>
+                        <label for="flight-arrival-time" class="block text-sm font-medium text-slate-600">Horário de Chegada</label>
+                        <input type="time" id="flight-arrival-time" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="flight-origin" class="block text-sm font-medium text-slate-600">Cidade de Origem</label>
+                        <input type="text" id="flight-origin" placeholder="Ex: São Paulo (GRU)" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                    </div>
+                    <div>
+                        <label for="flight-destination" class="block text-sm font-medium text-slate-600">Cidade de Destino</label>
+                        <input type="text" id="flight-destination" placeholder="Ex: Roma (FCO)" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                    </div>
+                </div>
+                <div>
+                    <label for="flight-company" class="block text-sm font-medium text-slate-600">Companhia Aérea</label>
+                    <input type="text" id="flight-company" placeholder="Ex: LATAM" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="flight-code" class="block text-sm font-medium text-slate-600">Código do Voo</label>
+                        <input type="text" id="flight-code" placeholder="Ex: LA8064" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                    </div>
+                    <div>
+                        <label for="flight-type" class="block text-sm font-medium text-slate-600">Tipo de Voo</label>
+                        <select id="flight-type" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                            <option>Voo Direto</option>
+                            <option>Com Conexão</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="pt-6 flex justify-end gap-3">
                     <button type="button" onclick="closeModal('add-flight-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
@@ -179,11 +219,11 @@
             <h3 class="text-2xl font-semibold mb-6">Adicionar Trem</h3>
             <form id="add-train-form" class="space-y-4">
                  <div>
-                    <label class="block text-sm font-medium text-slate-600">Origem</label>
+                    <label for="train-origin" class="block text-sm font-medium text-slate-600">Origem</label>
                     <input type="text" id="train-origin" placeholder="Ex: Roma Termini" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-slate-600">Destino</label>
+                    <label for="train-destination" class="block text-sm font-medium text-slate-600">Destino</label>
                     <input type="text" id="train-destination" placeholder="Ex: Firenze S.M.N." class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
                 <div class="pt-6 flex justify-end gap-3">
@@ -200,11 +240,11 @@
             <h3 class="text-2xl font-semibold mb-6">Adicionar Hospedagem</h3>
             <form id="add-lodging-form" class="space-y-4">
                  <div>
-                    <label class="block text-sm font-medium text-slate-600">Nome do Hotel/Local</label>
+                    <label for="lodging-name" class="block text-sm font-medium text-slate-600">Nome do Hotel/Local</label>
                     <input type="text" id="lodging-name" placeholder="Ex: Hotel Coliseu" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-slate-600">Endereço</label>
+                    <label for="lodging-address" class="block text-sm font-medium text-slate-600">Endereço</label>
                     <input type="text" id="lodging-address" placeholder="Ex: Via Cavour, 123" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
                 </div>
                 <div class="pt-6 flex justify-end gap-3">
@@ -300,8 +340,6 @@
         let onConfirmAction = () => {};
 
         // Configuração e inicialização do Firebase
-        const rawAppId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const appId = rawAppId.replace(/\./g, '_'); 
         const firebaseConfig = (typeof __firebase_config !== 'undefined' && __firebase_config)
                                 ? JSON.parse(__firebase_config)
                                 : firebaseConfigManual;
@@ -312,7 +350,7 @@
                 db = getDatabase(app);
 
                 // O caminho no banco de dados agora é público e compartilhado
-                tripsRef = ref(db, `public_trips/${appId}`);
+                tripsRef = ref(db, 'public_trips');
                 setupTripsListener();
 
             } catch (error) {
@@ -372,18 +410,30 @@
             document.getElementById('details-dates').innerText = `${formatDate(trip.startDate)} a ${formatDate(trip.endDate)}`;
 
             renderDetailList('flights-list', trip.flights, (item, index) => `
-                <div><p class="font-bold">${item.company} - ${item.code}</p></div>
-                <button onclick="deleteDetailItem('flights', ${index})" class="text-red-500 hover:text-red-700">&times;</button>
+                <div class="flex-grow">
+                    <p class="font-bold text-sm ${item.legType === 'ida' ? 'text-blue-600' : 'text-cyan-600'}">${item.legType === 'ida' ? 'Voo de Ida' : 'Voo de Volta'}</p>
+                    <p class="font-semibold">${item.company} ${item.code}</p>
+                    <p class="text-sm text-slate-600">${item.origin} → ${item.destination}</p>
+                    <p class="text-xs text-slate-500 mt-1">
+                        ${formatDate(item.date)} | ${item.departureTime} - ${item.arrivalTime} | ${item.flightType}
+                    </p>
+                </div>
+                <button onclick="deleteDetailItem('flights', ${index})" class="text-red-500 hover:text-red-700 self-start p-1">&times;</button>
             `, 'Nenhum voo adicionado.');
 
             renderDetailList('trains-list', trip.trains, (item, index) => `
-                <div><p class="font-bold">${item.from} → ${item.to}</p><p class="text-sm text-slate-500">${item.code || ''}</p></div>
-                <button onclick="deleteDetailItem('trains', ${index})" class="text-red-500 hover:text-red-700">&times;</button>
+                 <div class="flex-grow">
+                    <p class="font-bold">${item.from} → ${item.to}</p>
+                </div>
+                <button onclick="deleteDetailItem('trains', ${index})" class="text-red-500 hover:text-red-700 self-start p-1">&times;</button>
             `, 'Nenhum trem adicionado.');
             
             renderDetailList('lodging-list', trip.lodging, (item, index) => `
-                <div><p class="font-bold">${item.name}</p><p class="text-sm text-slate-500">${item.address}</p></div>
-                <button onclick="deleteDetailItem('lodging', ${index})" class="text-red-500 hover:text-red-700">&times;</button>
+                <div class="flex-grow">
+                    <p class="font-bold">${item.name}</p>
+                    <p class="text-sm text-slate-500">${item.address}</p>
+                </div>
+                <button onclick="deleteDetailItem('lodging', ${index})" class="text-red-500 hover:text-red-700 self-start p-1">&times;</button>
             `, 'Nenhuma hospedagem adicionada.');
         }
 
@@ -397,7 +447,7 @@
             }
             itemsArray.forEach((item, index) => {
                 const itemDiv = document.createElement('div');
-                itemDiv.className = 'flex justify-between items-center border-l-4 border-slate-200 pl-4 py-2';
+                itemDiv.className = 'flex justify-between items-start border-l-4 border-slate-200 pl-4 py-2';
                 itemDiv.innerHTML = itemTemplate(item, index);
                 listElement.appendChild(itemDiv);
             });
@@ -487,7 +537,17 @@
 
             let newItem = {};
             if (category === 'flights') {
-                newItem = { company: document.getElementById('flight-company').value, code: document.getElementById('flight-code').value };
+                newItem = { 
+                    legType: document.getElementById('flight-leg-type').value,
+                    date: document.getElementById('flight-date').value,
+                    departureTime: document.getElementById('flight-departure-time').value,
+                    arrivalTime: document.getElementById('flight-arrival-time').value,
+                    origin: document.getElementById('flight-origin').value,
+                    destination: document.getElementById('flight-destination').value,
+                    company: document.getElementById('flight-company').value,
+                    code: document.getElementById('flight-code').value,
+                    flightType: document.getElementById('flight-type').value,
+                };
             } else if (category === 'trains') {
                 newItem = { from: document.getElementById('train-origin').value, to: document.getElementById('train-destination').value };
             } else if (category === 'lodging') {
@@ -506,7 +566,7 @@
         window.deleteTrip = async (event, tripId) => {
             event.stopPropagation();
             showConfirmDelete('Tem certeza que deseja excluir esta viagem?', async () => {
-                const tripToDeleteRef = ref(db, `public_trips/${appId}/${tripId}`);
+                const tripToDeleteRef = ref(db, `public_trips/${tripId}`);
                 await remove(tripToDeleteRef);
                 closeModal('confirm-delete-modal');
             });
@@ -520,7 +580,7 @@
             const currentItems = Object.values(trip[category]);
             const itemToRemove = currentItems[index];
             
-            showConfirmDelete(`Tem certeza que deseja excluir o item "${itemToRemove.company || itemToRemove.from || itemToRemove.name}"?`, async () => {
+            showConfirmDelete(`Tem certeza que deseja excluir o item?`, async () => {
                 currentItems.splice(index, 1);
                 const updates = {};
                 updates[`/${currentTripId}/${category}`] = currentItems;
@@ -569,7 +629,7 @@
                 startDate: document.getElementById('edit-trip-start-date').value,
                 endDate: document.getElementById('edit-trip-end-date').value,
             };
-            const tripToUpdateRef = ref(db, `public_trips/${appId}/${currentTripId}`);
+            const tripToUpdateRef = ref(db, `public_trips/${currentTripId}`);
             await update(tripToUpdateRef, updates);
             closeModal('edit-trip-modal');
         });
