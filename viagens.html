@@ -667,7 +667,6 @@
         }
         
         // --- FUNÇÕES DE RENDERIZAÇÃO ---
-
         function renderTrips() {
             const tripsList = document.getElementById('trips-list');
             tripsList.innerHTML = ''; 
@@ -718,7 +717,6 @@
             itineraryList.classList.add('hidden');
             toggleBtn.querySelector('span').textContent = 'Mostrar Roteiro';
             toggleIcon.classList.remove('rotate-180');
-
 
             document.getElementById('details-title').textContent = trip.name;
             document.getElementById('details-dates').textContent = `${formatDate(trip.startDate)} - ${formatDate(trip.endDate)}`;
