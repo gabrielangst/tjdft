@@ -590,10 +590,11 @@
     </div>
     
     <div id="view-activity-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
-        <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-md m-4">
+        <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-md m-4 text-center">
             <div id="view-activity-icon" class="mx-auto mb-4 w-12 h-12 flex items-center justify-center bg-slate-100 text-slate-600 rounded-full">
             </div>
-            <h3 id="view-activity-time" class="text-2xl font-semibold mb-4 text-center"></h3>
+            <h3 id="view-activity-time" class="text-2xl font-semibold text-slate-800"></h3>
+            <p id="view-activity-type" class="text-sm font-medium text-slate-500 bg-slate-100 rounded-full px-3 py-1 mt-2 mb-4 inline-block"></p>
             <p id="view-activity-description" class="text-slate-600 text-center"></p>
             <div class="pt-6 flex justify-center">
                 <button type="button" onclick="closeModal('view-activity-modal')" class="px-6 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Fechar</button>
@@ -641,7 +642,7 @@
             lodging_checkin: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
             lodging_checkout: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>`,
             passeio: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`,
-            restaurante: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8"/><path d="M15 15 3.3 3.3a4.2 4.2 0 0 0 0 6l7.3 7.3c.7.7 2 .7 2.8 0L15 15Zm0 0 7 7"/><path d="m2.1 2.1 6.4 6.4"/></svg>`,
+            restaurante: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3z"/></svg>`,
             outro: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12a10.06 10.06 1 0 0-20 0Z"/><path d="M12 12v8a2 2 0 0 0 4 0"/><path d="M12 2v1"/></svg>`,
             basketball: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0-10 10c0 .2 0 .5.1.7"/><path d="M22 12a10 10 0 0 0-10-10c-.2 0-.5 0-.7.1"/><path d="M2 12h20"/><path d="M12 22a10 10 0 0 0 10-10c0-.2 0-.5-.1-.7"/><path d="M2 12a10 10 0 0 0 10 10c.2 0 .5 0 .7-.1"/></svg>`,
             building: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>`,
@@ -900,6 +901,7 @@
                         data-icon='${event.icon}'
                         data-time="${time}"
                         data-description="${descriptionEscaped}"
+                        data-type="${event.type || ''}"
                     >
                         <div class="flex items-center gap-3 flex-1 min-w-0">
                             <span class="font-bold text-sm w-12 text-right flex-shrink-0">${time}</span>
@@ -1044,10 +1046,20 @@
             const iconHTML = element.dataset.icon;
             const time = element.dataset.time;
             const description = element.dataset.description;
+            const type = element.dataset.type;
 
             document.getElementById('view-activity-icon').innerHTML = iconHTML.replace('w-5 h-5', 'w-8 h-8');
             document.getElementById('view-activity-time').textContent = time;
             document.getElementById('view-activity-description').textContent = description;
+            
+            const typeElement = document.getElementById('view-activity-type');
+            if (type) {
+                typeElement.textContent = type;
+                typeElement.style.display = 'inline-block';
+            } else {
+                typeElement.style.display = 'none';
+            }
+
             openModal('view-activity-modal');
         }
         
