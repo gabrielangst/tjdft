@@ -64,7 +64,12 @@
                 </button>
             </header>
 
-            <main id="trips-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></main>
+            <section id="featured-trips-panel" class="mb-10"></section>
+
+            <main>
+                <h2 class="text-2xl font-bold text-slate-800 mb-4">Todas as Viagens</h2>
+                <div id="trips-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </main>
         </div>
 
         <div id="details-view" class="hidden">
@@ -75,15 +80,22 @@
                 </button>
                 <h1 id="details-title" class="text-4xl font-bold text-slate-900"></h1>
                 <p id="details-dates" class="text-slate-500 mt-1"></p>
-                <div class="flex items-center gap-2 mt-4">
+                <div class="flex flex-wrap items-center gap-2 mt-4">
                     <button onclick="openModal('edit-image-modal')" class="flex items-center gap-2 text-sm bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-lg hover:bg-slate-300 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path></svg>
                         <span>Alterar Imagem</span>
                     </button>
-                    <button onclick="openModal('edit-trip-modal')" class="flex items-center gap-2 text-sm bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-lg hover:bg-slate-300 transition-colors">
+                    <button onclick="openEditTripModal()" class="flex items-center gap-2 text-sm bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-lg hover:bg-slate-300 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path><path d="m15 5 4 4"></path></svg>
                         <span>Editar Viagem</span>
                     </button>
+                    <button onclick="scrollToItinerary()" class="flex items-center gap-2 text-sm bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-lg hover:bg-slate-300 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-collapse"><path d="m3 10 2.5-2.5L3 5"></path><path d="m3 19 2.5-2.5L3 14"></path><path d="M10 6h11"></path><path d="M10 12h11"></path><path d="M10 18h11"></path></svg>
+                        <span>Roteiro</span>
+                    </button>
+                    <button id="custom-link-btn" style="display: none;" class="flex items-center gap-2 text-sm bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-lg hover:bg-slate-300 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg>
+                        <span></span> </button>
                 </div>
             </header>
 
@@ -130,7 +142,10 @@
             </section>
 
             <section id="daily-itinerary-panel" class="mt-8 bg-white p-6 rounded-xl shadow-lg">
-                <h2 class="text-2xl font-semibold mb-4">Roteiro por Dia</h2>
+                 <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-semibold">Roteiro por Dia</h2>
+                    <button onclick="scrollToTop()" class="text-sm bg-slate-200 text-slate-700 font-semibold px-3 py-1.5 rounded-lg hover:bg-slate-300 transition-colors">Subir</button>
+                </div>
                 <div id="daily-itinerary-list" class="space-y-6">
                 </div>
             </section>
@@ -511,6 +526,17 @@
                         <input type="date" id="edit-trip-end-date" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required="">
                     </div>
                 </div>
+                 <div class="border-t pt-4 mt-2">
+                    <label class="block text-sm font-medium text-slate-600 mb-1">Link Personalizado (Opcional)</label>
+                    <div>
+                        <label for="edit-trip-link-text" class="block text-xs font-medium text-slate-500">Texto do Botão</label>
+                        <input type="text" id="edit-trip-link-text" placeholder="Ex: Reservas" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm">
+                    </div>
+                    <div class="mt-2">
+                        <label for="edit-trip-link-url" class="block text-xs font-medium text-slate-500">URL do Link</label>
+                        <input type="url" id="edit-trip-link-url" placeholder="https://..." class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm">
+                    </div>
+                </div>
                 <div class="pt-6 flex justify-end gap-3">
                     <button type="button" onclick="closeModal('edit-trip-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
                     <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-semibold">Salvar Alterações</button>
@@ -685,10 +711,26 @@
         }
         
         // --- FUNÇÕES DE RENDERIZAÇÃO ---
-        function renderTrips() {
-            const tripsList = document.getElementById('trips-list');
-            tripsList.innerHTML = ''; 
+        function renderTripLists() {
+            const featuredTripsPanel = document.getElementById('featured-trips-panel');
+            const featuredTripsList = document.createElement('div');
+            featuredTripsList.id = 'featured-trips-list';
+            featuredTripsList.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
 
+            const tripsList = document.getElementById('trips-list');
+            
+            featuredTripsPanel.innerHTML = '';
+            tripsList.innerHTML = '';
+
+            const featuredTrips = tripsData.filter(trip => trip.featured);
+            if(featuredTrips.length > 0) {
+                featuredTripsPanel.innerHTML = `<h2 class="text-2xl font-bold text-slate-800 mb-4">Viagens Destacadas</h2>`;
+                featuredTrips.forEach(trip => {
+                    featuredTripsList.appendChild(createTripCard(trip));
+                });
+                featuredTripsPanel.appendChild(featuredTripsList);
+            }
+            
             if (tripsData.length === 0) {
                  tripsList.innerHTML = `<div class="col-span-full text-center p-10 bg-white rounded-lg shadow-sm">
                     <h3 class="text-xl font-medium text-slate-700">Nenhuma viagem encontrada.</h3>
@@ -698,27 +740,38 @@
             }
 
             tripsData.forEach(trip => {
-                const tripCard = document.createElement('div');
-                tripCard.className = 'trip-card bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer transform hover:-translate-y-1 transition-transform duration-300 relative';
-                tripCard.onclick = () => showTripDetails(trip.id);
-                
-                tripCard.innerHTML = `
-                    <button onclick="deleteTrip(event, '${trip.id}')" class="trip-card-delete-button absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-                    </button>
-                    <div class="h-48 bg-cover bg-center" style="background-image: url('${trip.imageUrl}')"></div>
-                    <div class="p-6">
-                        <h3 class="text-2xl font-bold text-slate-900">${trip.name}</h3>
-                        <p class="text-slate-500 mt-1">${trip.destination}</p>
-                        <div class="mt-4 text-sm font-medium text-slate-600">
-                           ${formatDate(trip.startDate)} - ${formatDate(trip.endDate)}
-                        </div>
-                    </div>
-                `;
-                tripsList.appendChild(tripCard);
+                tripsList.appendChild(createTripCard(trip));
             });
         }
         
+        function createTripCard(trip) {
+            const tripCard = document.createElement('div');
+            tripCard.className = 'trip-card bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer transform hover:-translate-y-1 transition-transform duration-300 relative';
+            tripCard.onclick = () => showTripDetails(trip.id);
+            
+            const starIcon = trip.featured ? 
+                `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>` : 
+                `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+
+            tripCard.innerHTML = `
+                <button onclick="toggleFeatured(event, '${trip.id}')" class="absolute top-3 left-3 z-10 w-8 h-8 flex items-center justify-center bg-white/70 backdrop-blur-sm text-yellow-500 rounded-full hover:bg-white transition-colors">
+                    ${starIcon}
+                </button>
+                <button onclick="deleteTrip(event, '${trip.id}')" class="trip-card-delete-button absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                </button>
+                <div class="h-48 bg-cover bg-center" style="background-image: url('${trip.imageUrl}')"></div>
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold text-slate-900">${trip.name}</h3>
+                    <p class="text-slate-500 mt-1">${trip.destination}</p>
+                    <div class="mt-4 text-sm font-medium text-slate-600">
+                       ${formatDate(trip.startDate)} - ${formatDate(trip.endDate)}
+                    </div>
+                </div>
+            `;
+            return tripCard;
+        }
+
         function renderTripDetails(tripId) {
             currentTripId = tripId;
             const trip = tripsData.find(t => t.id === tripId);
@@ -732,6 +785,16 @@
             document.getElementById('details-title').textContent = trip.name;
             document.getElementById('details-dates').textContent = `${formatDate(trip.startDate)} - ${formatDate(trip.endDate)}`;
             
+            // Handle custom link button visibility and action
+            const customLinkBtn = document.getElementById('custom-link-btn');
+            if (trip.customLinkText && trip.customLinkUrl) {
+                customLinkBtn.style.display = 'flex';
+                customLinkBtn.querySelector('span').textContent = trip.customLinkText;
+                customLinkBtn.onclick = () => window.open(trip.customLinkUrl, '_blank');
+            } else {
+                customLinkBtn.style.display = 'none';
+            }
+
             renderDocuments(trip);
             renderDailyItinerary(trip);
 
@@ -827,17 +890,22 @@
                 return;
             }
 
-            documents.forEach(doc => {
+            documents.forEach((doc, index) => {
                 const docElement = document.createElement('div');
                 docElement.className = 'flex items-center justify-between p-2 rounded-md hover:bg-slate-50';
                 docElement.innerHTML = `
-                    <label class="flex items-center gap-3 cursor-pointer">
-                        <input type="checkbox" onchange="toggleDocumentCheck('${doc.id}')" ${doc.checked ? 'checked' : ''} class="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                        <span class="${doc.checked ? 'line-through text-slate-400' : 'text-slate-700'}">${doc.name}</span>
-                    </label>
-                    <button onclick="deleteDocument('${doc.id}')" class="text-slate-400 hover:text-red-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-                    </button>
+                    <span class="text-slate-700">${doc.name}</span>
+                    <div class="flex items-center gap-2">
+                        <button ${index === 0 ? 'disabled' : ''} onclick="reorderDocument('${doc.id}', 'up')" class="p-1 disabled:opacity-30 disabled:cursor-not-allowed">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-circle"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4"/><path d="M12 16V8"/></svg>
+                        </button>
+                        <button ${index === documents.length - 1 ? 'disabled' : ''} onclick="reorderDocument('${doc.id}', 'down')" class="p-1 disabled:opacity-30 disabled:cursor-not-allowed">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down-circle"><circle cx="12" cy="12" r="10"/><path d="m12 16 4-4-4-4"/><path d="m12 8 v8"/></svg>
+                        </button>
+                        <button onclick="deleteDocument('${doc.id}')" class="text-slate-400 hover:text-red-600 p-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                        </button>
+                    </div>
                 `;
                 listElement.appendChild(docElement);
             });
@@ -1001,8 +1069,11 @@
                 const data = snapshot.val();
                 tripsData = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
                 
+                // Sort trips by start date, furthest first
+                tripsData.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
+
                 if (document.getElementById('details-view').classList.contains('hidden')) {
-                    renderTrips();
+                    renderTripLists();
                 } else if(currentTripId) {
                     const currentTripExists = tripsData.some(t => t.id === currentTripId);
                     if (currentTripExists) {
@@ -1080,6 +1151,35 @@
             if (form) form.reset();
             if (modalId === 'confirm-delete-modal') onConfirmAction = () => {};
         }
+        
+        window.scrollToItinerary = () => {
+            const itineraryPanel = document.getElementById('daily-itinerary-panel');
+            if (itineraryPanel) {
+                itineraryPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        };
+
+        window.scrollToTop = () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.openEditTripModal = () => {
+            if (!currentTripId) return;
+            const trip = tripsData.find(t => t.id === currentTripId);
+            if (!trip) return;
+
+            // Populate main fields
+            document.getElementById('edit-trip-name').value = trip.name;
+            document.getElementById('edit-trip-destination').value = trip.destination;
+            document.getElementById('edit-trip-start-date').value = trip.startDate;
+            document.getElementById('edit-trip-end-date').value = trip.endDate;
+
+            // Populate custom link fields
+            document.getElementById('edit-trip-link-text').value = trip.customLinkText || '';
+            document.getElementById('edit-trip-link-url').value = trip.customLinkUrl || '';
+
+            openModal('edit-trip-modal');
+        };
 
         window.openViewActivityModal = (element) => {
             const iconHTML = element.dataset.icon;
@@ -1264,25 +1364,43 @@
         };
 
         window.deleteDocument = async (docId) => {
+             showConfirmDelete('Tem certeza que deseja excluir este documento?', async () => {
+                const trip = tripsData.find(t => t.id === currentTripId);
+                if (!trip || !trip.documents) return;
+                const updatedDocuments = trip.documents.filter(d => d.id !== docId);
+                const updates = { [`/${currentTripId}/documents`]: updatedDocuments };
+                await update(tripsRef, updates);
+                closeModal('confirm-delete-modal');
+            });
+        };
+        
+        window.reorderDocument = async (docId, direction) => {
+            if (!currentTripId) return;
             const trip = tripsData.find(t => t.id === currentTripId);
-            if (!trip || !trip.documents) return;
-            const updatedDocuments = trip.documents.filter(d => d.id !== docId);
-            const updates = { [`/${currentTripId}/documents`]: updatedDocuments };
+            const documents = trip.documents ? [...trip.documents] : [];
+            const index = documents.findIndex(d => d.id === docId);
+
+            if (index === -1) return; 
+
+            const newIndex = direction === 'up' ? index - 1 : index + 1;
+
+            if (newIndex < 0 || newIndex >= documents.length) return;
+
+            // Swap elements
+            [documents[index], documents[newIndex]] = [documents[newIndex], documents[index]];
+
+            const updates = { [`/${currentTripId}/documents`]: documents };
             await update(tripsRef, updates);
         };
 
-        window.toggleDocumentCheck = async (docId) => {
-            const trip = tripsData.find(t => t.id === currentTripId);
-            if (!trip || !trip.documents) return;
-            const updatedDocuments = trip.documents.map(doc => {
-                if (doc.id === docId) {
-                    return { ...doc, checked: !doc.checked };
-                }
-                return doc;
-            });
-            const updates = { [`/${currentTripId}/documents`]: updatedDocuments };
+        window.toggleFeatured = async (event, tripId) => {
+            event.stopPropagation();
+            const trip = tripsData.find(t => t.id === tripId);
+            if (!trip) return;
+            const newFeaturedStatus = !trip.featured;
+            const updates = { [`/${tripId}/featured`]: newFeaturedStatus };
             await update(tripsRef, updates);
-        };
+        }
 
         // --- LISTENERS DOS FORMULÁRIOS ---
         document.getElementById('add-trip-form').addEventListener('submit', async function(e) {
@@ -1294,6 +1412,9 @@
                 startDate: document.getElementById('trip-start-date').value,
                 endDate: document.getElementById('trip-end-date').value,
                 imageUrl: `https://placehold.co/600x400/a3e635/1e293b?text=${encodeURIComponent(tripName)}`,
+                featured: false,
+                customLinkText: '',
+                customLinkUrl: ''
             };
             const newTripRef = push(tripsRef);
             await set(newTripRef, newTrip);
@@ -1314,7 +1435,6 @@
             const newDocument = {
                 id: Date.now().toString(),
                 name: docName,
-                checked: false
             };
 
             const updatedDocuments = [...currentDocuments, newDocument];
@@ -1341,7 +1461,12 @@
             e.preventDefault();
             if (!currentTripId) return;
             const updates = {
-                name: document.getElementById('edit-trip-name').value, destination: document.getElementById('edit-trip-destination').value, startDate: document.getElementById('edit-trip-start-date').value, endDate: document.getElementById('edit-trip-end-date').value,
+                name: document.getElementById('edit-trip-name').value,
+                destination: document.getElementById('edit-trip-destination').value,
+                startDate: document.getElementById('edit-trip-start-date').value,
+                endDate: document.getElementById('edit-trip-end-date').value,
+                customLinkText: document.getElementById('edit-trip-link-text').value.trim(),
+                customLinkUrl: document.getElementById('edit-trip-link-url').value.trim(),
             };
             const tripToUpdateRef = ref(db, `public_trips/${currentTripId}`);
             await update(tripToUpdateRef, updates);
