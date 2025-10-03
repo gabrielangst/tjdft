@@ -117,6 +117,18 @@
                 </section>
             </main>
 
+            <section id="documents-panel" class="mt-8 bg-white p-6 rounded-xl shadow-lg">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-semibold">Documentos</h2>
+                </div>
+                <form id="add-document-form" class="flex gap-2 mb-4">
+                    <input type="text" id="document-name" placeholder="Ex: Passaporte" class="flex-grow mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500" required="">
+                    <button type="submit" class="flex-shrink-0 bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300 self-center h-11 mt-1">Adicionar</button>
+                </form>
+                <div id="documents-list" class="space-y-2">
+                </div>
+            </section>
+
             <section id="daily-itinerary-panel" class="mt-8 bg-white p-6 rounded-xl shadow-lg">
                 <h2 class="text-2xl font-semibold mb-4">Roteiro por Dia</h2>
                 <div id="daily-itinerary-list" class="space-y-6">
@@ -720,6 +732,7 @@
             document.getElementById('details-title').textContent = trip.name;
             document.getElementById('details-dates').textContent = `${formatDate(trip.startDate)} - ${formatDate(trip.endDate)}`;
             
+            renderDocuments(trip);
             renderDailyItinerary(trip);
 
             const flightTemplate = (flight, index, allFlights) => `
@@ -802,6 +815,32 @@
                 </div>
             `;
             renderDetailList('lodging-list', trip.lodging, lodgingTemplate, 'Nenhuma hospedagem adicionada.');
+        }
+
+        function renderDocuments(trip) {
+            const listElement = document.getElementById('documents-list');
+            listElement.innerHTML = '';
+            const documents = trip.documents || [];
+
+            if (documents.length === 0) {
+                listElement.innerHTML = `<p class="text-slate-500 text-sm text-center py-2">Nenhum documento adicionado.</p>`;
+                return;
+            }
+
+            documents.forEach(doc => {
+                const docElement = document.createElement('div');
+                docElement.className = 'flex items-center justify-between p-2 rounded-md hover:bg-slate-50';
+                docElement.innerHTML = `
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <input type="checkbox" onchange="toggleDocumentCheck('${doc.id}')" ${doc.checked ? 'checked' : ''} class="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                        <span class="${doc.checked ? 'line-through text-slate-400' : 'text-slate-700'}">${doc.name}</span>
+                    </label>
+                    <button onclick="deleteDocument('${doc.id}')" class="text-slate-400 hover:text-red-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                    </button>
+                `;
+                listElement.appendChild(docElement);
+            });
         }
         
         function renderDailyItinerary(trip) {
@@ -1224,6 +1263,27 @@
             }
         };
 
+        window.deleteDocument = async (docId) => {
+            const trip = tripsData.find(t => t.id === currentTripId);
+            if (!trip || !trip.documents) return;
+            const updatedDocuments = trip.documents.filter(d => d.id !== docId);
+            const updates = { [`/${currentTripId}/documents`]: updatedDocuments };
+            await update(tripsRef, updates);
+        };
+
+        window.toggleDocumentCheck = async (docId) => {
+            const trip = tripsData.find(t => t.id === currentTripId);
+            if (!trip || !trip.documents) return;
+            const updatedDocuments = trip.documents.map(doc => {
+                if (doc.id === docId) {
+                    return { ...doc, checked: !doc.checked };
+                }
+                return doc;
+            });
+            const updates = { [`/${currentTripId}/documents`]: updatedDocuments };
+            await update(tripsRef, updates);
+        };
+
         // --- LISTENERS DOS FORMULÁRIOS ---
         document.getElementById('add-trip-form').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -1238,6 +1298,30 @@
             const newTripRef = push(tripsRef);
             await set(newTripRef, newTrip);
             closeModal('add-trip-modal');
+        });
+
+        document.getElementById('add-document-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            if (!currentTripId) return;
+
+            const input = document.getElementById('document-name');
+            const docName = input.value.trim();
+            if (!docName) return;
+
+            const trip = tripsData.find(t => t.id === currentTripId);
+            const currentDocuments = trip.documents || [];
+            
+            const newDocument = {
+                id: Date.now().toString(),
+                name: docName,
+                checked: false
+            };
+
+            const updatedDocuments = [...currentDocuments, newDocument];
+            const updates = { [`/${currentTripId}/documents`]: updatedDocuments };
+            await update(tripsRef, updates);
+
+            input.value = '';
         });
 
         document.getElementById('add-flight-form').addEventListener('submit', (e) => { e.preventDefault(); addDetail('flights'); });
