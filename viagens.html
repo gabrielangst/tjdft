@@ -46,6 +46,20 @@
             background-color: #dbeafe; /* blue-100 */
             transform: scale(1.1);
         }
+        /* Estilos para o painel de documentos recolhível */
+        #documents-content {
+            transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in-out;
+            max-height: 1000px; /* Altura suficiente para o conteúdo */
+            opacity: 1;
+        }
+        #documents-panel.collapsed #documents-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        #documents-panel.collapsed #documents-toggle-btn svg {
+            transform: rotate(-180deg);
+        }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800">
@@ -127,14 +141,19 @@
             </main>
 
             <section id="documents-panel" class="mt-8 bg-white p-6 rounded-xl shadow-lg">
-                <div class="flex justify-between items-center mb-4">
+                <div class="flex justify-between items-center cursor-pointer" onclick="toggleDocumentsPanel()">
                     <h2 class="text-2xl font-semibold">Documentos</h2>
+                    <button id="documents-toggle-btn" class="text-slate-500 hover:text-slate-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down transition-transform duration-300"><path d="m6 9 6 6 6-6"></path></svg>
+                    </button>
                 </div>
-                <form id="add-document-form" class="flex gap-2 mb-4">
-                    <input type="text" id="document-name" placeholder="Ex: Passaporte" class="flex-grow mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500" required="">
-                    <button type="submit" class="flex-shrink-0 bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300 self-center h-11 mt-1">Adicionar</button>
-                </form>
-                <div id="documents-list" class="space-y-2">
+                <div id="documents-content" class="mt-4">
+                    <form id="add-document-form" class="flex gap-2 mb-4">
+                        <input type="text" id="document-name" placeholder="Ex: Passaporte" class="flex-grow mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500" required="">
+                        <button type="submit" class="flex-shrink-0 bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300 self-center h-11 mt-1">Adicionar</button>
+                    </form>
+                    <div id="documents-list" class="space-y-2">
+                    </div>
                 </div>
             </section>
 
@@ -766,36 +785,36 @@
                 showTripsView();
                 return;
             }
+            
+            // Colapsa o painel de documentos por padrão
+            document.getElementById('documents-panel').classList.add('collapsed');
 
-            // --- Início da nova lógica para exibir cidades ---
             const citiesContainer = document.getElementById('details-cities-container');
-            citiesContainer.innerHTML = ''; // Limpa o container anterior
+            citiesContainer.innerHTML = ''; 
 
             if (trip.activities) {
                 const cityActivities = Object.values(trip.activities).filter(activity => activity.type === 'Cidade');
                 
                 if (cityActivities.length > 0) {
-                    // Pega apenas as descrições (nomes das cidades) e remove duplicadas
                     const uniqueCities = [...new Set(cityActivities.map(activity => activity.description))];
                     
                     const cityIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`;
                     
+                    // ** MUDANÇA 2: Aplicando a cor #c97c10 **
                     const citiesHtml = uniqueCities.map(city => `
                         <div class="flex items-center gap-2 bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-sm font-medium">
                             ${cityIcon}
-                            <span>${city}</span>
+                            <span style="color: #c97c10;">${city}</span>
                         </div>
                     `).join('');
                     
                     citiesContainer.innerHTML = citiesHtml;
                 }
             }
-            // --- Fim da nova lógica ---
-
+            
             document.getElementById('details-title').textContent = trip.name;
             document.getElementById('details-dates').textContent = `${formatDate(trip.startDate)} - ${formatDate(trip.endDate)}`;
             
-            // Handle custom link button visibility and action
             const customLinkBtn = document.getElementById('custom-link-btn');
             if (trip.customLinkText && trip.customLinkUrl) {
                 customLinkBtn.style.display = 'flex';
@@ -1080,7 +1099,6 @@
                 const data = snapshot.val();
                 tripsData = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];
                 
-                // Sort trips by start date, furthest first
                 tripsData.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
 
                 if (document.getElementById('details-view').classList.contains('hidden')) {
@@ -1150,6 +1168,12 @@
             document.getElementById('trips-view').classList.add('hidden');
             document.getElementById('details-view').classList.remove('hidden');
         }
+        
+        // ** MUDANÇA 1: Função para alternar o painel de documentos **
+        window.toggleDocumentsPanel = () => {
+            const panel = document.getElementById('documents-panel');
+            panel.classList.toggle('collapsed');
+        }
 
         window.openModal = (modalId) => {
             const modal = document.getElementById(modalId);
@@ -1179,14 +1203,11 @@
             const trip = tripsData.find(t => t.id === currentTripId);
             if (!trip) return;
 
-            // Populate main fields
             document.getElementById('edit-trip-name').value = trip.name;
             document.getElementById('edit-trip-destination').value = trip.destination;
             document.getElementById('edit-trip-start-date').value = trip.startDate;
             document.getElementById('edit-trip-end-date').value = trip.endDate;
             document.getElementById('edit-trip-image-url').value = trip.imageUrl || '';
-
-            // Populate custom link fields
             document.getElementById('edit-trip-link-text').value = trip.customLinkText || '';
             document.getElementById('edit-trip-link-url').value = trip.customLinkUrl || '';
 
@@ -1398,7 +1419,6 @@
 
             if (newIndex < 0 || newIndex >= documents.length) return;
 
-            // Swap elements
             [documents[index], documents[newIndex]] = [documents[newIndex], documents[index]];
 
             const updates = { [`/${currentTripId}/documents`]: documents };
