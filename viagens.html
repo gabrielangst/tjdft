@@ -859,7 +859,7 @@
                     const cityIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-slate-100"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`;
                     
                     const citiesHtml = uniqueCities.map(city => `
-                        <div class="flex items-center gap-2 bg-white/20 px-3 py-1 rounded-full text-sm font-medium backdrop-blur-sm">
+                        <div onclick="scrollToCity('${city.replace(/'/g, "\\'")}')" class="flex items-center gap-2 bg-white/20 px-3 py-1 rounded-full text-sm font-medium backdrop-blur-sm cursor-pointer hover:bg-white/30 transition-colors">
                             ${cityIcon}
                             <span style="color: #ffc95c; font-weight: 600;">${city}</span>
                         </div>
@@ -1077,7 +1077,7 @@
                 return acc;
             }, {});
             
-            // Lógica da contagem de dias
+            const cityAnchorsCreated = new Set();
             const startDate = new Date(trip.startDate + 'T00:00:00Z');
             const endDate = new Date(trip.endDate + 'T00:00:00Z');
             const totalTripDays = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
@@ -1091,6 +1091,17 @@
                 
                 const dayPanel = document.createElement('div');
                 dayPanel.className = 'border-t pt-4';
+                
+                for (const event of dayEvents) {
+                    if (event.data.isEditable && event.data.type === 'Cidade') {
+                        const cityName = event.data.description;
+                        if (!cityAnchorsCreated.has(cityName)) {
+                            dayPanel.id = `itinerary-day-${cityName.toLowerCase().replace(/\s+/g, '-')}`;
+                            cityAnchorsCreated.add(cityName);
+                            break; 
+                        }
+                    }
+                }
                 
                 let eventsHtml = dayEvents.map(event => {
                     const { isEditable, ...eventData } = event.data;
@@ -1303,6 +1314,17 @@
         }
         
         // --- CONTROLE DE NAVEGAÇÃO, MODAIS E FORMULÁRIOS ---
+        window.scrollToCity = (cityName) => {
+            const targetId = `itinerary-day-${cityName.toLowerCase().replace(/\s+/g, '-')}`;
+            const targetElement = document.getElementById(targetId);
+
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                console.warn(`Âncora para a cidade "${cityName}" não encontrada.`);
+            }
+        };
+        
         window.showTripsView = () => {
             document.getElementById('trips-view').classList.remove('hidden');
             document.getElementById('details-view').classList.add('hidden');
@@ -1310,7 +1332,6 @@
         }
 
         window.showTripDetails = (tripId) => {
-            // Adiciona a rolagem suave para o topo da página
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             document.getElementById('documents-panel').classList.add('collapsed');
