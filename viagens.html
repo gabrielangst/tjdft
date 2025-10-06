@@ -2,8 +2,9 @@
 <html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anote e Vai</title>
+    <title>MeLevaJunto</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com/">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
@@ -29,11 +30,12 @@
             background-color: rgba(0, 0, 0, 0.5);
             transition: opacity 0.3s ease-in-out;
         }
-        .trip-card-delete-button {
+        /* ATUALIZADO: Estilo genérico para botões de ação no card */
+        .trip-card-action-button {
             opacity: 0;
             transition: opacity 0.3s ease-in-out;
         }
-        .trip-card:hover .trip-card-delete-button {
+        .trip-card:hover .trip-card-action-button {
             opacity: 1;
         }
         .icon-picker-option {
@@ -90,6 +92,56 @@
             background-color: rgba(0,0,0,0.5);
             z-index: -1;
         }
+
+        /* --- NOVOS ESTILOS PARA O MODO DE REORGANIZAÇÃO --- */
+        .drag-handle {
+            display: none; /* Escondido por padrão */
+            cursor: grab;
+            color: #94a3b8;
+        }
+        #daily-itinerary-list.is-reorganizing .drag-handle {
+            display: block; /* Visível no modo de reorganização */
+        }
+        #daily-itinerary-list.is-reorganizing .add-activity-btn {
+            display: none; /* Esconde o botão de adicionar atividade */
+        }
+        /* NOVO: Estilo para o botão de deletar dia */
+        .delete-day-btn {
+            display: none; /* Escondido por padrão */
+        }
+        #daily-itinerary-list.is-reorganizing .delete-day-btn {
+            display: flex; /* Visível no modo de reorganização */
+        }
+        .day-panel.sortable-ghost {
+            background: #dbeafe;
+            opacity: 0.8;
+            border: 2px dashed #3b82f6;
+        }
+        .day-panel.sortable-chosen {
+            background: #eff6ff;
+        }
+        .insertion-point {
+            display: none; /* Escondido por padrão */
+            padding: 8px;
+            margin-bottom: 1.5rem; /* Corresponde a space-y-6 */
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            color: #475569;
+            transition: all 0.2s ease-in-out;
+        }
+        .insertion-point:hover {
+            background-color: #e0e7ff;
+            border-color: #a5b4fc;
+            color: #3730a3;
+        }
+        #daily-itinerary-list.is-reorganizing .insertion-point {
+            display: flex; /* Visível no modo de reorganização */
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800">
@@ -99,7 +151,7 @@
         <div id="trips-view">
             <header class="flex flex-col sm:flex-row justify-between sm:items-center mb-8">
                 <div>
-                    <h1 class="text-4xl font-bold text-slate-900">Anota e Vai</h1>
+                    <h1 class="text-4xl font-bold text-slate-900">MeLevaJunto</h1>
                     <p class="text-slate-500 mt-1">Veja abaixo as viagens que foram criadas até o momento</p>
                 </div>
                 <button onclick="openModal('add-trip-modal')" class="mt-4 sm:mt-0 flex items-center justify-center gap-2 bg-blue-600 text-white font-semibold px-5 py-3 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300">
@@ -193,9 +245,16 @@
             <section id="daily-itinerary-panel" class="mt-8 bg-white p-6 rounded-xl shadow-lg">
                  <div class="flex justify-between items-center mb-4">
                     <h2 class="text-2xl font-semibold">Roteiro por Dia</h2>
-                    <button onclick="scrollToTop()" class="text-sm bg-slate-200 text-slate-700 font-semibold px-3 py-1.5 rounded-lg hover:bg-slate-300 transition-colors">Subir</button>
+                    <div class="flex items-center gap-2">
+                        <div id="reorg-actions-container" class="hidden items-center gap-2">
+                            <button onclick="toggleReorganizationMode(true)" class="text-sm bg-slate-200 text-slate-700 font-semibold px-3 py-1.5 rounded-lg hover:bg-slate-300 transition-colors">Cancelar</button>
+                            <button onclick="toggleReorganizationMode(false)" class="text-sm bg-blue-600 text-white font-semibold px-3 py-1.5 rounded-lg hover:bg-blue-700 transition-colors">Concluir</button>
+                        </div>
+                         <button id="reorg-start-btn" onclick="toggleReorganizationMode(false)" class="text-sm bg-slate-600 text-white font-semibold px-3 py-1.5 rounded-lg hover:bg-slate-700 transition-colors">Reorganizar Roteiro</button>
+                        <button id="scroll-to-top-btn" onclick="scrollToTop()" class="text-sm bg-slate-200 text-slate-700 font-semibold px-3 py-1.5 rounded-lg hover:bg-slate-300 transition-colors">Subir</button>
+                    </div>
                 </div>
-                <div id="daily-itinerary-list" class="space-y-6">
+                <div id="daily-itinerary-list">
                 </div>
             </section>
         </div>
@@ -746,6 +805,10 @@
         let currentTripId = null;
         let currentEditingItemIndex = null;
         let onConfirmAction = () => {};
+        // --- NOVAS VARIÁVEIS DE ESTADO ---
+        let isReorganizing = false;
+        let sortableInstance = null;
+        let initialTripState = null; // Para o botão de cancelar
 
         // Função Utilitária
         function formatDate(dateString, options = { day: 'numeric', month: 'short', year: 'numeric' }) {
@@ -760,19 +823,16 @@
             flight_arrival: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" transform="scale(1,-1)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>`,
             lodging_checkin: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
             lodging_checkout: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>`,
-            
             train: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18h2a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H6a2 2 0 0 0-4 2v10a2 2 0 0 0 2 2h2"/><path d="m12 18-3-3 3-3 3 3-3 3Z"/><path d="M6 12h12"/><path d="M6 6h12"/></svg>`,
             car: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>`,
             bus: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6v6"/><path d="M16 6v6"/><path d="M2 12h19.6"/><path d="M18 18h3s.5-1.7.8-2.8c.1-.4.2-.8.2-1.2 0-.4-.1-.8-.2-1.2l-1.4-5C20.1 6.8 19.1 6 18 6H4a2 2 0 0 0-2 2v10h3"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>`,
             transport_other: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 18H8a4 4 0 0 1 0-8h1.5"/><path d="m20 12-3-3 3-3"/><path d="M4 18V6"/></svg>`,
-
             passeio: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`,
             restaurante: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3z"/></svg>`,
             outro: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12a10.06 10.06 1 0 0-20 0Z"/><path d="M12 12v8a2 2 0 0 0 4 0"/><path d="M12 2v1"/></svg>`,
             basketball: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0-10 10c0 .2 0 .5.1.7"/><path d="M22 12a10 10 0 0 0-10-10c-.2 0-.5 0-.7.1"/><path d="M2 12h20"/><path d="M12 22a10 10 0 0 0 10-10c0-.2 0-.5-.1-.7"/><path d="M2 12a10 10 0 0 0 10 10c.2 0 .5 0 .7-.1"/></svg>`,
             building: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>`,
             shopping: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>`,
-            
             tree: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-8"/><path d="m17 14-5-5-5 5h10z"/><path d="M8.5 14h7"/><path d="M7 9a5 5 0 0 1 10 0v2H7Z"/></svg>`,
             cake: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16h16"/><path d="M16 11V7a4 4 0 0 0-8 0v4"/><path d="M12 21v-4"/><path d="M12 7a2 2 0 0 1 0-4 2 2 0 0 1 0 4Z"/></svg>`,
             sun: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`,
@@ -782,7 +842,6 @@
             music: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`,
             waves: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6c.9.5 2.2 1 3.5 1s2.6-.5 3.5-1 2.2 1 3.5 1 2.6-.5 3.5-1"/><path d="M3 12c.9.5 2.2 1 3.5 1s2.6-.5 3.5-1 2.2 1 3.5 1 2.6-.5 3.5-1"/><path d="M3 18c.9.5 2.2 1 3.5 1s2.6-.5 3.5-1 2.2 1 3.5 1 2.6-.5 3.5-1"/></svg>`,
             sunglasses: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 14h2"/><path d="M20 14h2"/><path d="M5.2 11.3 4 14"/><path d="M18.8 11.3 20 14"/><circle cx="8" cy="15" r="4"/><circle cx="16" cy="15" r="4"/><path d="M12 15a4 4 0 0 0-4-4h8a4 4 0 0 0-4 4Z"/></svg>`,
-
             default: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`
         };
 
@@ -851,9 +910,14 @@
                 <button onclick="toggleFeatured(event, '${trip.id}')" class="absolute top-3 left-3 z-10 w-8 h-8 flex items-center justify-center bg-white/70 backdrop-blur-sm text-yellow-500 rounded-full hover:bg-white transition-colors">
                     ${starIcon}
                 </button>
-                <button onclick="deleteTrip(event, '${trip.id}')" class="trip-card-delete-button absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-                </button>
+                <div class="absolute top-3 right-3 z-10 flex gap-2">
+                    <button onclick="duplicateTrip(event, '${trip.id}')" title="Duplicar Viagem" class="trip-card-action-button w-8 h-8 flex items-center justify-center bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
+                    </button>
+                    <button onclick="deleteTrip(event, '${trip.id}')" title="Excluir Viagem" class="trip-card-action-button w-8 h-8 flex items-center justify-center bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                    </button>
+                </div>
                 <div class="h-48 bg-cover bg-center" style="background-image: url('${trip.imageUrl}')"></div>
                 <div class="p-6">
                     <h3 class="text-2xl font-bold text-slate-900">${trip.name}</h3>
@@ -886,8 +950,6 @@
                 const cityActivities = Object.values(trip.activities).filter(activity => activity.type === 'Cidade');
                 
                 if (cityActivities.length > 0) {
-                    // *** CORREÇÃO APLICADA AQUI ***
-                    // Filtra nomes indefinidos ou vazios antes de criar o Set
                     const uniqueCities = [...new Set(cityActivities.map(activity => activity.name).filter(Boolean))];
                     
                     const cityIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-slate-100"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`;
@@ -1089,8 +1151,6 @@
             if (trip.activities) {
                 Object.values(trip.activities).forEach(a => {
                     const activityIcon = ICONS[a.icon] || ICONS.default;
-                    // *** CORREÇÃO APLICADA AQUI ***
-                    // Garante que name e description tenham um valor padrão
                     if(a.date && a.time) allEvents.push({ dateTime: new Date(`${a.date}T${a.time}`), name: a.name || 'Atividade', description: a.description || '', icon: activityIcon, data: { isEditable: true, ...a } });
                 });
             }
@@ -1114,15 +1174,22 @@
 
             let currentDate = new Date(trip.startDate + 'T00:00:00Z');
 
+            // Renderiza o primeiro ponto de inserção
+            container.innerHTML += `<div class="insertion-point" onclick="insertNewDay(0)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span>Inserir Novo Dia</span>
+            </div>`;
+
             while(currentDate <= endDate) {
                 const dayKey = currentDate.toISOString().split('T')[0];
                 const dayEvents = groupedByDay[dayKey] || [];
                 
                 const dayPanel = document.createElement('div');
-                dayPanel.className = 'border-t pt-4';
+                dayPanel.className = 'day-panel border-t pt-6';
+                dayPanel.dataset.date = dayKey; // Guarda a data para referência
                 
                 for (const event of dayEvents) {
-                    if (event.data.isEditable && event.data.type === 'Cidade' && event.data.name) {
+                    if (event.data.isEditable && event.data.type === 'Cidade') {
                         const cityName = event.data.name;
                         if (!cityAnchorsCreated.has(cityName)) {
                             dayPanel.id = `itinerary-day-${cityName.toLowerCase().replace(/\s+/g, '-')}`;
@@ -1187,14 +1254,29 @@
 
                 dayPanel.innerHTML = `
                     <div class="flex justify-between items-center mb-2">
-                        <h3 class="font-bold text-lg text-slate-800">${dayCounter}/${totalTripDays} | ${formatDate(dayKey, {weekday: 'long', day: 'numeric', month: 'long'})}</h3>
-                        <button onclick="openAddActivityModal('${dayKey}')" class="flex items-center justify-center w-10 h-10 bg-green-100 text-green-600 rounded-full hover:bg-green-200 transition-colors">
-                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                        </button>
+                         <div class="flex items-center gap-3">
+                            <svg class="drag-handle" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-grip-vertical"><circle cx="9" cy="12" r="1"/><circle cx="9" cy="5" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="19" r="1"/></svg>
+                            <h3 class="font-bold text-lg text-slate-800">${dayCounter}/${totalTripDays} | ${formatDate(dayKey, {weekday: 'long', day: 'numeric', month: 'long'})}</h3>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="deleteDay('${dayKey}')" class="delete-day-btn flex items-center justify-center w-10 h-10 bg-red-100 text-red-600 rounded-full hover:bg-red-200 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                            </button>
+                            <button onclick="openAddActivityModal('${dayKey}')" class="add-activity-btn flex items-center justify-center w-10 h-10 bg-green-100 text-green-600 rounded-full hover:bg-green-200 transition-colors">
+                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            </button>
+                        </div>
                     </div>
                     <div class="border-l-2 border-slate-100 pl-2 space-y-1">${eventsHtml}</div>
                 `;
                 container.appendChild(dayPanel);
+
+                // Renderiza os pontos de inserção subsequentes
+                container.innerHTML += `<div class="insertion-point" onclick="insertNewDay(${dayCounter})">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    <span>Inserir Novo Dia</span>
+                </div>`;
+
                 currentDate.setUTCDate(currentDate.getUTCDate() + 1);
                 dayCounter++;
             }
@@ -1556,8 +1638,6 @@
             if (activity) {
                 document.getElementById('edit-activity-id').value = activity.id;
                 document.getElementById('edit-activity-time').value = activity.time;
-                // *** CORREÇÃO APLICADA AQUI ***
-                // Garante que o valor não seja 'undefined'
                 document.getElementById('edit-activity-name').value = activity.name || '';
                 document.getElementById('edit-activity-type').value = activity.type;
                 document.getElementById('edit-activity-description').value = activity.description || '';
@@ -1614,6 +1694,47 @@
                 closeModal('confirm-delete-modal');
             });
         }
+        
+        // NOVO: Função para duplicar uma viagem
+        window.duplicateTrip = async (event, tripId) => {
+            event.stopPropagation();
+
+            const originalTrip = tripsData.find(t => t.id === tripId);
+            if (!originalTrip) {
+                console.error("Viagem não encontrada para duplicação");
+                return;
+            }
+
+            const newTrip = JSON.parse(JSON.stringify(originalTrip));
+
+            delete newTrip.id;
+
+            newTrip.name = `${originalTrip.name} (Cópia)`;
+            newTrip.featured = false;
+
+            if (newTrip.activities) {
+                const activitiesArray = Array.isArray(newTrip.activities) 
+                    ? newTrip.activities 
+                    : Object.values(newTrip.activities);
+                activitiesArray.forEach((activity, index) => {
+                    activity.id = `${Date.now()}-${index}`;
+                });
+                newTrip.activities = activitiesArray;
+            }
+
+            if (newTrip.documents) {
+                 newTrip.documents.forEach((doc, index) => {
+                    doc.id = `${Date.now()}-${index}`;
+                });
+            }
+
+            try {
+                const newTripRef = push(tripsRef);
+                await set(newTripRef, newTrip);
+            } catch (error) {
+                console.error("Falha ao duplicar a viagem:", error);
+            }
+        };
 
         window.deleteDetailItem = async (category, index) => {
             if (!currentTripId) return;
@@ -1700,6 +1821,158 @@
             const updates = { [`/${tripId}/featured`]: newFeaturedStatus };
             await update(tripsRef, updates);
         }
+
+        // --- NOVA SEÇÃO: LÓGICA DE REORGANIZAÇÃO DO ROTEIRO ---
+        
+        function getDaysArray(trip) {
+            const allActivities = trip.activities ? Object.values(trip.activities) : [];
+            const groupedByDay = allActivities.reduce((acc, act) => {
+                const date = act.date;
+                if (!acc[date]) acc[date] = [];
+                acc[date].push(act);
+                return acc;
+            }, {});
+
+            let daysArray = [];
+            if (trip.startDate && trip.endDate) {
+                let currentDate = new Date(trip.startDate + 'T00:00:00Z');
+                const endDate = new Date(trip.endDate + 'T00:00:00Z');
+                while(currentDate <= endDate) {
+                    const dayKey = currentDate.toISOString().split('T')[0];
+                    daysArray.push({
+                        date: dayKey,
+                        activities: groupedByDay[dayKey] || []
+                    });
+                    currentDate.setUTCDate(currentDate.getUTCDate() + 1);
+                }
+            }
+            return daysArray;
+        }
+
+        async function remapAndSave(tripId, daysArray) {
+            const trip = tripsData.find(t => t.id === tripId);
+            let currentDate = new Date(trip.startDate + 'T00:00:00Z');
+            const newActivities = [];
+            
+            daysArray.forEach(dayObj => {
+                const isoDate = currentDate.toISOString().split('T')[0];
+                dayObj.activities.forEach(act => {
+                    act.date = isoDate; // Reatribui a data correta
+                    newActivities.push(act);
+                });
+                currentDate.setUTCDate(currentDate.getUTCDate() + 1);
+            });
+            
+            const newEndDate = new Date(currentDate);
+            newEndDate.setUTCDate(newEndDate.getUTCDate() - 1);
+            
+            const updates = {
+                [`/${tripId}/activities`]: newActivities,
+                [`/${tripId}/endDate`]: newEndDate.toISOString().split('T')[0]
+            };
+            
+            await update(tripsRef, updates);
+        }
+
+        window.reorganizeItinerary = async (oldIndex, newIndex) => {
+            const trip = tripsData.find(t => t.id === currentTripId);
+            if (!trip) return;
+
+            let daysArray = getDaysArray(trip);
+            const [movedItem] = daysArray.splice(oldIndex, 1);
+            daysArray.splice(newIndex, 0, movedItem);
+
+            await remapAndSave(currentTripId, daysArray);
+        };
+        
+        window.insertNewDay = async (index) => {
+            const trip = tripsData.find(t => t.id === currentTripId);
+            if (!trip) return;
+
+            let daysArray = getDaysArray(trip);
+            daysArray.splice(index, 0, { date: 'new', activities: [] });
+
+            await remapAndSave(currentTripId, daysArray);
+        };
+        
+        window.deleteDay = async (dayKey) => {
+            const trip = tripsData.find(t => t.id === currentTripId);
+            if (!trip) return;
+
+            let daysArray = getDaysArray(trip);
+            if (daysArray.length <= 1) {
+                alert("Não é possível excluir o único dia da viagem.");
+                return;
+            }
+
+            showConfirmDelete(`Tem certeza que deseja excluir o dia ${formatDate(dayKey, {weekday: 'long', day: 'numeric', month: 'long'})} e todas as suas atividades?`, async () => {
+                let daysArray = getDaysArray(trip);
+                const dayIndex = daysArray.findIndex(day => day.date === dayKey);
+                
+                if (dayIndex > -1) {
+                    daysArray.splice(dayIndex, 1);
+                    await remapAndSave(currentTripId, daysArray);
+                }
+                closeModal('confirm-delete-modal');
+            });
+        };
+
+        function initializeSortable() {
+            const list = document.getElementById('daily-itinerary-list');
+            if (sortableInstance) sortableInstance.destroy();
+            
+            sortableInstance = new Sortable(list, {
+                animation: 150,
+                handle: '.drag-handle',
+                draggable: '.day-panel', 
+                onEnd: function (evt) {
+                    const oldDraggableIndex = evt.oldDraggableIndex;
+                    const newDraggableIndex = evt.newDraggableIndex;
+
+                    if (oldDraggableIndex !== newDraggableIndex) {
+                        reorganizeItinerary(oldDraggableIndex, newDraggableIndex);
+                    }
+                },
+            });
+        }
+        
+        window.toggleReorganizationMode = (isCancelling) => {
+            const list = document.getElementById('daily-itinerary-list');
+            const startBtn = document.getElementById('reorg-start-btn');
+            const actionsContainer = document.getElementById('reorg-actions-container');
+            const scrollTopBtn = document.getElementById('scroll-to-top-btn'); 
+            const trip = tripsData.find(t => t.id === currentTripId);
+
+            isReorganizing = !list.classList.contains('is-reorganizing');
+            list.classList.toggle('is-reorganizing', isReorganizing);
+
+            if (isReorganizing) {
+                initialTripState = { 
+                    activities: trip.activities ? JSON.parse(JSON.stringify(trip.activities)) : {}, 
+                    endDate: trip.endDate 
+                };
+                startBtn.style.display = 'none';
+                actionsContainer.style.display = 'flex';
+                scrollTopBtn.style.display = 'none'; 
+                initializeSortable();
+            } else {
+                if (isCancelling && initialTripState) {
+                    const updates = {
+                        [`/${currentTripId}/activities`]: initialTripState.activities,
+                        [`/${currentTripId}/endDate`]: initialTripState.endDate
+                    };
+                    update(tripsRef, updates);
+                }
+                initialTripState = null;
+                startBtn.style.display = 'block';
+                actionsContainer.style.display = 'none';
+                scrollTopBtn.style.display = 'block'; 
+                if (sortableInstance) {
+                    sortableInstance.destroy();
+                    sortableInstance = null;
+                }
+            }
+        };
 
         // --- LISTENERS DOS FORMULÁRIOS ---
         document.getElementById('add-trip-form').addEventListener('submit', async function(e) {
