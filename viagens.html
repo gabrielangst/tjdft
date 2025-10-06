@@ -598,9 +598,14 @@
             <h3 class="text-2xl font-semibold mb-6">Adicionar Atividade</h3>
             <form id="add-activity-form" class="space-y-4">
                 <input type="hidden" id="activity-date">
-                <input type="hidden" id="activity-icon" value="passeio"> <div>
+                <input type="hidden" id="activity-icon" value="passeio">
+                <div>
                     <label for="activity-time" class="block text-sm font-medium text-slate-600">Horário</label>
                     <input type="time" id="activity-time" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                </div>
+                 <div>
+                    <label for="activity-name" class="block text-sm font-medium text-slate-600">Nome da Atividade</label>
+                    <input type="text" id="activity-name" placeholder="Ex: Visita ao Coliseu" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
                 </div>
                 <div>
                     <label for="activity-type" class="block text-sm font-medium text-slate-600">Tipo de Atividade</label>
@@ -612,8 +617,8 @@
                     </select>
                 </div>
                 <div>
-                    <label for="activity-description" class="block text-sm font-medium text-slate-600">Descrição</label>
-                    <textarea id="activity-description" rows="3" placeholder="Ex: Visita ao Coliseu" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required></textarea>
+                    <label for="activity-description" class="block text-sm font-medium text-slate-600">Descrição (Opcional)</label>
+                    <textarea id="activity-description" rows="3" placeholder="Ex: Tour guiado com acesso ao subterrâneo." class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm"></textarea>
                 </div>
                 <div>
                     <label for="activity-link" class="block text-sm font-medium text-slate-600">Link (Opcional)</label>
@@ -643,6 +648,10 @@
                     <input type="time" id="edit-activity-time" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
                 </div>
                 <div>
+                    <label for="edit-activity-name" class="block text-sm font-medium text-slate-600">Nome da Atividade</label>
+                    <input type="text" id="edit-activity-name" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                </div>
+                <div>
                     <label for="edit-activity-type" class="block text-sm font-medium text-slate-600">Tipo de Atividade</label>
                     <select id="edit-activity-type" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
                         <option value="Passeio">Passeio</option>
@@ -652,8 +661,8 @@
                     </select>
                 </div>
                 <div>
-                    <label for="edit-activity-description" class="block text-sm font-medium text-slate-600">Descrição</label>
-                    <textarea id="edit-activity-description" rows="3" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required></textarea>
+                    <label for="edit-activity-description" class="block text-sm font-medium text-slate-600">Descrição (Opcional)</label>
+                    <textarea id="edit-activity-description" rows="3" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm"></textarea>
                 </div>
                 <div>
                     <label for="edit-activity-link" class="block text-sm font-medium text-slate-600">Link (Opcional)</label>
@@ -676,15 +685,24 @@
         <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-lg m-4 text-center">
             <div id="view-activity-icon" class="mx-auto mb-4 w-12 h-12 flex items-center justify-center bg-slate-100 text-slate-600 rounded-full">
             </div>
-            <h3 id="view-activity-time" class="text-2xl font-semibold text-slate-800"></h3>
+            <h3 id="view-activity-name" class="text-2xl font-semibold text-slate-800"></h3>
+            <p id="view-activity-time" class="text-slate-500"></p>
             <p id="view-activity-type" class="text-sm font-medium text-slate-500 bg-slate-100 rounded-full px-3 py-1 mt-2 mb-4 inline-block"></p>
             <p id="view-activity-description" class="text-slate-600 mb-4"></p>
             <div id="view-activity-details-list" class="text-sm text-left space-y-2 border-t pt-4"></div>
-            <div id="view-activity-link-container" class="mt-6" style="display: none;">
-                 <a id="view-activity-link-btn" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 bg-blue-600 text-white font-semibold px-5 py-3 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" x2="21" y1="14" y2="3"></line></svg>
-                    <span>Acessar Link</span>
-                </a>
+            <div class="mt-6 space-y-3">
+                <div id="view-activity-search-container" style="display: none;">
+                    <button id="view-activity-search-btn" class="inline-flex items-center justify-center gap-2 w-full bg-slate-600 text-white font-semibold px-5 py-3 rounded-lg shadow-md hover:bg-slate-700 transition-colors duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+                        <span>Pesquisar</span>
+                    </button>
+                </div>
+                <div id="view-activity-link-container" style="display: none;">
+                     <a id="view-activity-link-btn" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 w-full bg-blue-600 text-white font-semibold px-5 py-3 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" x2="21" y1="14" y2="3"></line></svg>
+                        <span>Acessar Link</span>
+                    </a>
+                </div>
             </div>
             <div class="pt-6 flex justify-center">
                 <button type="button" onclick="closeModal('view-activity-modal')" class="px-6 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Fechar</button>
@@ -868,7 +886,9 @@
                 const cityActivities = Object.values(trip.activities).filter(activity => activity.type === 'Cidade');
                 
                 if (cityActivities.length > 0) {
-                    const uniqueCities = [...new Set(cityActivities.map(activity => activity.description))];
+                    // *** CORREÇÃO APLICADA AQUI ***
+                    // Filtra nomes indefinidos ou vazios antes de criar o Set
+                    const uniqueCities = [...new Set(cityActivities.map(activity => activity.name).filter(Boolean))];
                     
                     const cityIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-slate-100"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`;
                     
@@ -1025,15 +1045,16 @@
             if (trip.flights) {
                 Object.values(trip.flights).forEach(f => {
                     const flightData = { isEditable: false, ...f };
+                    const eventName = `Voo ${f.company}`;
                     if (f.date && f.departureTime) {
-                        allEvents.push({ dateTime: new Date(`${f.date}T${f.departureTime}`), description: `Partida do Voo ${f.company}: ${f.origin} → ${f.destination}`, icon: ICONS.flight_departure, data: flightData });
+                        allEvents.push({ dateTime: new Date(`${f.date}T${f.departureTime}`), name: eventName, description: `Partida de ${f.origin} para ${f.destination}`, icon: ICONS.flight_departure, data: flightData });
                     }
                     if (f.date && f.arrivalTime) {
                         let arrivalDateTime = new Date(`${f.date}T${f.arrivalTime}`);
                         if (arrivalDateTime < new Date(`${f.date}T${f.departureTime}`)) {
                             arrivalDateTime.setDate(arrivalDateTime.getDate() + 1);
                         }
-                        allEvents.push({ dateTime: arrivalDateTime, description: `Chegada do Voo ${f.company} em ${f.destination}`, icon: ICONS.flight_arrival, data: flightData });
+                        allEvents.push({ dateTime: arrivalDateTime, name: eventName, description: `Chegada em ${f.destination}`, icon: ICONS.flight_arrival, data: flightData });
                     }
                 });
             }
@@ -1041,42 +1062,36 @@
                 Object.values(trip.transport).forEach(t => {
                     let eventIcon;
                     const transportData = { isEditable: false, ...t };
-                    const descriptionSuffix = t.description ? `: ${t.description}` : '';
 
                     switch (t.type) {
                         case 'Carro Alugado': 
                             eventIcon = ICONS.car;
-                            if (t.departureDate && t.departureTime) allEvents.push({ dateTime: new Date(`${t.departureDate}T${t.departureTime}`), description: `Retirada (Carro Alugado)${descriptionSuffix}`, icon: eventIcon, data: transportData });
-                            if (t.arrivalDate && t.arrivalTime) allEvents.push({ dateTime: new Date(`${t.arrivalDate}T${t.arrivalTime}`), description: `Devolução (Carro Alugado)${descriptionSuffix}`, icon: eventIcon, data: transportData });
+                            if (t.departureDate && t.departureTime) allEvents.push({ dateTime: new Date(`${t.departureDate}T${t.departureTime}`), name: `Retirada de Carro`, description: t.description || 'Detalhes do aluguel', icon: eventIcon, data: transportData });
+                            if (t.arrivalDate && t.arrivalTime) allEvents.push({ dateTime: new Date(`${t.arrivalDate}T${t.arrivalTime}`), name: `Devolução de Carro`, description: t.description || 'Detalhes da devolução', icon: eventIcon, data: transportData });
                             break;
                         case 'Trem':
-                            eventIcon = ICONS.train;
-                            if (t.departureDate && t.departureTime) allEvents.push({ dateTime: new Date(`${t.departureDate}T${t.departureTime}`), description: `Embarque (Trem)${descriptionSuffix}`, icon: eventIcon, data: transportData });
-                            if (t.arrivalDate && t.arrivalTime) allEvents.push({ dateTime: new Date(`${t.arrivalDate}T${t.arrivalTime}`), description: `Desembarque (Trem)${descriptionSuffix}`, icon: eventIcon, data: transportData });
-                            break;
                         case 'Ônibus':
-                            eventIcon = ICONS.bus;
-                            if (t.departureDate && t.departureTime) allEvents.push({ dateTime: new Date(`${t.departureDate}T${t.departureTime}`), description: `Embarque (Ônibus)${descriptionSuffix}`, icon: eventIcon, data: transportData });
-                            if (t.arrivalDate && t.arrivalTime) allEvents.push({ dateTime: new Date(`${t.arrivalDate}T${t.arrivalTime}`), description: `Desembarque (Ônibus)${descriptionSuffix}`, icon: eventIcon, data: transportData });
-                            break;
                         default:
-                            eventIcon = ICONS.transport_other;
-                            if (t.departureDate && t.departureTime) allEvents.push({ dateTime: new Date(`${t.departureDate}T${t.departureTime}`), description: `Embarque (${t.type})${descriptionSuffix}`, icon: eventIcon, data: transportData });
-                            if (t.arrivalDate && t.arrivalTime) allEvents.push({ dateTime: new Date(`${t.arrivalDate}T${t.arrivalTime}`), description: `Desembarque (${t.type})${descriptionSuffix}`, icon: eventIcon, data: transportData });
+                            eventIcon = t.type === 'Trem' ? ICONS.train : (t.type === 'Ônibus' ? ICONS.bus : ICONS.transport_other);
+                            const transportName = `${t.type} de ${t.from || ''} para ${t.to || ''}`;
+                             if (t.departureDate && t.departureTime) allEvents.push({ dateTime: new Date(`${t.departureDate}T${t.departureTime}`), name: `Partida (${t.type})`, description: `De ${t.from || '?'} para ${t.to || '?'}`, icon: eventIcon, data: transportData });
+                            if (t.arrivalDate && t.arrivalTime) allEvents.push({ dateTime: new Date(`${t.arrivalDate}T${t.arrivalTime}`), name: `Chegada (${t.type})`, description: `Em ${t.to || '?'}`, icon: eventIcon, data: transportData });
                     }
                 });
             }
             if (trip.lodging) {
                 Object.values(trip.lodging).forEach(l => {
                     const lodgingData = { isEditable: false, ...l };
-                    if (l.checkinDate && l.checkinTime) allEvents.push({ dateTime: new Date(`${l.checkinDate}T${l.checkinTime}`), description: `Check-in: ${l.name}`, icon: ICONS.lodging_checkin, data: lodgingData });
-                    if (l.checkoutDate && l.checkoutTime) allEvents.push({ dateTime: new Date(`${l.checkoutDate}T${l.checkoutTime}`), description: `Check-out: ${l.name}`, icon: ICONS.lodging_checkout, data: lodgingData });
+                    if (l.checkinDate && l.checkinTime) allEvents.push({ dateTime: new Date(`${l.checkinDate}T${l.checkinTime}`), name: `Check-in`, description: l.name, icon: ICONS.lodging_checkin, data: lodgingData });
+                    if (l.checkoutDate && l.checkoutTime) allEvents.push({ dateTime: new Date(`${l.checkoutDate}T${l.checkoutTime}`), name: `Check-out`, description: l.name, icon: ICONS.lodging_checkout, data: lodgingData });
                 });
             }
             if (trip.activities) {
                 Object.values(trip.activities).forEach(a => {
                     const activityIcon = ICONS[a.icon] || ICONS.default;
-                    if(a.date && a.time) allEvents.push({ dateTime: new Date(`${a.date}T${a.time}`), description: a.description, icon: activityIcon, data: { isEditable: true, ...a } });
+                    // *** CORREÇÃO APLICADA AQUI ***
+                    // Garante que name e description tenham um valor padrão
+                    if(a.date && a.time) allEvents.push({ dateTime: new Date(`${a.date}T${a.time}`), name: a.name || 'Atividade', description: a.description || '', icon: activityIcon, data: { isEditable: true, ...a } });
                 });
             }
 
@@ -1107,8 +1122,8 @@
                 dayPanel.className = 'border-t pt-4';
                 
                 for (const event of dayEvents) {
-                    if (event.data.isEditable && event.data.type === 'Cidade') {
-                        const cityName = event.data.description;
+                    if (event.data.isEditable && event.data.type === 'Cidade' && event.data.name) {
+                        const cityName = event.data.name;
                         if (!cityAnchorsCreated.has(cityName)) {
                             dayPanel.id = `itinerary-day-${cityName.toLowerCase().replace(/\s+/g, '-')}`;
                             cityAnchorsCreated.add(cityName);
@@ -1140,14 +1155,18 @@
                         onclick='openViewActivityModal(this)'
                         data-icon='${event.icon}'
                         data-time="${time}"
-                        data-description="${event.description.replace(/"/g, '&quot;')}"
+                        data-name="${(event.name || '').replace(/"/g, '&quot;')}"
+                        data-description="${(event.description || '').replace(/"/g, '&quot;')}"
                         data-iseditable="${isEditable}"
                         ${datasetAttributes}
                     >
                         <div class="flex items-center gap-3 flex-1 min-w-0">
                             <span class="font-bold text-sm w-12 text-right flex-shrink-0">${time}</span>
                             <div class="flex items-center gap-2 text-slate-500 flex-shrink-0">${event.icon || ''}</div>
-                            <p class="text-sm text-slate-700 truncate">${event.description}</p>
+                            <p class="text-sm text-slate-700 truncate">
+                                <strong class="font-semibold">${event.name}</strong>
+                                ${event.description ? ` | ${event.description}` : ''}
+                            </p>
                         </div>
                         ${isEditable ? `
                         <div class="flex gap-2 items-center flex-shrink-0">
@@ -1363,7 +1382,6 @@
             const modal = document.getElementById(modalId);
             modal.classList.replace('hidden', 'flex');
 
-            // ALTERAÇÃO 2: Preenche as datas com base na data de início da viagem atual
             if (currentTripId) {
                 const trip = tripsData.find(t => t.id === currentTripId);
                 if (trip && trip.startDate) {
@@ -1419,8 +1437,9 @@
         window.openViewActivityModal = (element) => {
             const ds = element.dataset;
             document.getElementById('view-activity-icon').innerHTML = ds.icon.replace('w-5 h-5', 'w-8 h-8');
+            document.getElementById('view-activity-name').textContent = ds.name;
             document.getElementById('view-activity-time').textContent = ds.time;
-            
+
             const typeElement = document.getElementById('view-activity-type');
             if (ds.type && ds.iseditable === 'true') {
                 typeElement.textContent = ds.type;
@@ -1430,14 +1449,14 @@
             }
             
             const descriptionElement = document.getElementById('view-activity-description');
-            descriptionElement.textContent = ds.iseditable === 'true' ? ds.description : '';
-            descriptionElement.style.display = ds.iseditable === 'true' ? 'block' : 'none';
+            descriptionElement.textContent = ds.description;
+            descriptionElement.style.display = ds.description ? 'block' : 'none';
 
             const detailsList = document.getElementById('view-activity-details-list');
             let detailsHtml = '';
 
             if (ds.iseditable !== 'true') {
-                 detailsHtml += `<p class="font-semibold text-base text-slate-800">${ds.description.split(': ')[0]}</p>`;
+                 detailsHtml += `<p class="font-semibold text-base text-slate-800">${ds.name}</p>`;
             }
 
             if (ds.from || ds.to) {
@@ -1447,12 +1466,8 @@
                 detailsHtml += `<p class="mt-2"><strong class="font-semibold text-slate-600">Endereço:</strong> ${ds.address}</p>`;
             }
             
-            const isTransportEvent = ds.from !== undefined || ds.to !== undefined;
-            if (ds.description && ds.iseditable !== 'true' && isTransportEvent) { 
-                 const descriptionParts = ds.description.split(': ');
-                 if(descriptionParts.length > 1) {
-                    detailsHtml += `<p class="mt-2"><strong class="font-semibold text-slate-600">Detalhes:</strong> ${descriptionParts.slice(1).join(': ')}</p>`;
-                 }
+            if (ds.description && ds.iseditable !== 'true') {
+                 detailsHtml += `<p class="mt-2"><strong class="font-semibold text-slate-600">Detalhes:</strong> ${ds.description}</p>`;
             }
 
             detailsList.innerHTML = detailsHtml;
@@ -1461,11 +1476,23 @@
             const linkContainer = document.getElementById('view-activity-link-container');
             const linkBtn = document.getElementById('view-activity-link-btn');
             
-            if (ds.link && ds.link.trim() !== '') {
+            if (ds.link && ds.link.trim() !== '' && ds.link.trim() !== 'undefined') {
                 linkBtn.href = ds.link;
                 linkContainer.style.display = 'block';
             } else {
                 linkContainer.style.display = 'none';
+            }
+
+            const searchContainer = document.getElementById('view-activity-search-container');
+            const searchBtn = document.getElementById('view-activity-search-btn');
+
+            if (ds.name && ds.iseditable === 'true') {
+                searchContainer.style.display = 'block';
+                searchBtn.onclick = () => {
+                    window.open(`https://www.google.com/search?q=${encodeURIComponent(ds.name)}`, '_blank');
+                };
+            } else {
+                searchContainer.style.display = 'none';
             }
 
             openModal('view-activity-modal');
@@ -1529,8 +1556,11 @@
             if (activity) {
                 document.getElementById('edit-activity-id').value = activity.id;
                 document.getElementById('edit-activity-time').value = activity.time;
+                // *** CORREÇÃO APLICADA AQUI ***
+                // Garante que o valor não seja 'undefined'
+                document.getElementById('edit-activity-name').value = activity.name || '';
                 document.getElementById('edit-activity-type').value = activity.type;
-                document.getElementById('edit-activity-description').value = activity.description;
+                document.getElementById('edit-activity-description').value = activity.description || '';
                 document.getElementById('edit-activity-link').value = activity.link || '';
                 document.getElementById('edit-activity-icon').value = activity.icon;
 
@@ -1786,6 +1816,7 @@
                 id: Date.now().toString(),
                 date: document.getElementById('activity-date').value,
                 time: document.getElementById('activity-time').value,
+                name: document.getElementById('activity-name').value,
                 type: document.getElementById('activity-type').value,
                 description: document.getElementById('activity-description').value,
                 icon: document.getElementById('activity-icon').value,
@@ -1809,6 +1840,7 @@
                 currentActivities[activityIndex] = {
                     ...currentActivities[activityIndex],
                     time: document.getElementById('edit-activity-time').value,
+                    name: document.getElementById('edit-activity-name').value,
                     type: document.getElementById('edit-activity-type').value,
                     description: document.getElementById('edit-activity-description').value,
                     icon: document.getElementById('edit-activity-icon').value,
@@ -1842,7 +1874,6 @@
         document.getElementById('transport-type').addEventListener('change', (e) => handleTransportTypeChange(e.target));
         document.getElementById('edit-transport-type').addEventListener('change', (e) => handleTransportTypeChange(e.target));
 
-        // ALTERAÇÃO 1: Preenche a data de fim da viagem automaticamente
         document.getElementById('trip-start-date').addEventListener('change', function(e) {
             const startDate = e.target.value;
             const endDateInput = document.getElementById('trip-end-date');
