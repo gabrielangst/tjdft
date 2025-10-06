@@ -2,7 +2,7 @@
 <html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planejador de Viagens Colaborativo</title>
+    <title>Anote e Vai</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com/">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
@@ -99,7 +99,7 @@
         <div id="trips-view">
             <header class="flex flex-col sm:flex-row justify-between sm:items-center mb-8">
                 <div>
-                    <h1 class="text-4xl font-bold text-slate-900">Viagens</h1>
+                    <h1 class="text-4xl font-bold text-slate-900">Anota e Vai</h1>
                     <p class="text-slate-500 mt-1">Veja abaixo as viagens que foram criadas até o momento</p>
                 </div>
                 <button onclick="openModal('add-trip-modal')" class="mt-4 sm:mt-0 flex items-center justify-center gap-2 bg-blue-600 text-white font-semibold px-5 py-3 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300">
@@ -272,8 +272,8 @@
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label for="flight-code" class="block text-sm font-medium text-slate-600">Código do Voo</label>
-                        <input type="text" id="flight-code" placeholder="Ex: LA8064" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required="">
+                        <label for="flight-code" class="block text-sm font-medium text-slate-600">Código do Voo (Opcional)</label>
+                        <input type="text" id="flight-code" placeholder="Ex: LA8064" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm">
                     </div>
                     <div>
                         <label for="flight-type" class="block text-sm font-medium text-slate-600">Tipo de Voo</label>
@@ -332,8 +332,8 @@
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label for="edit-flight-code" class="block text-sm font-medium text-slate-600">Código do Voo</label>
-                        <input type="text" id="edit-flight-code" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required="">
+                        <label for="edit-flight-code" class="block text-sm font-medium text-slate-600">Código do Voo (Opcional)</label>
+                        <input type="text" id="edit-flight-code" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm">
                     </div>
                     <div>
                         <label for="edit-flight-type" class="block text-sm font-medium text-slate-600">Tipo de Voo</label>
@@ -1362,6 +1362,24 @@
         window.openModal = (modalId) => {
             const modal = document.getElementById(modalId);
             modal.classList.replace('hidden', 'flex');
+
+            // ALTERAÇÃO 2: Preenche as datas com base na data de início da viagem atual
+            if (currentTripId) {
+                const trip = tripsData.find(t => t.id === currentTripId);
+                if (trip && trip.startDate) {
+                    const tripStartDate = trip.startDate;
+                    
+                    if (modalId === 'add-flight-modal') {
+                        document.getElementById('flight-date').value = tripStartDate;
+                    } else if (modalId === 'add-transport-modal') {
+                        document.getElementById('transport-departure-date').value = tripStartDate;
+                        document.getElementById('transport-arrival-date').value = tripStartDate;
+                    } else if (modalId === 'add-lodging-modal') {
+                        document.getElementById('lodging-checkin-date').value = tripStartDate;
+                        document.getElementById('lodging-checkout-date').value = tripStartDate;
+                    }
+                }
+            }
         }
 
         window.closeModal = (modalId) => {
@@ -1823,6 +1841,16 @@
         
         document.getElementById('transport-type').addEventListener('change', (e) => handleTransportTypeChange(e.target));
         document.getElementById('edit-transport-type').addEventListener('change', (e) => handleTransportTypeChange(e.target));
+
+        // ALTERAÇÃO 1: Preenche a data de fim da viagem automaticamente
+        document.getElementById('trip-start-date').addEventListener('change', function(e) {
+            const startDate = e.target.value;
+            const endDateInput = document.getElementById('trip-end-date');
+            if (startDate) {
+                endDateInput.value = startDate;
+                endDateInput.min = startDate; 
+            }
+        });
     </script>
 
 </body></html>
