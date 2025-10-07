@@ -45,13 +45,14 @@
             background-color: #dbeafe;
             transform: scale(1.1);
         }
-        #documents-content, #spending-content {
+        #documents-content, #spending-content, #notes-content {
             transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in-out, margin 0.5s ease-in-out, padding 0.5s ease-in-out;
             max-height: 1000px;
             opacity: 1;
         }
         #documents-panel.collapsed #documents-content,
-        #spending-panel.collapsed #spending-content {
+        #spending-panel.collapsed #spending-content,
+        #notes-panel.collapsed #notes-content {
             max-height: 0;
             opacity: 0;
             overflow: hidden;
@@ -59,11 +60,12 @@
             padding-top: 0 !important;
             padding-bottom: 0 !important;
         }
-        #documents-toggle-btn svg, #spending-toggle-btn svg {
+        #documents-toggle-btn svg, #spending-toggle-btn svg, #notes-toggle-btn svg {
             transition: transform 0.3s ease-in-out;
         }
         #documents-panel.collapsed #documents-toggle-btn svg,
-        #spending-panel.collapsed #spending-toggle-btn svg {
+        #spending-panel.collapsed #spending-toggle-btn svg,
+        #notes-panel.collapsed #notes-toggle-btn svg {
             transform: rotate(180deg);
         }
         .status-dot {
@@ -281,6 +283,22 @@
                     </div>
                 </div>
                 <div id="daily-itinerary-list">
+                </div>
+            </section>
+            
+            <section id="notes-panel" class="mt-8 bg-white p-6 rounded-xl shadow-lg">
+                <div class="flex justify-between items-center cursor-pointer" onclick="toggleNotesPanel()">
+                    <h2 class="text-2xl font-semibold">Anotações</h2>
+                    <button id="notes-toggle-btn" class="text-slate-500 hover:text-slate-800 p-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-up"><path d="m18 15-6-6-6 6"></path></svg>
+                    </button>
+                </div>
+                <div id="notes-content" class="mt-4">
+                    <button onclick="openModal('add-note-modal')" class="w-full flex items-center justify-center gap-2 bg-blue-100 text-blue-700 font-semibold mb-4 px-5 py-3 rounded-lg shadow-sm hover:bg-blue-200 transition-colors duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        <span>Adicionar Anotação</span>
+                    </button>
+                    <div id="notes-list" class="space-y-2"></div>
                 </div>
             </section>
 
@@ -864,6 +882,84 @@
         </div>
     </div>
 
+    <div id="add-note-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
+        <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-lg m-4">
+            <h3 class="text-2xl font-semibold mb-6">Adicionar Anotação</h3>
+            <form id="add-note-form" class="space-y-4">
+                <div>
+                    <label for="note-title" class="block text-sm font-medium text-slate-600">Nome da Anotação</label>
+                    <input type="text" id="note-title" placeholder="Ex: Dica de restaurante do amigo" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                </div>
+                <div>
+                    <label for="note-author" class="block text-sm font-medium text-slate-600">Nome (de quem incluiu)</label>
+                    <input type="text" id="note-author" placeholder="Ex: João" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm">
+                </div>
+                <div>
+                    <label for="note-description" class="block text-sm font-medium text-slate-600">Descrição</label>
+                    <textarea id="note-description" rows="3" placeholder="Anotações, detalhes, etc." class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm"></textarea>
+                </div>
+                <div>
+                    <label for="note-link" class="block text-sm font-medium text-slate-600">Link de Referência (Opcional)</label>
+                    <input type="url" id="note-link" placeholder="https://..." class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm">
+                </div>
+                <div class="pt-6 flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('add-note-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-semibold">Salvar Anotação</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="edit-note-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
+        <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-lg m-4">
+            <h3 class="text-2xl font-semibold mb-6">Editar Anotação</h3>
+            <form id="edit-note-form" class="space-y-4">
+                <input type="hidden" id="edit-note-id">
+                <div>
+                    <label for="edit-note-title" class="block text-sm font-medium text-slate-600">Nome da Anotação</label>
+                    <input type="text" id="edit-note-title" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
+                </div>
+                <div>
+                    <label for="edit-note-author" class="block text-sm font-medium text-slate-600">Nome (de quem incluiu)</label>
+                    <input type="text" id="edit-note-author" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm">
+                </div>
+                <div>
+                    <label for="edit-note-description" class="block text-sm font-medium text-slate-600">Descrição</label>
+                    <textarea id="edit-note-description" rows="3" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm"></textarea>
+                </div>
+                <div>
+                    <label for="edit-note-link" class="block text-sm font-medium text-slate-600">Link de Referência (Opcional)</label>
+                    <input type="url" id="edit-note-link" placeholder="https://..." class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm">
+                </div>
+                <div class="pt-6 flex justify-end gap-3">
+                    <button type="button" onclick="closeModal('edit-note-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-semibold">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="view-note-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
+        <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-lg m-4">
+            <h3 id="view-note-title" class="text-2xl font-semibold text-slate-800 mb-1"></h3>
+            <p id="view-note-author" class="text-sm text-slate-500 mb-4"></p>
+            
+            <div id="view-note-description-container" class="text-slate-600 mb-4 p-3 bg-slate-50 rounded-md border">
+                <p id="view-note-description"></p>
+            </div>
+            
+            <div id="view-note-link-container" style="display: none;" class="mt-6">
+                 <a id="view-note-link-btn" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 w-full bg-blue-600 text-white font-semibold px-5 py-3 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" x2="21" y1="14" y2="3"></line></svg>
+                    <span>Acessar Link de Referência</span>
+                </a>
+            </div>
+            <div class="pt-6 flex justify-center">
+                <button type="button" onclick="closeModal('view-note-modal')" class="px-6 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Fechar</button>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         // Importações do Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -885,6 +981,7 @@
         let tripsData = []; 
         let currentTripId = null;
         let currentEditingItemIndex = null;
+        let currentEditingItemId = null; // Para anotações e outros itens com ID único
         let onConfirmAction = () => {};
         
         // Variáveis de estado para reorganização
@@ -1073,6 +1170,7 @@
             }
 
             renderDocuments(trip);
+            renderNotes(trip); // RENDERIZAÇÃO DO NOVO PAINEL
             renderDailyItinerary(trip);
             renderLodgingCoverageStatus(trip);
             renderSpendingPanel(trip);
@@ -1194,6 +1292,47 @@
                     </div>
                 `;
                 listElement.appendChild(docElement);
+            });
+        }
+
+        // NOVO: Função para renderizar as anotações
+        function renderNotes(trip) {
+            const listElement = document.getElementById('notes-list');
+            listElement.innerHTML = '';
+            const notes = trip.notes || [];
+
+            if (notes.length === 0) {
+                listElement.innerHTML = `<p class="text-slate-500 text-sm text-center py-2">Nenhuma anotação adicionada.</p>`;
+                return;
+            }
+
+            notes.forEach((note) => {
+                const noteElement = document.createElement('div');
+                noteElement.className = 'flex items-center justify-between p-3 rounded-lg hover:bg-slate-50 border border-slate-200 cursor-pointer';
+                
+                // Adiciona os dados ao dataset para o modal de visualização
+                noteElement.dataset.title = note.title;
+                noteElement.dataset.author = note.author || 'Não especificado';
+                noteElement.dataset.description = note.description || 'Sem descrição.';
+                noteElement.dataset.link = note.link || '';
+
+                noteElement.onclick = () => openViewNoteModal(noteElement);
+
+                noteElement.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 lucide lucide-notebook-pen"><path d="M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4"/><path d="M2 6h4"/><path d="M2 10h4"/><path d="M2 14h4"/><path d="M2 18h4"/><path d="M18.4 2.6a2.17 2.17 0 0 1 3 3L16 11l-4 1 1-4Z"/></svg>
+                        <span class="text-slate-700 font-medium">${note.title}</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="event.stopPropagation(); openEditNoteModal('${note.id}')" class="text-slate-400 hover:text-blue-600 p-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                        </button>
+                        <button onclick="event.stopPropagation(); deleteNote('${note.id}')" class="text-slate-400 hover:text-red-600 p-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                        </button>
+                    </div>
+                `;
+                listElement.appendChild(noteElement);
             });
         }
         
@@ -1415,9 +1554,6 @@
                     if (currentTripExists) {
                         renderTripDetails(currentTripId);
 
-			// --- ADICIONE ESTE BLOCO DE CÓDIGO AQUI ---
-                        // Reativa o SortableJS se estivermos no modo de reorganização,
-                        // pois o renderTripDetails() acima redesenhou o DOM.
                         if (isReorganizing) {
                             if (reorganizationMode === 'days') {
                                 initializeDaySorting();
@@ -1425,8 +1561,6 @@
                                 initializeActivitySorting();
                             }
                         }
-                        // --- FIM DA ALTERAÇÃO ---
-
 
                     } else {
                         showTripsView();
@@ -1521,7 +1655,6 @@
             const modalIcon = document.getElementById('lodging-coverage-modal-icon');
             const totalCostDisplay = document.getElementById('lodging-total-cost-display');
 
-            // Formata o custo total para o formato de moeda brasileira
             const formattedCost = totalCost.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
             if (totalCost > 0) {
@@ -1560,7 +1693,6 @@
              statusDot.style.display = 'block';
         }
         
-        // NOVA FUNÇÃO para renderizar o painel de gastos
         function renderSpendingPanel(trip) {
             const listElement = document.getElementById('spending-list');
             const totalElement = document.getElementById('spending-total-display');
@@ -1577,7 +1709,6 @@
                 activities: 'Atividades'
             };
 
-            // Coleta de todos os gastos
             for (const category in categoryMap) {
                 if (trip[category]) {
                     Object.values(trip[category]).forEach(item => {
@@ -1606,7 +1737,6 @@
                 return;
             }
 
-            // Agrupamento por categoria
             const groupedExpenses = allExpenses.reduce((acc, expense) => {
                 if (!acc[expense.category]) {
                     acc[expense.category] = [];
@@ -1615,7 +1745,6 @@
                 return acc;
             }, {});
 
-            // Renderização
             for (const categoryName in groupedExpenses) {
                 const groupItems = groupedExpenses[categoryName];
                 let groupSubtotal = 0;
@@ -1670,37 +1799,36 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             document.getElementById('documents-panel').classList.add('collapsed');
-            document.getElementById('spending-panel').classList.add('collapsed'); // Inicia o novo painel colapsado
+            document.getElementById('spending-panel').classList.add('collapsed');
+            // O painel de anotações inicia aberto por padrão (sem a classe 'collapsed')
+            document.getElementById('notes-panel').classList.remove('collapsed');
+
             renderTripDetails(tripId);
             document.getElementById('trips-view').classList.add('hidden');
             document.getElementById('details-view').classList.remove('hidden');
         }
         
         window.toggleDocumentsPanel = () => {
-            const panel = document.getElementById('documents-panel');
-            panel.classList.toggle('collapsed');
+            document.getElementById('documents-panel').classList.toggle('collapsed');
+        }
+
+        // NOVO: Função para controlar o painel de anotações
+        window.toggleNotesPanel = () => {
+            document.getElementById('notes-panel').classList.toggle('collapsed');
         }
 
         window.toggleSpendingPanel = () => {
             const panel = document.getElementById('spending-panel');
-
-            // Verifica se o painel está fechado (collapsed) ANTES de mudar a classe.
-            // Se ele tem a classe, significa que estamos prestes a abri-lo.
             const isOpening = panel.classList.contains('collapsed');
-
-            // Alterna a classe para iniciar a animação de abrir/fechar.
             panel.classList.toggle('collapsed');
 
-            // Se o painel estiver sendo aberto, executa a rolagem.
             if (isOpening) {
-                // Usamos um timeout para que a rolagem aconteça junto com a animação de expansão,
-                // e não de forma instantânea. A animação CSS dura 500ms.
                 setTimeout(() => {
                     panel.scrollIntoView({
-                        behavior: 'smooth', // Efeito de rolagem suave
-                        block: 'start'      // Alinha o topo do painel com o topo da tela
+                        behavior: 'smooth',
+                        block: 'start'
                     });
-                }, 150); // Um pequeno atraso de 150ms para a experiência ficar mais fluida.
+                }, 150);
             }
         }
 
@@ -1761,13 +1889,10 @@
         };
 
         window.openViewActivityModal = (element) => {
-            
-const isReorganizingActive = document.getElementById('daily-itinerary-list').classList.contains('is-reorganizing');
-            if (isReorganizingActive) {
-                return; // Sai da função e não faz nada se estiver no modo de reorganização
-            }
+            const isReorganizingActive = document.getElementById('daily-itinerary-list').classList.contains('is-reorganizing');
+            if (isReorganizingActive) return;
 
-const ds = element.dataset;
+            const ds = element.dataset;
             document.getElementById('view-activity-icon').innerHTML = ds.icon.replace('w-5 h-5', 'w-8 h-8');
             document.getElementById('view-activity-name').textContent = ds.name;
             document.getElementById('view-activity-time').textContent = ds.time;
@@ -1828,6 +1953,39 @@ const ds = element.dataset;
             }
 
             openModal('view-activity-modal');
+        }
+
+        // NOVO: Funções para abrir os modais de anotação
+        window.openViewNoteModal = (element) => {
+            const ds = element.dataset;
+            document.getElementById('view-note-title').textContent = ds.title;
+            document.getElementById('view-note-author').textContent = `Por: ${ds.author}`;
+            document.getElementById('view-note-description').textContent = ds.description;
+            document.getElementById('view-note-description-container').style.display = ds.description ? 'block' : 'none';
+            
+            const linkContainer = document.getElementById('view-note-link-container');
+            const linkBtn = document.getElementById('view-note-link-btn');
+            if (ds.link) {
+                linkBtn.href = ds.link;
+                linkContainer.style.display = 'block';
+            } else {
+                linkContainer.style.display = 'none';
+            }
+            openModal('view-note-modal');
+        }
+
+        window.openEditNoteModal = (noteId) => {
+            const trip = tripsData.find(t => t.id === currentTripId);
+            const note = trip?.notes?.find(n => n.id === noteId);
+            if (!note) return;
+
+            currentEditingItemId = noteId;
+            document.getElementById('edit-note-id').value = note.id;
+            document.getElementById('edit-note-title').value = note.title;
+            document.getElementById('edit-note-author').value = note.author || '';
+            document.getElementById('edit-note-description').value = note.description || '';
+            document.getElementById('edit-note-link').value = note.link || '';
+            openModal('edit-note-modal');
         }
         
         window.openEditFlightModal = (index) => {
@@ -2042,6 +2200,18 @@ const ds = element.dataset;
             });
         };
 
+        // NOVO: Função para excluir anotação
+        window.deleteNote = async (noteId) => {
+            showConfirmDelete('Tem certeza que deseja excluir esta anotação?', async () => {
+                const trip = tripsData.find(t => t.id === currentTripId);
+                if (!trip || !trip.notes) return;
+                const updatedNotes = trip.notes.filter(n => n.id !== noteId);
+                const updates = { [`/${currentTripId}/notes`]: updatedNotes };
+                await update(tripsRef, updates);
+                closeModal('confirm-delete-modal');
+            });
+        };
+
         window.deleteDocument = async (docId) => {
              showConfirmDelete('Tem certeza que deseja excluir este documento?', async () => {
                 const trip = tripsData.find(t => t.id === currentTripId);
@@ -2082,7 +2252,6 @@ const ds = element.dataset;
 
         // --- SEÇÃO ATUALIZADA: LÓGICA DE REORGANIZAÇÃO DO ROTEIRO COM DUPLO MODO ---
         
-        // Função para salvar a ordem das atividades (MODO ATIVIDADES)
         async function updateActivityOrderAndDate() {
             if (!currentTripId) return;
             const trip = tripsData.find(t => t.id === currentTripId);
@@ -2110,7 +2279,6 @@ const ds = element.dataset;
             await update(tripsRef, updates);
         }
 
-        // Função para inicializar o arraste de ATIVIDADES
         function initializeActivitySorting() {
             sortableInstances.forEach(instance => instance.destroy());
             sortableInstances = [];
@@ -2126,7 +2294,6 @@ const ds = element.dataset;
             });
         }
 
-        // Função para salvar a ordem dos dias (MODO DIAS - Lógica original)
         async function remapAndSaveDays(tripId, daysArray) {
             const trip = tripsData.find(t => t.id === tripId);
             let currentDate = new Date(trip.startDate + 'T00:00:00Z');
@@ -2152,7 +2319,6 @@ const ds = element.dataset;
             await update(tripsRef, updates);
         }
         
-        // Helper para obter os dias (usado pelo modo de dias)
         function getDaysArray(trip) {
             const allActivities = trip.activities ? Object.values(trip.activities) : [];
             const groupedByDay = allActivities.reduce((acc, act) => {
@@ -2178,7 +2344,6 @@ const ds = element.dataset;
             return daysArray;
         }
         
-        // Função para reorganizar os dias (MODO DIAS)
         window.reorganizeItinerary = async (oldIndex, newIndex) => {
             const trip = tripsData.find(t => t.id === currentTripId);
             if (!trip) return;
@@ -2188,7 +2353,6 @@ const ds = element.dataset;
             await remapAndSaveDays(currentTripId, daysArray);
         };
 
-        // Função para inicializar o arraste de DIAS
         function initializeDaySorting() {
             if (sortableInstance) sortableInstance.destroy();
             const list = document.getElementById('daily-itinerary-list');
@@ -2203,15 +2367,13 @@ const ds = element.dataset;
             });
         }
         
-        // NOVA FUNÇÃO: Alterna entre os modos de reorganização
         window.switchReorganizationType = (type) => {
-            if (reorganizationMode === type) return; // Não faz nada se já estiver no modo
+            if (reorganizationMode === type) return;
             reorganizationMode = type;
             const list = document.getElementById('daily-itinerary-list');
             const daysBtn = document.getElementById('reorg-mode-days-btn');
             const activitiesBtn = document.getElementById('reorg-mode-activities-btn');
 
-            // Destrói instâncias anteriores para evitar conflitos
             if (sortableInstance) sortableInstance.destroy();
             sortableInstances.forEach(i => i.destroy());
             sortableInstance = null;
@@ -2223,7 +2385,7 @@ const ds = element.dataset;
                 daysBtn.classList.add('active');
                 activitiesBtn.classList.remove('active');
                 initializeDaySorting();
-            } else { // type === 'activities'
+            } else {
                 list.classList.remove('mode-days');
                 list.classList.add('mode-activities');
                 activitiesBtn.classList.add('active');
@@ -2232,7 +2394,6 @@ const ds = element.dataset;
             }
         }
 
-        // FUNÇÃO MESTRE: Controla a entrada e saída do modo de reorganização geral
         window.toggleReorganizationMode = (isCancelling) => {
             const list = document.getElementById('daily-itinerary-list');
             const startBtn = document.getElementById('reorg-start-btn');
@@ -2251,7 +2412,6 @@ const ds = element.dataset;
                 startBtn.style.display = 'none';
                 actionsContainer.style.display = 'flex';
                 scrollTopBtn.style.display = 'none';
-                // Inicia por padrão no modo de dias
                 switchReorganizationType('days');
             } else {
                 if (isCancelling && initialTripState) {
@@ -2266,7 +2426,6 @@ const ds = element.dataset;
                 actionsContainer.style.display = 'none';
                 scrollTopBtn.style.display = 'block'; 
                 
-                // Limpa as classes de modo e destrói todas as instâncias de sortable
                 list.classList.remove('mode-days', 'mode-activities');
                 if (sortableInstance) sortableInstance.destroy();
                 sortableInstances.forEach(i => i.destroy());
@@ -2461,39 +2620,90 @@ const ds = element.dataset;
                 const updates = { [`/${currentTripId}/activities`]: currentActivities };
                 await update(tripsRef, updates);
             }
-            closeModal('edit-activity-modal');
+closeModal('edit-activity-modal');
+        });
+
+        // NOVO: Listeners para os formulários de anotações
+        document.getElementById('add-note-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const trip = tripsData.find(t => t.id === currentTripId);
+            if (!trip) return;
+
+            const newNote = {
+                id: Date.now().toString(),
+                title: document.getElementById('note-title').value,
+                author: document.getElementById('note-author').value,
+                description: document.getElementById('note-description').value,
+                link: document.getElementById('note-link').value.trim()
+            };
+
+            const currentNotes = trip.notes || [];
+            currentNotes.push(newNote);
+
+            const updates = { [`/${currentTripId}/notes`]: currentNotes };
+            await update(tripsRef, updates);
+            closeModal('add-note-modal');
+        });
+
+        document.getElementById('edit-note-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const trip = tripsData.find(t => t.id === currentTripId);
+            const noteId = document.getElementById('edit-note-id').value;
+            if (!trip || !trip.notes) return;
+
+            const noteIndex = trip.notes.findIndex(n => n.id === noteId);
+            if (noteIndex > -1) {
+                trip.notes[noteIndex] = {
+                    ...trip.notes[noteIndex],
+                    title: document.getElementById('edit-note-title').value,
+                    author: document.getElementById('edit-note-author').value,
+                    description: document.getElementById('edit-note-description').value,
+                    link: document.getElementById('edit-note-link').value.trim()
+                };
+                const updates = { [`/${currentTripId}/notes`]: trip.notes };
+                await update(tripsRef, updates);
+            }
+            closeModal('edit-note-modal');
         });
 
         document.getElementById('confirm-delete-btn').addEventListener('click', () => {
-            if (typeof onConfirmAction === 'function') onConfirmAction();
-        });
-
-        function handleTransportTypeChange(selectElement) {
-            const form = selectElement.closest('form');
-            const originInput = form.querySelector('[id$="transport-origin"]');
-            const destinationInput = form.querySelector('[id$="transport-destination"]');
-            const originLabel = originInput.parentElement.querySelector('label');
-            const destinationLabel = destinationInput.parentElement.querySelector('label');
-            if (selectElement.value === 'Carro Alugado') {
-                originInput.required = false; destinationInput.required = false;
-                originLabel.innerText = 'Origem (Opcional)'; destinationLabel.innerText = 'Destino (Opcional)';
-            } else {
-                originInput.required = true; destinationInput.required = true;
-                originLabel.innerText = 'Origem'; destinationLabel.innerText = 'Destino';
-            }
-        }
-        
-        document.getElementById('transport-type').addEventListener('change', (e) => handleTransportTypeChange(e.target));
-        document.getElementById('edit-transport-type').addEventListener('change', (e) => handleTransportTypeChange(e.target));
-
-        document.getElementById('trip-start-date').addEventListener('change', function(e) {
-            const startDate = e.target.value;
-            const endDateInput = document.getElementById('trip-end-date');
-            if (startDate) {
-                endDateInput.value = startDate;
-                endDateInput.min = startDate; 
+            if (onConfirmAction) {
+                onConfirmAction();
             }
         });
+
+        // Expor funções globais que são chamadas via onclick no HTML
+        window.openModal = openModal;
+        window.closeModal = closeModal;
+        window.showTripsView = showTripsView;
+        window.openEditTripModal = openEditTripModal;
+        window.scrollToItinerary = scrollToItinerary;
+        window.toggleDocumentsPanel = toggleDocumentsPanel;
+        window.toggleNotesPanel = toggleNotesPanel;
+        window.toggleSpendingPanel = toggleSpendingPanel;
+        window.openEditFlightModal = openEditFlightModal;
+        window.openEditTransportModal = openEditTransportModal;
+        window.openEditLodgingModal = openEditLodgingModal;
+        window.reorderDetailItem = reorderDetailItem;
+        window.deleteDetailItem = deleteDetailItem;
+        window.deleteDocument = deleteDocument;
+        window.reorderDocument = reorderDocument;
+        window.deleteNote = deleteNote;
+        window.openEditNoteModal = openEditNoteModal;
+        window.openViewNoteModal = openViewNoteModal;
+        window.toggleReorganizationMode = toggleReorganizationMode;
+        window.switchReorganizationType = switchReorganizationType;
+        window.insertNewDay = insertNewDay;
+        window.deleteDay = deleteDay;
+        window.scrollToTop = scrollToTop;
+        window.openAddActivityModal = openAddActivityModal;
+        window.deleteActivity = deleteActivity;
+        window.openEditActivityModal = openEditActivityModal;
+        window.openViewActivityModal = openViewActivityModal;
+        window.toggleFeatured = toggleFeatured;
+        window.duplicateTrip = duplicateTrip;
+        window.deleteTrip = deleteTrip;
+
     </script>
 
 </body></html>
