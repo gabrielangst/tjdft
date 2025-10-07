@@ -1683,7 +1683,25 @@
 
         window.toggleSpendingPanel = () => {
             const panel = document.getElementById('spending-panel');
+
+            // Verifica se o painel está fechado (collapsed) ANTES de mudar a classe.
+            // Se ele tem a classe, significa que estamos prestes a abri-lo.
+            const isOpening = panel.classList.contains('collapsed');
+
+            // Alterna a classe para iniciar a animação de abrir/fechar.
             panel.classList.toggle('collapsed');
+
+            // Se o painel estiver sendo aberto, executa a rolagem.
+            if (isOpening) {
+                // Usamos um timeout para que a rolagem aconteça junto com a animação de expansão,
+                // e não de forma instantânea. A animação CSS dura 500ms.
+                setTimeout(() => {
+                    panel.scrollIntoView({
+                        behavior: 'smooth', // Efeito de rolagem suave
+                        block: 'start'      // Alinha o topo do painel com o topo da tela
+                    });
+                }, 150); // Um pequeno atraso de 150ms para a experiência ficar mais fluida.
+            }
         }
 
         window.openModal = (modalId) => {
