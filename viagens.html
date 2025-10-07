@@ -45,12 +45,13 @@
             background-color: #dbeafe;
             transform: scale(1.1);
         }
-        #documents-content {
+        #documents-content, #spending-content {
             transition: max-height 0.5s ease-in-out, opacity 0.3s ease-in-out, margin 0.5s ease-in-out, padding 0.5s ease-in-out;
             max-height: 1000px;
             opacity: 1;
         }
-        #documents-panel.collapsed #documents-content {
+        #documents-panel.collapsed #documents-content,
+        #spending-panel.collapsed #spending-content {
             max-height: 0;
             opacity: 0;
             overflow: hidden;
@@ -58,10 +59,11 @@
             padding-top: 0 !important;
             padding-bottom: 0 !important;
         }
-        #documents-toggle-btn svg {
+        #documents-toggle-btn svg, #spending-toggle-btn svg {
             transition: transform 0.3s ease-in-out;
         }
-        #documents-panel.collapsed #documents-toggle-btn svg {
+        #documents-panel.collapsed #documents-toggle-btn svg,
+        #spending-panel.collapsed #spending-toggle-btn svg {
             transform: rotate(180deg);
         }
         .status-dot {
@@ -281,6 +283,21 @@
                 <div id="daily-itinerary-list">
                 </div>
             </section>
+
+            <section id="spending-panel" class="mt-8 bg-white p-6 rounded-xl shadow-lg">
+                <div class="flex justify-between items-center cursor-pointer" onclick="toggleSpendingPanel()">
+                    <h2 class="text-2xl font-semibold">Resumo de Gastos</h2>
+                    <button id="spending-toggle-btn" class="text-slate-500 hover:text-slate-800 p-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-up"><path d="m18 15-6-6-6 6"></path></svg>
+                    </button>
+                </div>
+                <div id="spending-content" class="mt-4">
+                    <div id="spending-list" class="space-y-4">
+                        </div>
+                    <div id="spending-total-display" class="mt-4 pt-4 border-t-2 border-slate-200 text-xl font-bold text-slate-900 text-right">
+                        </div>
+                </div>
+            </section>
         </div>
     </div>
 
@@ -366,6 +383,10 @@
                         </select>
                     </div>
                 </div>
+                <div>
+                    <label for="flight-cost" class="block text-sm font-medium text-slate-600">Custo (R$) (Opcional)</label>
+                    <input type="number" id="flight-cost" placeholder="Ex: 3500.50" min="0" step="0.01" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
                 <div class="pt-6 flex justify-end gap-3">
                     <button type="button" onclick="closeModal('add-flight-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
                     <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-semibold">Adicionar Voo</button>
@@ -426,6 +447,10 @@
                         </select>
                     </div>
                 </div>
+                <div>
+                    <label for="edit-flight-cost" class="block text-sm font-medium text-slate-600">Custo (R$) (Opcional)</label>
+                    <input type="number" id="edit-flight-cost" placeholder="Ex: 3500.50" min="0" step="0.01" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
                 <div class="pt-6 flex justify-end gap-3">
                     <button type="button" onclick="closeModal('edit-flight-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
                     <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-semibold">Salvar Alterações</button>
@@ -479,6 +504,10 @@
                     <label for="transport-description" class="block text-sm font-medium text-slate-600">Descrição (Opcional)</label>
                     <textarea id="transport-description" rows="3" placeholder="Ex: Trem #9418, vagão 5, assentos 21, 22" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
                 </div>
+                <div>
+                    <label for="transport-cost" class="block text-sm font-medium text-slate-600">Custo (R$) (Opcional)</label>
+                    <input type="number" id="transport-cost" placeholder="Ex: 150.00" min="0" step="0.01" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
                 <div class="pt-6 flex justify-end gap-3">
                     <button type="button" onclick="closeModal('add-transport-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
                     <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-semibold">Adicionar Transporte</button>
@@ -518,6 +547,14 @@
                         <label for="lodging-checkout-time" class="block text-sm font-medium text-slate-600">Horário</label>
                         <input type="time" id="lodging-checkout-time" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required="">
                     </div>
+                </div>
+                <div>
+                    <label for="lodging-cost" class="block text-sm font-medium text-slate-600">Custo Total (R$)</label>
+                    <input type="number" id="lodging-cost" placeholder="Ex: 1500" min="0" step="0.01" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="lodging-link" class="block text-sm font-medium text-slate-600">Link (Opcional)</label>
+                    <input type="url" id="lodging-link" placeholder="https://..." class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 <div class="pt-6 flex justify-end gap-3">
                     <button type="button" onclick="closeModal('add-lodging-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
@@ -572,6 +609,10 @@
                     <label for="edit-transport-description" class="block text-sm font-medium text-slate-600">Descrição (Opcional)</label>
                     <textarea id="edit-transport-description" rows="3" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
                 </div>
+                <div>
+                    <label for="edit-transport-cost" class="block text-sm font-medium text-slate-600">Custo (R$) (Opcional)</label>
+                    <input type="number" id="edit-transport-cost" placeholder="Ex: 150.00" min="0" step="0.01" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
                 <div class="pt-6 flex justify-end gap-3">
                     <button type="button" onclick="closeModal('edit-transport-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
                     <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors font-semibold">Salvar Alterações</button>
@@ -611,6 +652,14 @@
                         <label for="edit-lodging-checkout-time" class="block text-sm font-medium text-slate-600">Horário</label>
                         <input type="time" id="edit-lodging-checkout-time" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required="">
                     </div>
+                </div>
+                <div>
+                    <label for="edit-lodging-cost" class="block text-sm font-medium text-slate-600">Custo Total (R$)</label>
+                    <input type="number" id="edit-lodging-cost" placeholder="Ex: 1500" min="0" step="0.01" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="edit-lodging-link" class="block text-sm font-medium text-slate-600">Link (Opcional)</label>
+                    <input type="url" id="edit-lodging-link" placeholder="https://..." class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 <div class="pt-6 flex justify-end gap-3">
                     <button type="button" onclick="closeModal('edit-lodging-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
@@ -707,6 +756,10 @@
                     <label for="activity-link" class="block text-sm font-medium text-slate-600">Link (Opcional)</label>
                     <input type="url" id="activity-link" placeholder="https://exemplo.com/passeio" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 </div>
+                 <div>
+                    <label for="activity-cost" class="block text-sm font-medium text-slate-600">Custo (R$) (Opcional)</label>
+                    <input type="number" id="activity-cost" placeholder="Ex: 50.00" min="0" step="0.01" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
                 <div>
                     <label class="block text-sm font-medium text-slate-600">Ícone</label>
                     <div id="add-icon-picker" class="mt-2 flex flex-wrap gap-2">
@@ -750,6 +803,10 @@
                 <div>
                     <label for="edit-activity-link" class="block text-sm font-medium text-slate-600">Link (Opcional)</label>
                     <input type="url" id="edit-activity-link" placeholder="https://exemplo.com/passeio" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="edit-activity-cost" class="block text-sm font-medium text-slate-600">Custo (R$) (Opcional)</label>
+                    <input type="number" id="edit-activity-cost" placeholder="Ex: 50.00" min="0" step="0.01" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-slate-600">Ícone</label>
@@ -800,6 +857,7 @@
                 <h3 id="lodging-coverage-modal-title" class="text-xl font-semibold"></h3>
             </div>
             <div id="lodging-coverage-modal-body" class="text-slate-600 text-sm space-y-2"></div>
+            <div id="lodging-total-cost-display" class="mt-4 pt-4 border-t border-slate-200 text-base font-semibold text-slate-800"></div>
             <div class="pt-6 flex justify-end">
                 <button type="button" onclick="closeModal('lodging-coverage-modal')" class="px-6 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Fechar</button>
             </div>
@@ -842,6 +900,16 @@
             if(!dateString) return 'Data indefinida';
             const date = new Date(dateString + 'T00:00:00Z');
             return date.toLocaleDateString('pt-BR', { timeZone: 'UTC', ...options });
+        }
+        
+        function formatCurrency(value) {
+            if (typeof value !== 'number') {
+                value = parseFloat(value);
+            }
+            if (isNaN(value)) {
+                return 'R$ 0,00';
+            }
+            return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
 
         // Definições de Ícones (sem alterações)
@@ -1007,6 +1075,7 @@
             renderDocuments(trip);
             renderDailyItinerary(trip);
             renderLodgingCoverageStatus(trip);
+            renderSpendingPanel(trip);
 
             const flightTemplate = (flight, index, allFlights) => `
                 <div>
@@ -1064,11 +1133,16 @@
             renderDetailList('transport-list', trip.transport, transportTemplate, 'Nenhum transporte adicionado.');
 
             const lodgingTemplate = (item, index, allLodging) => `
-                <div>
+                <div class="flex-1">
                     <p class="font-semibold text-slate-800">${item.name}</p>
                     <p class="text-sm text-slate-600">${item.address}</p>
                     <p class="text-xs text-slate-500">Check-in: ${formatDate(item.checkinDate)}</p>
                     <p class="text-xs text-slate-500">Check-out: ${formatDate(item.checkoutDate)} às ${item.checkoutTime}</p>
+                    ${item.link ? `
+                    <a href="${item.link}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="mt-2 inline-flex items-center gap-2 text-xs bg-slate-100 text-slate-700 font-semibold px-3 py-1.5 rounded-md hover:bg-slate-200 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-external-link"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" x2="21" y1="14" y2="3"></line></svg>
+                        <span>Acessar Link</span>
+                    </a>` : ''}
                 </div>
                  <div class="flex flex-col gap-2 items-center">
                     <div class="flex gap-1">
@@ -1426,12 +1500,17 @@
 
             const coveredNights = new Set();
             const lodgings = trip.lodging ? Object.values(trip.lodging) : [];
+            let totalCost = 0;
+            
             lodgings.forEach(l => {
                 let checkin = new Date(l.checkinDate + 'T00:00:00Z');
                 const checkout = new Date(l.checkoutDate + 'T00:00:00Z');
                 while (checkin < checkout) {
                     coveredNights.add(checkin.toISOString().split('T')[0]);
                     checkin.setUTCDate(checkin.getUTCDate() + 1);
+                }
+                if (l.cost && !isNaN(parseFloat(l.cost))) {
+                    totalCost += parseFloat(l.cost);
                 }
             });
 
@@ -1440,9 +1519,20 @@
             const modalTitle = document.getElementById('lodging-coverage-modal-title');
             const modalBody = document.getElementById('lodging-coverage-modal-body');
             const modalIcon = document.getElementById('lodging-coverage-modal-icon');
+            const totalCostDisplay = document.getElementById('lodging-total-cost-display');
+
+            // Formata o custo total para o formato de moeda brasileira
+            const formattedCost = totalCost.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+            if (totalCost > 0) {
+                totalCostDisplay.innerHTML = `Custo Total Estimado: <strong>${formattedCost}</strong>`;
+                totalCostDisplay.style.display = 'block';
+            } else {
+                totalCostDisplay.style.display = 'none';
+            }
 
             if (missingNights.length === 0 && requiredNights.length > 0) {
-                statusDot.style.backgroundColor = '#22c55e';
+                statusDot.style.backgroundColor = '#22c55e'; // Verde
                 statusDot.onclick = () => {
                     modalTitle.textContent = "Cobertura de Hospedagem Completa";
                     modalIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-500"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
@@ -1450,7 +1540,7 @@
                     openModal('lodging-coverage-modal');
                 };
             } else {
-                statusDot.style.backgroundColor = '#ef4444';
+                statusDot.style.backgroundColor = '#ef4444'; // Vermelho
                 statusDot.onclick = () => {
                     modalTitle.textContent = "Hospedagem Incompleta";
                      modalIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-500"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>`;
@@ -1469,6 +1559,94 @@
             }
              statusDot.style.display = 'block';
         }
+        
+        // NOVA FUNÇÃO para renderizar o painel de gastos
+        function renderSpendingPanel(trip) {
+            const listElement = document.getElementById('spending-list');
+            const totalElement = document.getElementById('spending-total-display');
+            listElement.innerHTML = '';
+            totalElement.innerHTML = '';
+
+            const allExpenses = [];
+            let totalCost = 0;
+
+            const categoryMap = {
+                flights: 'Voos',
+                transport: 'Transportes',
+                lodging: 'Hospedagens',
+                activities: 'Atividades'
+            };
+
+            // Coleta de todos os gastos
+            for (const category in categoryMap) {
+                if (trip[category]) {
+                    Object.values(trip[category]).forEach(item => {
+                        const cost = parseFloat(item.cost);
+                        if (!isNaN(cost) && cost > 0) {
+                            let name = 'Item';
+                            if (category === 'flights') name = `${item.company}: ${item.origin} → ${item.destination}`;
+                            else if (category === 'transport') name = `${item.type}: ${item.from || ''} → ${item.to || ''}`;
+                            else if (category === 'lodging') name = `Hospedagem: ${item.name}`;
+                            else if (category === 'activities') name = `Atividade: ${item.name}`;
+                            
+                            allExpenses.push({
+                                category: categoryMap[category],
+                                name: name,
+                                cost: cost
+                            });
+                            totalCost += cost;
+                        }
+                    });
+                }
+            }
+
+            if (allExpenses.length === 0) {
+                listElement.innerHTML = `<p class="text-slate-500 text-sm text-center py-2">Nenhum gasto adicionado ainda.</p>`;
+                totalElement.innerHTML = `Total Geral: ${formatCurrency(0)}`;
+                return;
+            }
+
+            // Agrupamento por categoria
+            const groupedExpenses = allExpenses.reduce((acc, expense) => {
+                if (!acc[expense.category]) {
+                    acc[expense.category] = [];
+                }
+                acc[expense.category].push(expense);
+                return acc;
+            }, {});
+
+            // Renderização
+            for (const categoryName in groupedExpenses) {
+                const groupItems = groupedExpenses[categoryName];
+                let groupSubtotal = 0;
+
+                const groupHtml = document.createElement('div');
+                
+                let itemsHtml = groupItems.map(item => {
+                    groupSubtotal += item.cost;
+                    return `
+                        <div class="flex justify-between items-center text-sm text-slate-600 pl-4 py-1">
+                            <span>${item.name}</span>
+                            <span class="font-medium">${formatCurrency(item.cost)}</span>
+                        </div>
+                    `;
+                }).join('');
+
+                groupHtml.innerHTML = `
+                    <div class="border-b pb-2">
+                        <div class="flex justify-between items-baseline">
+                            <h3 class="font-semibold text-lg text-slate-800">${categoryName}</h3>
+                            <span class="font-semibold text-slate-700">${formatCurrency(groupSubtotal)}</span>
+                        </div>
+                        <div class="mt-1 space-y-1">${itemsHtml}</div>
+                    </div>
+                `;
+                listElement.appendChild(groupHtml);
+            }
+
+            totalElement.innerHTML = `Total Geral: ${formatCurrency(totalCost)}`;
+        }
+
         
         // --- CONTROLE DE NAVEGAÇÃO, MODAIS E FORMULÁRIOS ---
         window.scrollToCity = (cityName) => {
@@ -1492,6 +1670,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             document.getElementById('documents-panel').classList.add('collapsed');
+            document.getElementById('spending-panel').classList.add('collapsed'); // Inicia o novo painel colapsado
             renderTripDetails(tripId);
             document.getElementById('trips-view').classList.add('hidden');
             document.getElementById('details-view').classList.remove('hidden');
@@ -1499,6 +1678,11 @@
         
         window.toggleDocumentsPanel = () => {
             const panel = document.getElementById('documents-panel');
+            panel.classList.toggle('collapsed');
+        }
+
+        window.toggleSpendingPanel = () => {
+            const panel = document.getElementById('spending-panel');
             panel.classList.toggle('collapsed');
         }
 
@@ -1643,6 +1827,7 @@ const ds = element.dataset;
             document.getElementById('edit-flight-company').value = flight.company;
             document.getElementById('edit-flight-code').value = flight.code;
             document.getElementById('edit-flight-type').value = flight.flightType;
+            document.getElementById('edit-flight-cost').value = flight.cost || '';
             openModal('edit-flight-modal');
         }
 
@@ -1660,6 +1845,7 @@ const ds = element.dataset;
             document.getElementById('edit-transport-departure-time').value = transport.departureTime;
             document.getElementById('edit-transport-arrival-date').value = transport.arrivalDate;
             document.getElementById('edit-transport-arrival-time').value = transport.arrivalTime;
+            document.getElementById('edit-transport-cost').value = transport.cost || '';
             document.getElementById('edit-transport-type').dispatchEvent(new Event('change'));
             openModal('edit-transport-modal');
         }
@@ -1676,6 +1862,8 @@ const ds = element.dataset;
             document.getElementById('edit-lodging-checkin-time').value = lodging.checkinTime;
             document.getElementById('edit-lodging-checkout-date').value = lodging.checkoutDate;
             document.getElementById('edit-lodging-checkout-time').value = lodging.checkoutTime;
+            document.getElementById('edit-lodging-cost').value = lodging.cost || '';
+            document.getElementById('edit-lodging-link').value = lodging.link || '';
             openModal('edit-lodging-modal');
         }
 
@@ -1690,6 +1878,7 @@ const ds = element.dataset;
                 document.getElementById('edit-activity-type').value = activity.type;
                 document.getElementById('edit-activity-description').value = activity.description || '';
                 document.getElementById('edit-activity-link').value = activity.link || '';
+                document.getElementById('edit-activity-cost').value = activity.cost || '';
                 document.getElementById('edit-activity-icon').value = activity.icon;
 
                 const picker = document.getElementById('edit-icon-picker');
@@ -1715,14 +1904,18 @@ const ds = element.dataset;
             if (category === 'flights') {
                 newItem = { 
                     legType: document.getElementById('flight-leg-type').value, date: document.getElementById('flight-date').value, departureTime: document.getElementById('flight-departure-time').value, arrivalTime: document.getElementById('flight-arrival-time').value, origin: document.getElementById('flight-origin').value, destination: document.getElementById('flight-destination').value, company: document.getElementById('flight-company').value, code: document.getElementById('flight-code').value, flightType: document.getElementById('flight-type').value,
+                    cost: document.getElementById('flight-cost').value,
                 };
             } else if (category === 'transport') {
                 newItem = { 
                     type: document.getElementById('transport-type').value, from: document.getElementById('transport-origin').value, to: document.getElementById('transport-destination').value, description: document.getElementById('transport-description').value, departureDate: document.getElementById('transport-departure-date').value, departureTime: document.getElementById('transport-departure-time').value, arrivalDate: document.getElementById('transport-arrival-date').value, arrivalTime: document.getElementById('transport-arrival-time').value,
+                    cost: document.getElementById('transport-cost').value,
                 };
             } else if (category === 'lodging') {
                 newItem = { 
                     name: document.getElementById('lodging-name').value, address: document.getElementById('lodging-address').value, checkinDate: document.getElementById('lodging-checkin-date').value, checkinTime: document.getElementById('lodging-checkin-time').value, checkoutDate: document.getElementById('lodging-checkout-date').value, checkoutTime: document.getElementById('lodging-checkout-time').value,
+                    cost: document.getElementById('lodging-cost').value,
+                    link: document.getElementById('lodging-link').value.trim()
                 };
             }
             const currentItems = trip[category] ? [...Object.values(trip[category])] : [];
@@ -2165,6 +2358,7 @@ const ds = element.dataset;
             const trip = tripsData.find(t => t.id === currentTripId); if (!trip) return;
             const updatedFlight = {
                 legType: document.getElementById('edit-flight-leg-type').value, date: document.getElementById('edit-flight-date').value, departureTime: document.getElementById('edit-flight-departure-time').value, arrivalTime: document.getElementById('edit-flight-arrival-time').value, origin: document.getElementById('edit-flight-origin').value, destination: document.getElementById('edit-flight-destination').value, company: document.getElementById('edit-flight-company').value, code: document.getElementById('edit-flight-code').value, flightType: document.getElementById('edit-flight-type').value,
+                cost: document.getElementById('edit-flight-cost').value,
             };
             const currentFlights = trip.flights ? [...Object.values(trip.flights)] : [];
             currentFlights[currentEditingItemIndex] = updatedFlight;
@@ -2180,6 +2374,7 @@ const ds = element.dataset;
             const trip = tripsData.find(t => t.id === currentTripId); if (!trip) return;
             const updatedTransport = {
                 type: document.getElementById('edit-transport-type').value, from: document.getElementById('edit-transport-origin').value, to: document.getElementById('edit-transport-destination').value, description: document.getElementById('edit-transport-description').value, departureDate: document.getElementById('edit-transport-departure-date').value, departureTime: document.getElementById('edit-transport-departure-time').value, arrivalDate: document.getElementById('edit-transport-arrival-date').value, arrivalTime: document.getElementById('edit-transport-arrival-time').value,
+                cost: document.getElementById('edit-transport-cost').value,
             };
             const currentTransport = trip.transport ? [...Object.values(trip.transport)] : [];
             currentTransport[currentEditingItemIndex] = updatedTransport;
@@ -2195,6 +2390,8 @@ const ds = element.dataset;
             const trip = tripsData.find(t => t.id === currentTripId); if (!trip) return;
             const updatedLodging = {
                 name: document.getElementById('edit-lodging-name').value, address: document.getElementById('edit-lodging-address').value, checkinDate: document.getElementById('edit-lodging-checkin-date').value, checkinTime: document.getElementById('edit-lodging-checkin-time').value, checkoutDate: document.getElementById('edit-lodging-checkout-date').value, checkoutTime: document.getElementById('edit-lodging-checkout-time').value,
+                cost: document.getElementById('edit-lodging-cost').value,
+                link: document.getElementById('edit-lodging-link').value.trim()
             };
             const currentLodging = trip.lodging ? [...Object.values(trip.lodging)] : [];
             currentLodging[currentEditingItemIndex] = updatedLodging;
@@ -2216,6 +2413,7 @@ const ds = element.dataset;
                 description: document.getElementById('activity-description').value,
                 icon: document.getElementById('activity-icon').value,
                 link: document.getElementById('activity-link').value.trim(),
+                cost: document.getElementById('activity-cost').value,
             };
             const currentActivities = trip.activities ? [...Object.values(trip.activities)] : [];
             currentActivities.push(newActivity);
@@ -2240,6 +2438,7 @@ const ds = element.dataset;
                     description: document.getElementById('edit-activity-description').value,
                     icon: document.getElementById('edit-activity-icon').value,
                     link: document.getElementById('edit-activity-link').value.trim(),
+                    cost: document.getElementById('edit-activity-cost').value,
                 };
                 const updates = { [`/${currentTripId}/activities`]: currentActivities };
                 await update(tripsRef, updates);
