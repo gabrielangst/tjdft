@@ -10,10 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
     
     <style>
-
-	#view-note-description {
-    	  white-space: pre-line;
-	}
+#view-note-description {
+      white-space: pre-line;
+}
         body {
             font-family: 'Inter', sans-serif;
         }
@@ -890,7 +889,6 @@
         <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-lg m-4">
             <h3 class="text-2xl font-semibold mb-6">Adicionar Anotação</h3>
             <form id="add-note-form" class="space-y-4">
-                <input type="hidden" id="note-icon" value="notebook">
                 <div>
                     <label for="note-title" class="block text-sm font-medium text-slate-600">Nome da Anotação</label>
                     <input type="text" id="note-title" placeholder="Ex: Dica de restaurante do amigo" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
@@ -907,11 +905,6 @@
                     <label for="note-link" class="block text-sm font-medium text-slate-600">Link de Referência (Opcional)</label>
                     <input type="url" id="note-link" placeholder="https://..." class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm">
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-600">Ícone</label>
-                    <div id="add-note-icon-picker" class="mt-2 flex flex-wrap gap-2">
-                    </div>
-                </div>
                 <div class="pt-6 flex justify-end gap-3">
                     <button type="button" onclick="closeModal('add-note-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
                     <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-semibold">Salvar Anotação</button>
@@ -925,7 +918,6 @@
             <h3 class="text-2xl font-semibold mb-6">Editar Anotação</h3>
             <form id="edit-note-form" class="space-y-4">
                 <input type="hidden" id="edit-note-id">
-                <input type="hidden" id="edit-note-icon">
                 <div>
                     <label for="edit-note-title" class="block text-sm font-medium text-slate-600">Nome da Anotação</label>
                     <input type="text" id="edit-note-title" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
@@ -942,11 +934,6 @@
                     <label for="edit-note-link" class="block text-sm font-medium text-slate-600">Link de Referência (Opcional)</label>
                     <input type="url" id="edit-note-link" placeholder="https://..." class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm">
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-600">Ícone</label>
-                    <div id="edit-note-icon-picker" class="mt-2 flex flex-wrap gap-2">
-                    </div>
-                </div>
                 <div class="pt-6 flex justify-end gap-3">
                     <button type="button" onclick="closeModal('edit-note-modal')" class="px-4 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Cancelar</button>
                     <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-semibold">Salvar Alterações</button>
@@ -957,10 +944,8 @@
 
     <div id="view-note-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
         <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-lg m-4">
-            <div id="view-note-icon" class="mx-auto mb-4 w-12 h-12 flex items-center justify-center bg-slate-100 text-slate-600 rounded-full">
-            </div>
-            <h3 id="view-note-title" class="text-2xl font-semibold text-slate-800 mb-1 text-center"></h3>
-            <p id="view-note-author" class="text-sm text-slate-500 mb-4 text-center"></p>
+            <h3 id="view-note-title" class="text-2xl font-semibold text-slate-800 mb-1"></h3>
+            <p id="view-note-author" class="text-sm text-slate-500 mb-4"></p>
             
             <div id="view-note-description-container" class="text-slate-600 mb-4 p-3 bg-slate-50 rounded-md border">
                 <p id="view-note-description"></p>
@@ -1027,7 +1012,7 @@
             return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
 
-        // Definições de Ícones
+        // Definições de Ícones (sem alterações)
         const ICONS = {
             flight_departure: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>`,
             flight_arrival: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" transform="scale(1,-1)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>`,
@@ -1046,21 +1031,12 @@
             tree: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-8"/><path d="m17 14-5-5-5 5h10z"/><path d="M8.5 14h7"/><path d="M7 9a5 5 0 0 1 10 0v2H7Z"/></svg>`,
             cake: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16h16"/><path d="M16 11V7a4 4 0 0 0-8 0v4"/><path d="M12 21v-4"/><path d="M12 7a2 2 0 0 1 0-4 2 2 0 0 1 0 4Z"/></svg>`,
             sun: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`,
-            leaf: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 4 13V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M15.5 5.5A3.5 3.5 0 0 1 19 9v1.5a2.5 2.5 0 0 1-5 0V9A3.5 3.5 0 0 1 15.5 5.5Z"/></svg>`,
+            leaf: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`,
             mountain: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>`,
             ferris_wheel: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="12" r="10"/><path d="m12 22 3-8 3 8"/><path d="m12 22-3-8-3 8"/><path d="m2 12h8"/><path d="m14 12h8"/><path d="m19.07 4.93-4.24 4.24"/><path d="m4.93 19.07 4.24-4.24"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 19.07-4.24-4.24"/></svg>`,
             music: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`,
             waves: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6c.9.5 2.2 1 3.5 1s2.6-.5 3.5-1 2.2 1 3.5 1 2.6-.5 3.5-1"/><path d="M3 12c.9.5 2.2 1 3.5 1s2.6-.5 3.5-1 2.2 1 3.5 1 2.6-.5 3.5-1"/><path d="M3 18c.9.5 2.2 1 3.5 1s2.6-.5 3.5-1 2.2 1 3.5 1 2.6-.5 3.5-1"/></svg>`,
             sunglasses: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 14h2"/><path d="M20 14h2"/><path d="M5.2 11.3 4 14"/><path d="M18.8 11.3 20 14"/><circle cx="8" cy="15" r="4"/><circle cx="16" cy="15" r="4"/><path d="M12 15a4 4 0 0 0-4-4h8a4 4 0 0 0-4 4Z"/></svg>`,
-            notebook: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-notebook-pen"><path d="M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4"/><path d="M2 6h4"/><path d="M2 10h4"/><path d="M2 14h4"/><path d="M2 18h4"/><path d="M18.4 2.6a2.17 2.17 0 0 1 3 3L16 11l-4 1 1-4Z"/></svg>`,
-            lightbulb: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lightbulb"><path d="M15 14c.2-1 .7-1.7 1.5-2.5C17.7 10.2 18 9 18 7c0-2.2-1.8-4-4-4S10 4.8 10 7c0 2 1.3 4.3 2.5 5.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>`,
-            pin: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`,
-            chat: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square-text"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M13 8H7"/><path d="M17 12H7"/></svg>`,
-            link_note: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"/></svg>`,
-            warning: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-alert"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>`,
-shopping: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>`,
-            remedio: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><line x1="12" y1="9" x2="12" y2="15"></line><line x1="9" y1="12" x2="15" y2="12"></line></svg>`,
-            comida: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3z"/></svg>`,
             default: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`
         };
 
@@ -1074,7 +1050,7 @@ shopping: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 
                 db = getDatabase(app);
                 tripsRef = ref(db, 'public_trips');
                 setupTripsListener(); 
-                setupAllIconPickers();
+                setupIconPickers();
             } catch (error) {
                 console.error("Firebase initialization failed:", error);
             }
@@ -1197,7 +1173,7 @@ shopping: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 
             }
 
             renderDocuments(trip);
-            renderNotes(trip); 
+            renderNotes(trip); // RENDERIZAÇÃO DO NOVO PAINEL
             renderDailyItinerary(trip);
             renderLodgingCoverageStatus(trip);
             renderSpendingPanel(trip);
@@ -1322,6 +1298,7 @@ shopping: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 
             });
         }
 
+        // NOVO: Função para renderizar as anotações
         function renderNotes(trip) {
             const listElement = document.getElementById('notes-list');
             listElement.innerHTML = '';
@@ -1336,19 +1313,17 @@ shopping: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 
                 const noteElement = document.createElement('div');
                 noteElement.className = 'flex items-center justify-between p-3 rounded-lg hover:bg-slate-50 border border-slate-200 cursor-pointer';
                 
-                const noteIcon = ICONS[note.icon] || ICONS.notebook;
-
+                // Adiciona os dados ao dataset para o modal de visualização
                 noteElement.dataset.title = note.title;
                 noteElement.dataset.author = note.author || 'Não especificado';
                 noteElement.dataset.description = note.description || 'Sem descrição.';
                 noteElement.dataset.link = note.link || '';
-                noteElement.dataset.iconSvg = noteIcon;
 
                 noteElement.onclick = () => openViewNoteModal(noteElement);
 
                 noteElement.innerHTML = `
                     <div class="flex items-center gap-3">
-                        ${noteIcon.replace('w-5 h-5', 'w-6 h-6')}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 lucide lucide-notebook-pen"><path d="M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4"/><path d="M2 6h4"/><path d="M2 10h4"/><path d="M2 14h4"/><path d="M2 18h4"/><path d="M18.4 2.6a2.17 2.17 0 0 1 3 3L16 11l-4 1 1-4Z"/></svg>
                         <span class="text-slate-700 font-medium">${note.title}</span>
                     </div>
                     <div class="flex items-center gap-2">
@@ -1599,27 +1574,19 @@ shopping: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 
             });
         }
 
-        function setupAllIconPickers() {
-            const activityIconOptions = {
+        function setupIconPickers() {
+            const iconOptions = {
                 passeio: ICONS.passeio, restaurante: ICONS.restaurante, shopping: ICONS.shopping, music: ICONS.music,
                 building: ICONS.building, tree: ICONS.tree, leaf: ICONS.leaf, sun: ICONS.sun, cake: ICONS.cake, 
                 mountain: ICONS.mountain, ferris_wheel: ICONS.ferris_wheel, basketball: ICONS.basketball, 
                 waves: ICONS.waves, sunglasses: ICONS.sunglasses,
                 outro: ICONS.outro
             };
-            const noteIconOptions = {
-                notebook: ICONS.notebook,     shopping: ICONS.shopping, // Alterado de 'compras' para 'shopping'
-    remedio: ICONS.remedio,   // Este já estava certo
-    warning: ICONS.warning,   // Alterado de 'alerta' para 'warning'
-    comida: ICONS.comida,     // Este já estava certo
-    pin: ICONS.pin            // Alterado de 'marcador' para 'pin'
-            };
 
-            const populatePicker = (pickerId, icons) => {
+            const populatePicker = (pickerId) => {
                 const picker = document.getElementById(pickerId);
-                if (!picker) return;
                 picker.innerHTML = '';
-                for (const [name, svg] of Object.entries(icons)) {
+                for (const [name, svg] of Object.entries(iconOptions)) {
                     if (!svg) {
                         console.warn(`Icon '${name}' is missing in ICONS object.`);
                         continue;
@@ -1632,13 +1599,13 @@ shopping: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 
                 }
             };
 
-            const handlePickerClick = (e, hiddenInputId) => {
+            const handlePickerClick = (e, formId) => {
                 const target = e.target.closest('.icon-picker-option');
                 if (!target) return;
 
                 const iconName = target.dataset.icon;
                 const picker = target.parentElement;
-                const hiddenInput = document.getElementById(hiddenInputId);
+                const hiddenInput = document.getElementById(formId);
 
                 hiddenInput.value = iconName;
 
@@ -1646,17 +1613,11 @@ shopping: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 
                 target.classList.add('selected');
             };
 
-            // Activity Pickers
-            populatePicker('add-icon-picker', activityIconOptions);
-            populatePicker('edit-icon-picker', activityIconOptions);
+            populatePicker('add-icon-picker');
+            populatePicker('edit-icon-picker');
+
             document.getElementById('add-icon-picker').addEventListener('click', (e) => handlePickerClick(e, 'activity-icon'));
             document.getElementById('edit-icon-picker').addEventListener('click', (e) => handlePickerClick(e, 'edit-activity-icon'));
-        
-            // Note Pickers
-            populatePicker('add-note-icon-picker', noteIconOptions);
-            populatePicker('edit-note-icon-picker', noteIconOptions);
-            document.getElementById('add-note-icon-picker').addEventListener('click', (e) => handlePickerClick(e, 'note-icon'));
-            document.getElementById('edit-note-icon-picker').addEventListener('click', (e) => handlePickerClick(e, 'edit-note-icon'));
         }
 
         function renderLodgingCoverageStatus(trip) {
@@ -1842,6 +1803,7 @@ shopping: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 
 
             document.getElementById('documents-panel').classList.add('collapsed');
             document.getElementById('spending-panel').classList.add('collapsed');
+            // O painel de anotações inicia aberto por padrão (sem a classe 'collapsed')
             document.getElementById('notes-panel').classList.remove('collapsed');
 
             renderTripDetails(tripId);
@@ -1853,6 +1815,7 @@ shopping: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 
             document.getElementById('documents-panel').classList.toggle('collapsed');
         }
 
+        // NOVO: Função para controlar o painel de anotações
         window.toggleNotesPanel = () => {
             document.getElementById('notes-panel').classList.toggle('collapsed');
         }
@@ -1995,9 +1958,9 @@ shopping: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 
             openModal('view-activity-modal');
         }
 
+        // NOVO: Funções para abrir os modais de anotação
         window.openViewNoteModal = (element) => {
             const ds = element.dataset;
-            document.getElementById('view-note-icon').innerHTML = ds.iconSvg.replace('w-6 h-6', 'w-8 h-8');
             document.getElementById('view-note-title').textContent = ds.title;
             document.getElementById('view-note-author').textContent = `Por: ${ds.author}`;
             document.getElementById('view-note-description').textContent = ds.description;
@@ -2025,13 +1988,6 @@ shopping: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 
             document.getElementById('edit-note-author').value = note.author || '';
             document.getElementById('edit-note-description').value = note.description || '';
             document.getElementById('edit-note-link').value = note.link || '';
-            document.getElementById('edit-note-icon').value = note.icon || 'notebook';
-
-            const picker = document.getElementById('edit-note-icon-picker');
-            picker.querySelectorAll('.icon-picker-option').forEach(opt => opt.classList.remove('selected'));
-            const selectedIcon = picker.querySelector(`[data-icon="${note.icon || 'notebook'}"]`);
-            if (selectedIcon) selectedIcon.classList.add('selected');
-
             openModal('edit-note-modal');
         }
         
@@ -2138,627 +2094,619 @@ shopping: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 
                 newItem = { 
                     name: document.getElementById('lodging-name').value, address: document.getElementById('lodging-address').value, checkinDate: document.getElementById('lodging-checkin-date').value, checkinTime: document.getElementById('lodging-checkin-time').value, checkoutDate: document.getElementById('lodging-checkout-date').value, checkoutTime: document.getElementById('lodging-checkout-time').value,
                     cost: document.getElementById('lodging-cost').value,
-                    link: document.getElementById('lodging-link').value,
+                    link: document.getElementById('lodging-link').value.trim()
                 };
             }
-            
             const currentItems = trip[category] ? [...Object.values(trip[category])] : [];
             currentItems.push(newItem);
-
-            try {
-                await set(ref(db, `public_trips/${currentTripId}/${category}`), currentItems);
-                closeModal(`add-${category.slice(0, -1)}-modal`);
-            } catch (error) {
-                console.error(`Erro ao adicionar ${category}:`, error);
-            }
+            const updates = {};
+            updates[`/${currentTripId}/${category}`] = currentItems;
+            await update(tripsRef, updates);
+            let modalIdToClose = category === 'flights' ? 'add-flight-modal' : (category === 'transport' ? 'add-transport-modal' : 'add-lodging-modal');
+            if (modalIdToClose) closeModal(modalIdToClose);
         }
         
-        async function editDetailItem(category) {
-            if (!currentTripId || currentEditingItemIndex === null) return;
-            const trip = tripsData.find(t => t.id === currentTripId);
-            if (!trip) return;
-        
-            let updatedItem = {};
-            if (category === 'flights') {
-                 updatedItem = { 
-                    legType: document.getElementById('edit-flight-leg-type').value, date: document.getElementById('edit-flight-date').value, departureTime: document.getElementById('edit-flight-departure-time').value, arrivalTime: document.getElementById('edit-flight-arrival-time').value, origin: document.getElementById('edit-flight-origin').value, destination: document.getElementById('edit-flight-destination').value, company: document.getElementById('edit-flight-company').value, code: document.getElementById('edit-flight-code').value, flightType: document.getElementById('edit-flight-type').value,
-                    cost: document.getElementById('edit-flight-cost').value,
-                };
-            } else if (category === 'transport') {
-                 updatedItem = { 
-                    type: document.getElementById('edit-transport-type').value, from: document.getElementById('edit-transport-origin').value, to: document.getElementById('edit-transport-destination').value, description: document.getElementById('edit-transport-description').value, departureDate: document.getElementById('edit-transport-departure-date').value, departureTime: document.getElementById('edit-transport-departure-time').value, arrivalDate: document.getElementById('edit-transport-arrival-date').value, arrivalTime: document.getElementById('edit-transport-arrival-time').value,
-                    cost: document.getElementById('edit-transport-cost').value,
-                 };
-            } else if (category === 'lodging') {
-                 updatedItem = { 
-                    name: document.getElementById('edit-lodging-name').value, address: document.getElementById('edit-lodging-address').value, checkinDate: document.getElementById('edit-lodging-checkin-date').value, checkinTime: document.getElementById('edit-lodging-checkin-time').value, checkoutDate: document.getElementById('edit-lodging-checkout-date').value, checkoutTime: document.getElementById('edit-lodging-checkout-time').value,
-                    cost: document.getElementById('edit-lodging-cost').value,
-                    link: document.getElementById('edit-lodging-link').value
-                 };
-            }
-
-            const itemsRef = ref(db, `public_trips/${currentTripId}/${category}/${currentEditingItemIndex}`);
-            try {
-                await update(itemsRef, updatedItem);
-                closeModal(`edit-${category.slice(0, -1)}-modal`);
-            } catch (error) {
-                console.error(`Erro ao editar ${category}:`, error);
-            } finally {
-                currentEditingItemIndex = null;
-            }
-        }
-        
-        window.deleteDetailItem = (category, index) => {
-            showConfirmDelete(`Tem certeza de que deseja excluir este item de ${category.slice(0, -1)}?`, async () => {
-                const trip = tripsData.find(t => t.id === currentTripId);
-                let items = trip[category] ? [...Object.values(trip[category])] : [];
-                items.splice(index, 1);
-                try {
-                    await set(ref(db, `public_trips/${currentTripId}/${category}`), items);
-                } catch (error) {
-                    console.error(`Erro ao excluir item de ${category}:`, error);
-                }
+        window.deleteTrip = async (event, tripId) => {
+            event.stopPropagation();
+            showConfirmDelete('Tem certeza que deseja excluir esta viagem?', async () => {
+                const tripToDeleteRef = ref(db, `public_trips/${tripId}`);
+                await remove(tripToDeleteRef);
+                closeModal('confirm-delete-modal');
             });
+        }
+        
+        window.duplicateTrip = async (event, tripId) => {
+            event.stopPropagation();
+
+            const originalTrip = tripsData.find(t => t.id === tripId);
+            if (!originalTrip) {
+                console.error("Viagem não encontrada para duplicação");
+                return;
+            }
+
+            const newTrip = JSON.parse(JSON.stringify(originalTrip));
+
+            delete newTrip.id;
+
+            newTrip.name = `${originalTrip.name} (Cópia)`;
+            newTrip.featured = false;
+
+            if (newTrip.activities) {
+                const activitiesArray = Array.isArray(newTrip.activities) 
+                    ? newTrip.activities 
+                    : Object.values(newTrip.activities);
+                activitiesArray.forEach((activity, index) => {
+                    activity.id = `${Date.now()}-${index}`;
+                });
+                newTrip.activities = activitiesArray;
+            }
+
+            if (newTrip.documents) {
+                 newTrip.documents.forEach((doc, index) => {
+                    doc.id = `${Date.now()}-${index}`;
+                });
+            }
+
+            try {
+                const newTripRef = push(tripsRef);
+                await set(newTripRef, newTrip);
+            } catch (error) {
+                console.error("Falha ao duplicar a viagem:", error);
+            }
         };
+
+        window.deleteDetailItem = async (category, index) => {
+            if (!currentTripId) return;
+            const trip = tripsData.find(t => t.id === currentTripId);
+            if (!trip || !trip[category]) return;
+            const currentItems = Object.values(trip[category]);
+            showConfirmDelete(`Tem certeza que deseja excluir o item?`, async () => {
+                currentItems.splice(index, 1);
+                const updates = {};
+                updates[`/${currentTripId}/${category}`] = currentItems;
+                await update(tripsRef, updates);
+                closeModal('confirm-delete-modal');
+            });
+        }
         
         window.reorderDetailItem = async (category, index, direction) => {
             if (!currentTripId) return;
             const trip = tripsData.find(t => t.id === currentTripId);
-            let items = trip[category] ? [...Object.values(trip[category])] : [];
-
-            if ((direction === 'up' && index > 0) || (direction === 'down' && index < items.length - 1)) {
-                const newIndex = direction === 'up' ? index - 1 : index + 1;
-                [items[index], items[newIndex]] = [items[newIndex], items[index]]; // Swap
-                try {
-                    await set(ref(db, `public_trips/${currentTripId}/${category}`), items);
-                } catch (error) {
-                    console.error(`Erro ao reordenar ${category}:`, error);
-                }
-            }
+            const items = trip[category] ? [...Object.values(trip[category])] : [];
+            const newIndex = direction === 'up' ? index - 1 : index + 1;
+            if (newIndex < 0 || newIndex >= items.length) return;
+            [items[index], items[newIndex]] = [items[newIndex], items[index]];
+            const updates = {};
+            updates[`/${currentTripId}/${category}`] = items;
+            await update(tripsRef, updates);
+        }
+        
+        window.openAddActivityModal = (date) => {
+            document.getElementById('activity-date').value = date;
+            const picker = document.getElementById('add-icon-picker');
+            const hiddenInput = document.getElementById('activity-icon');
+            hiddenInput.value = 'passeio'; 
+            picker.querySelectorAll('.icon-picker-option').forEach(opt => opt.classList.remove('selected'));
+            picker.querySelector('[data-icon="passeio"]').classList.add('selected');
+            openModal('add-activity-modal');
         };
 
-        // --- MANIPULAÇÃO DE DADOS (CRUD) ---
-        async function addTrip(name, destination, startDate, endDate) {
-            const defaultImageUrl = `https://source.unsplash.com/random/800x600/?${encodeURIComponent(destination)}`;
-            const newTrip = { name, destination, startDate, endDate, imageUrl: defaultImageUrl };
-            
-            try {
-                const newTripRef = push(tripsRef);
-                await set(newTripRef, newTrip);
-                closeModal('add-trip-modal');
-            } catch (error) {
-                console.error("Erro ao adicionar viagem:", error);
-            }
-        }
-        
-        async function updateTrip(tripId, updatedData) {
-            const tripRef = ref(db, `public_trips/${tripId}`);
-            try {
-                await update(tripRef, updatedData);
-                closeModal('edit-trip-modal');
-            } catch (error) {
-                console.error("Erro ao atualizar viagem:", error);
-            }
-        }
-        
-        window.deleteTrip = (event, tripId) => {
+        window.deleteActivity = (activityId) => {
             event.stopPropagation();
-            const trip = tripsData.find(t => t.id === tripId);
-            showConfirmDelete(`Tem certeza de que deseja excluir a viagem "${trip.name}"?`, async () => {
-                try {
-                    await remove(ref(db, `public_trips/${tripId}`));
-                } catch (error) {
-                    console.error("Erro ao excluir viagem:", error);
-                }
+            showConfirmDelete('Tem certeza que deseja excluir esta atividade?', async () => {
+                const trip = tripsData.find(t => t.id === currentTripId);
+                const currentActivities = trip.activities ? Object.values(trip.activities) : [];
+                const updatedActivities = currentActivities.filter(a => a.id !== activityId);
+                const updates = { [`/${currentTripId}/activities`]: updatedActivities };
+                await update(tripsRef, updates);
+                closeModal('confirm-delete-modal');
             });
+        };
+
+        // NOVO: Função para excluir anotação
+        window.deleteNote = async (noteId) => {
+            showConfirmDelete('Tem certeza que deseja excluir esta anotação?', async () => {
+                const trip = tripsData.find(t => t.id === currentTripId);
+                if (!trip || !trip.notes) return;
+                const updatedNotes = trip.notes.filter(n => n.id !== noteId);
+                const updates = { [`/${currentTripId}/notes`]: updatedNotes };
+                await update(tripsRef, updates);
+                closeModal('confirm-delete-modal');
+            });
+        };
+
+        window.deleteDocument = async (docId) => {
+             showConfirmDelete('Tem certeza que deseja excluir este documento?', async () => {
+                const trip = tripsData.find(t => t.id === currentTripId);
+                if (!trip || !trip.documents) return;
+                const updatedDocuments = trip.documents.filter(d => d.id !== docId);
+                const updates = { [`/${currentTripId}/documents`]: updatedDocuments };
+                await update(tripsRef, updates);
+                closeModal('confirm-delete-modal');
+            });
+        };
+        
+        window.reorderDocument = async (docId, direction) => {
+            if (!currentTripId) return;
+            const trip = tripsData.find(t => t.id === currentTripId);
+            const documents = trip.documents ? [...trip.documents] : [];
+            const index = documents.findIndex(d => d.id === docId);
+
+            if (index === -1) return; 
+
+            const newIndex = direction === 'up' ? index - 1 : index + 1;
+
+            if (newIndex < 0 || newIndex >= documents.length) return;
+
+            [documents[index], documents[newIndex]] = [documents[newIndex], documents[index]];
+
+            const updates = { [`/${currentTripId}/documents`]: documents };
+            await update(tripsRef, updates);
         };
 
         window.toggleFeatured = async (event, tripId) => {
             event.stopPropagation();
             const trip = tripsData.find(t => t.id === tripId);
             if (!trip) return;
-            
-            const tripRef = ref(db, `public_trips/${tripId}`);
-            try {
-                await update(tripRef, { featured: !trip.featured });
-            } catch (error) {
-                console.error("Erro ao destacar viagem:", error);
-            }
+            const newFeaturedStatus = !trip.featured;
+            const updates = { [`/${tripId}/featured`]: newFeaturedStatus };
+            await update(tripsRef, updates);
         }
 
-        window.duplicateTrip = async (event, tripId) => {
-            event.stopPropagation();
-            const originalTrip = tripsData.find(t => t.id === tripId);
-            if (!originalTrip) return;
-            
-            const newTrip = { ...originalTrip };
-            delete newTrip.id; 
-            newTrip.name = `${originalTrip.name} (Cópia)`;
-            
-            try {
-                const newTripRef = push(tripsRef);
-                await set(newTripRef, newTrip);
-                
-            } catch (error) {
-                console.error("Erro ao duplicar viagem:", error);
-            }
-        };
+        // --- SEÇÃO ATUALIZADA: LÓGICA DE REORGANIZAÇÃO DO ROTEIRO COM DUPLO MODO ---
         
-        async function addDocument(name) {
+        async function updateActivityOrderAndDate() {
             if (!currentTripId) return;
             const trip = tripsData.find(t => t.id === currentTripId);
-            const newDoc = { id: Date.now().toString(), name: name };
-            const currentDocs = trip.documents ? [...trip.documents] : [];
-            currentDocs.push(newDoc);
-            try {
-                await set(ref(db, `public_trips/${currentTripId}/documents`), currentDocs);
-                document.getElementById('add-document-form').reset();
-            } catch (error) {
-                console.error("Erro ao adicionar documento:", error);
-            }
-        }
+            if (!trip) return;
 
-        window.deleteDocument = (docId) => {
-            showConfirmDelete('Tem certeza que deseja excluir este documento?', async () => {
-                if (!currentTripId) return;
-                const trip = tripsData.find(t => t.id === currentTripId);
-                const updatedDocs = trip.documents.filter(d => d.id !== docId);
-                try {
-                    await set(ref(db, `public_trips/${currentTripId}/documents`), updatedDocs);
-                } catch (error) {
-                    console.error("Erro ao excluir documento:", error);
+            const allActivityElements = document.querySelectorAll('.activity-item[data-activity-id]');
+            let allCurrentActivities = trip.activities ? JSON.parse(JSON.stringify(Object.values(trip.activities))) : [];
+            let updatedActivities = [];
+
+            allActivityElements.forEach(el => {
+                const activityId = el.dataset.activityId;
+                const newDate = el.closest('.activity-list').dataset.date;
+                const activityData = allCurrentActivities.find(a => a.id === activityId);
+                if (activityData) {
+                    activityData.date = newDate;
+                    updatedActivities.push(activityData);
                 }
             });
-        };
 
-        window.reorderDocument = async (docId, direction) => {
-             if (!currentTripId) return;
-            const trip = tripsData.find(t => t.id === currentTripId);
-            let documents = trip.documents ? [...trip.documents] : [];
-            const index = documents.findIndex(d => d.id === docId);
-
-            if ((direction === 'up' && index > 0) || (direction === 'down' && index < documents.length - 1)) {
-                const newIndex = direction === 'up' ? index - 1 : index + 1;
-                [documents[index], documents[newIndex]] = [documents[newIndex], documents[index]]; 
-                try {
-                    await set(ref(db, `public_trips/${currentTripId}/documents`), documents);
-                } catch (error) {
-                    console.error(`Erro ao reordenar documento:`, error);
-                }
-            }
-        };
-
-        async function addNote(noteData) {
-            if (!currentTripId) return;
-            const trip = tripsData.find(t => t.id === currentTripId);
-            const newNote = { id: Date.now().toString(), ...noteData };
-            const currentNotes = trip.notes ? [...trip.notes] : [];
-            currentNotes.push(newNote);
-            try {
-                await set(ref(db, `public_trips/${currentTripId}/notes`), currentNotes);
-                closeModal('add-note-modal');
-            } catch (error) {
-                console.error("Erro ao adicionar anotação:", error);
-            }
-        }
-
-        async function editNote(noteId, updatedData) {
-            if (!currentTripId) return;
-            const trip = tripsData.find(t => t.id === currentTripId);
-            const notes = trip.notes ? [...trip.notes] : [];
-            const noteIndex = notes.findIndex(n => n.id === noteId);
-            if (noteIndex === -1) return;
-
-            notes[noteIndex] = { ...notes[noteIndex], ...updatedData };
-            
-            try {
-                await set(ref(db, `public_trips/${currentTripId}/notes`), notes);
-                closeModal('edit-note-modal');
-            } catch (error) {
-                console.error("Erro ao editar anotação:", error);
-            }
-        }
-
-        window.deleteNote = (noteId) => {
-            showConfirmDelete('Tem certeza que deseja excluir esta anotação?', async () => {
-                if (!currentTripId) return;
-                const trip = tripsData.find(t => t.id === currentTripId);
-                const updatedNotes = trip.notes.filter(n => n.id !== noteId);
-                try {
-                    await set(ref(db, `public_trips/${currentTripId}/notes`), updatedNotes);
-                } catch (error) {
-                    console.error("Erro ao excluir anotação:", error);
-                }
+            allCurrentActivities.forEach(act => {
+                if (!updatedActivities.find(a => a.id === act.id)) { updatedActivities.push(act); }
             });
-        };
-        
-        async function addActivity(activityData) {
-            if (!currentTripId) return;
-            try {
-                const activitiesRef = ref(db, `public_trips/${currentTripId}/activities`);
-                const newActivityRef = push(activitiesRef);
-                const newActivity = { ...activityData, id: newActivityRef.key };
-                await set(newActivityRef, newActivity);
-                closeModal('add-activity-modal');
-            } catch (error) {
-                console.error("Erro ao adicionar atividade:", error);
-            }
-        }
-        
-        async function editActivity(activityId, updatedData) {
-            if (!currentTripId) return;
-            const activityRef = ref(db, `public_trips/${currentTripId}/activities/${activityId}`);
-            try {
-                await update(activityRef, updatedData);
-                closeModal('edit-activity-modal');
-            } catch(error) {
-                console.error("Erro ao editar atividade:", error);
-            }
+
+            const updates = { [`/${currentTripId}/activities`]: updatedActivities };
+            await update(tripsRef, updates);
         }
 
-        window.deleteActivity = (activityId) => {
-            showConfirmDelete('Tem certeza que deseja excluir esta atividade?', async () => {
-                if (!currentTripId) return;
-                const activityRef = ref(db, `public_trips/${currentTripId}/activities/${activityId}`);
-                try {
-                    await remove(activityRef);
-                } catch (error) {
-                    console.error("Erro ao excluir atividade:", error);
-                }
-            });
-        };
-        
-        // --- LÓGICA DE REORGANIZAÇÃO ---
-        window.toggleReorganizationMode = async (isCancel) => {
-            isReorganizing = !isReorganizing;
-            const container = document.getElementById('daily-itinerary-list');
-            const reorgActions = document.getElementById('reorg-actions-container');
-            const startBtn = document.getElementById('reorg-start-btn');
-
-            if (isReorganizing) {
-                initialTripState = tripsData.find(t => t.id === currentTripId); // Salva o estado
-                reorgActions.classList.replace('hidden', 'flex');
-                startBtn.classList.add('hidden');
-                container.classList.add('is-reorganizing');
-                switchReorganizationType(reorganizationMode); // Inicializa o modo atual
-            } else {
-                reorgActions.classList.replace('flex', 'hidden');
-                startBtn.classList.remove('hidden');
-                container.classList.remove('is-reorganizing', 'mode-days', 'mode-activities');
-                
-                destroyAllSortableInstances();
-
-                if (isCancel && initialTripState) {
-                    await set(ref(db, `public_trips/${currentTripId}`), initialTripState);
-                }
-            }
-        }
-
-        window.switchReorganizationType = (mode) => {
-            reorganizationMode = mode;
-            const container = document.getElementById('daily-itinerary-list');
-            const daysBtn = document.getElementById('reorg-mode-days-btn');
-            const activitiesBtn = document.getElementById('reorg-mode-activities-btn');
-            
-            destroyAllSortableInstances(); 
-
-            if (mode === 'days') {
-                container.classList.add('mode-days');
-                container.classList.remove('mode-activities');
-                daysBtn.classList.add('active');
-                activitiesBtn.classList.remove('active');
-                initializeDaySorting();
-            } else { // activities
-                container.classList.remove('mode-days');
-                container.classList.add('mode-activities');
-                daysBtn.classList.remove('active');
-                activitiesBtn.classList.add('active');
-                initializeActivitySorting();
-            }
-        }
-        
-        function destroyAllSortableInstances() {
-            if (sortableInstance) {
-                sortableInstance.destroy();
-                sortableInstance = null;
-            }
-            if (sortableInstances.length > 0) {
-                sortableInstances.forEach(instance => instance.destroy());
-                sortableInstances = [];
-            }
-        }
-
-        function initializeDaySorting() {
-            const container = document.getElementById('daily-itinerary-list');
-            sortableInstance = new Sortable(container, {
-                animation: 150,
-                handle: '.drag-handle',
-                filter: '.insertion-point',
-                ghostClass: 'sortable-ghost',
-                onEnd: async (evt) => {
-                    const trip = { ...tripsData.find(t => t.id === currentTripId) };
-                    const dayElements = Array.from(container.querySelectorAll('.day-panel'));
-                    const newStartDate = new Date(trip.startDate + 'T00:00:00Z');
-                    
-                    const activitiesByOldDate = Object.values(trip.activities || {}).reduce((acc, activity) => {
-                        if (!acc[activity.date]) acc[activity.date] = [];
-                        acc[activity.date].push(activity);
-                        return acc;
-                    }, {});
-
-                    const newActivities = {};
-
-                    dayElements.forEach((dayEl, index) => {
-                        const oldDate = dayEl.dataset.date;
-                        const newDate = new Date(newStartDate);
-                        newDate.setUTCDate(newDate.getUTCDate() + index);
-                        const newDateString = newDate.toISOString().split('T')[0];
-
-                        if (activitiesByOldDate[oldDate]) {
-                            activitiesByOldDate[oldDate].forEach(activity => {
-                                const newActivity = { ...activity, date: newDateString };
-                                newActivities[activity.id] = newActivity;
-                            });
-                        }
-                    });
-
-                    await update(ref(db, `public_trips/${currentTripId}`), { activities: newActivities });
-                }
-            });
-        }
-        
         function initializeActivitySorting() {
+            sortableInstances.forEach(instance => instance.destroy());
+            sortableInstances = [];
             const activityLists = document.querySelectorAll('.activity-list');
+            
             activityLists.forEach(list => {
                 const instance = new Sortable(list, {
-                    group: 'activities',
-                    animation: 150,
-                    handle: '.activity-drag-handle',
-                    ghostClass: 'sortable-ghost',
-                    chosenClass: 'sortable-chosen',
-                    onEnd: async (evt) => {
-                        const activityId = evt.item.dataset.activityId;
-                        if (!activityId) return;
-
-                        const newDate = evt.to.dataset.date;
-                        const trip = tripsData.find(t => t.id === currentTripId);
-                        
-                        const activityElementsInNewList = Array.from(evt.to.querySelectorAll('.activity-item[data-iseditable="true"]'));
-                        const activityIdsInOrder = activityElementsInNewList.map(el => el.dataset.activityId);
-                        
-                        const activitiesOnThisDate = Object.values(trip.activities).filter(a => a.date === newDate && a.id !== activityId);
-                        activitiesOnThisDate.sort((a,b) => new Date(`1970-01-01T${a.time}`) - new Date(`1970-01-01T${b.time}`));
-                        
-                        let baseTime = 8 * 60; // 8:00 AM in minutes
-                        let updatedActivities = {};
-                        
-                        activityIdsInOrder.forEach((id, index) => {
-                             const hours = Math.floor(baseTime / 60).toString().padStart(2, '0');
-                             const minutes = (baseTime % 60).toString().padStart(2, '0');
-                             const newTime = `${hours}:${minutes}`;
-
-                             updatedActivities[`activities/${id}/date`] = newDate;
-                             updatedActivities[`activities/${id}/time`] = newTime;
-
-                             baseTime += 30; // Increment time for the next activity
-                        });
-                        
-                        try {
-                           await update(ref(db, `public_trips/${currentTripId}`), updatedActivities);
-                        } catch (error) {
-                           console.error("Erro ao mover atividade:", error);
-                        }
-                    }
+                    group: 'shared-activities', animation: 150, handle: '.activity-drag-handle',
+                    draggable: '.activity-item[data-iseditable="true"]',
+                    onEnd: (evt) => updateActivityOrderAndDate(),
                 });
                 sortableInstances.push(instance);
             });
         }
+
+        async function remapAndSaveDays(tripId, daysArray) {
+            const trip = tripsData.find(t => t.id === tripId);
+            let currentDate = new Date(trip.startDate + 'T00:00:00Z');
+            const newActivities = [];
+            
+            daysArray.forEach(dayObj => {
+                const isoDate = currentDate.toISOString().split('T')[0];
+                dayObj.activities.forEach(act => {
+                    act.date = isoDate;
+                    newActivities.push(act);
+                });
+                currentDate.setUTCDate(currentDate.getUTCDate() + 1);
+            });
+            
+            const newEndDate = new Date(currentDate);
+            newEndDate.setUTCDate(newEndDate.getUTCDate() - 1);
+            
+            const updates = {
+                [`/${tripId}/activities`]: newActivities,
+                [`/${tripId}/endDate`]: newEndDate.toISOString().split('T')[0]
+            };
+            
+            await update(tripsRef, updates);
+        }
         
-        window.insertNewDay = async (afterDayIndex) => {
+        function getDaysArray(trip) {
+            const allActivities = trip.activities ? Object.values(trip.activities) : [];
+            const groupedByDay = allActivities.reduce((acc, act) => {
+                const date = act.date;
+                if (!acc[date]) acc[date] = [];
+                acc[date].push(act);
+                return acc;
+            }, {});
+
+            let daysArray = [];
+            if (trip.startDate && trip.endDate) {
+                let currentDate = new Date(trip.startDate + 'T00:00:00Z');
+                const endDate = new Date(trip.endDate + 'T00:00:00Z');
+                while(currentDate <= endDate) {
+                    const dayKey = currentDate.toISOString().split('T')[0];
+                    daysArray.push({
+                        date: dayKey,
+                        activities: groupedByDay[dayKey] || []
+                    });
+                    currentDate.setUTCDate(currentDate.getUTCDate() + 1);
+                }
+            }
+            return daysArray;
+        }
+        
+        window.reorganizeItinerary = async (oldIndex, newIndex) => {
+            const trip = tripsData.find(t => t.id === currentTripId);
+            if (!trip) return;
+            let daysArray = getDaysArray(trip);
+            const [movedItem] = daysArray.splice(oldIndex, 1);
+            daysArray.splice(newIndex, 0, movedItem);
+            await remapAndSaveDays(currentTripId, daysArray);
+        };
+
+        function initializeDaySorting() {
+            if (sortableInstance) sortableInstance.destroy();
+            const list = document.getElementById('daily-itinerary-list');
+            
+            sortableInstance = new Sortable(list, {
+                animation: 150, handle: '.drag-handle', draggable: '.day-panel',
+                onEnd: (evt) => {
+                    if (evt.oldDraggableIndex !== evt.newDraggableIndex) {
+                        reorganizeItinerary(evt.oldDraggableIndex, evt.newDraggableIndex);
+                    }
+                },
+            });
+        }
+        
+        window.switchReorganizationType = (type) => {
+            if (reorganizationMode === type) return;
+            reorganizationMode = type;
+            const list = document.getElementById('daily-itinerary-list');
+            const daysBtn = document.getElementById('reorg-mode-days-btn');
+            const activitiesBtn = document.getElementById('reorg-mode-activities-btn');
+
+            if (sortableInstance) sortableInstance.destroy();
+            sortableInstances.forEach(i => i.destroy());
+            sortableInstance = null;
+            sortableInstances = [];
+
+            if (type === 'days') {
+                list.classList.remove('mode-activities');
+                list.classList.add('mode-days');
+                daysBtn.classList.add('active');
+                activitiesBtn.classList.remove('active');
+                initializeDaySorting();
+            } else {
+                list.classList.remove('mode-days');
+                list.classList.add('mode-activities');
+                activitiesBtn.classList.add('active');
+                daysBtn.classList.remove('active');
+                initializeActivitySorting();
+            }
+        }
+
+        window.toggleReorganizationMode = (isCancelling) => {
+            const list = document.getElementById('daily-itinerary-list');
+            const startBtn = document.getElementById('reorg-start-btn');
+            const actionsContainer = document.getElementById('reorg-actions-container');
+            const scrollTopBtn = document.getElementById('scroll-to-top-btn'); 
+            
+            isReorganizing = !list.classList.contains('is-reorganizing');
+            list.classList.toggle('is-reorganizing', isReorganizing);
+
+            if (isReorganizing) {
+                const trip = tripsData.find(t => t.id === currentTripId);
+                initialTripState = { 
+                    activities: trip.activities ? JSON.parse(JSON.stringify(trip.activities)) : {}, 
+                    endDate: trip.endDate 
+                };
+                startBtn.style.display = 'none';
+                actionsContainer.style.display = 'flex';
+                scrollTopBtn.style.display = 'none';
+                switchReorganizationType('days');
+            } else {
+                if (isCancelling && initialTripState) {
+                    const updates = {
+                        [`/${currentTripId}/activities`]: initialTripState.activities,
+                        [`/${currentTripId}/endDate`]: initialTripState.endDate
+                    };
+                    update(tripsRef, updates);
+                }
+                initialTripState = null;
+                startBtn.style.display = 'block';
+                actionsContainer.style.display = 'none';
+                scrollTopBtn.style.display = 'block'; 
+                
+                list.classList.remove('mode-days', 'mode-activities');
+                if (sortableInstance) sortableInstance.destroy();
+                sortableInstances.forEach(i => i.destroy());
+                sortableInstance = null;
+                sortableInstances = [];
+            }
+        };
+
+        window.insertNewDay = async (index) => {
             const trip = tripsData.find(t => t.id === currentTripId);
             if (!trip) return;
 
-            const originalEndDate = new Date(trip.endDate + 'T00:00:00Z');
-            const newEndDate = new Date(originalEndDate);
-            newEndDate.setUTCDate(newEndDate.getUTCDate() + 1);
-            
-            const updates = {};
-            updates.endDate = newEndDate.toISOString().split('T')[0];
+            let daysArray = getDaysArray(trip);
+            daysArray.splice(index, 0, { date: 'new', activities: [] });
 
-            const dateToShiftFrom = new Date(trip.startDate + 'T00:00:00Z');
-            dateToShiftFrom.setUTCDate(dateToShiftFrom.getUTCDate() + afterDayIndex);
-
-            Object.values(trip.activities || {}).forEach(activity => {
-                const activityDate = new Date(activity.date + 'T00:00:00Z');
-                if (activityDate >= dateToShiftFrom) {
-                    const newActivityDate = new Date(activityDate);
-                    newActivityDate.setUTCDate(newActivityDate.getUTCDate() + 1);
-                    updates[`activities/${activity.id}/date`] = newActivityDate.toISOString().split('T')[0];
-                }
-            });
-            
-            await update(ref(db, `public_trips/${currentTripId}`), updates);
-        }
+            await remapAndSaveDays(currentTripId, daysArray);
+        };
         
-        window.deleteDay = (dateToDelete) => {
-             showConfirmDelete(`Tem certeza que deseja excluir o dia ${formatDate(dateToDelete)} e todas as suas atividades?`, async () => {
-                const trip = { ...tripsData.find(t => t.id === currentTripId) };
-                if (!trip) return;
+        window.deleteDay = async (dayKey) => {
+            const trip = tripsData.find(t => t.id === currentTripId);
+            if (!trip) return;
 
-                const originalEndDate = new Date(trip.endDate + 'T00:00:00Z');
-                const newEndDate = new Date(originalEndDate);
-                newEndDate.setUTCDate(newEndDate.getUTCDate() - 1);
+            let daysArray = getDaysArray(trip);
+            if (daysArray.length <= 1) {
+                alert("Não é possível excluir o único dia da viagem.");
+                return;
+            }
+
+            showConfirmDelete(`Tem certeza que deseja excluir o dia ${formatDate(dayKey, {weekday: 'long', day: 'numeric', month: 'long'})} e todas as suas atividades?`, async () => {
+                let daysArray = getDaysArray(trip);
+                const dayIndex = daysArray.findIndex(day => day.date === dayKey);
                 
-                const updates = {};
-                updates.endDate = newEndDate.toISOString().split('T')[0];
-                
-                const dateToDeleteObj = new Date(dateToDelete + 'T00:00:00Z');
-
-                Object.values(trip.activities || {}).forEach(activity => {
-                    const activityDate = new Date(activity.date + 'T00:00:00Z');
-                    if (activityDate.getTime() === dateToDeleteObj.getTime()) {
-                        updates[`activities/${activity.id}`] = null; // Deleta a atividade
-                    } else if (activityDate > dateToDeleteObj) {
-                        const newActivityDate = new Date(activityDate);
-                        newActivityDate.setUTCDate(newActivityDate.getUTCDate() - 1);
-                        updates[`activities/${activity.id}/date`] = newActivityDate.toISOString().split('T')[0];
-                    }
-                });
-                
-                await update(ref(db, `public_trips/${currentTripId}`), updates);
-             });
-        }
-
-
-        // --- EVENT LISTENERS ---
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('add-trip-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                addTrip(
-                    document.getElementById('trip-name').value,
-                    document.getElementById('trip-destination').value,
-                    document.getElementById('trip-start-date').value,
-                    document.getElementById('trip-end-date').value
-                );
-            });
-            
-            document.getElementById('edit-trip-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const updatedData = {
-                    name: document.getElementById('edit-trip-name').value,
-                    destination: document.getElementById('edit-trip-destination').value,
-                    startDate: document.getElementById('edit-trip-start-date').value,
-                    endDate: document.getElementById('edit-trip-end-date').value,
-                    imageUrl: document.getElementById('edit-trip-image-url').value,
-                    customLinkText: document.getElementById('edit-trip-link-text').value,
-                    customLinkUrl: document.getElementById('edit-trip-link-url').value,
-                };
-                updateTrip(currentTripId, updatedData);
-            });
-            
-            document.getElementById('add-document-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const docName = document.getElementById('document-name').value;
-                addDocument(docName);
-            });
-
-            document.getElementById('add-note-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const noteData = {
-                    title: document.getElementById('note-title').value,
-                    author: document.getElementById('note-author').value,
-                    description: document.getElementById('note-description').value,
-                    link: document.getElementById('note-link').value,
-                    icon: document.getElementById('note-icon').value,
-                };
-                addNote(noteData);
-            });
-
-            document.getElementById('edit-note-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const noteId = document.getElementById('edit-note-id').value;
-                const updatedData = {
-                    title: document.getElementById('edit-note-title').value,
-                    author: document.getElementById('edit-note-author').value,
-                    description: document.getElementById('edit-note-description').value,
-                    link: document.getElementById('edit-note-link').value,
-                    icon: document.getElementById('edit-note-icon').value,
-                };
-                editNote(noteId, updatedData);
-            });
-
-            document.getElementById('add-flight-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                addDetail('flights');
-            });
-            document.getElementById('edit-flight-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                editDetailItem('flights');
-            });
-
-             document.getElementById('add-transport-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                addDetail('transport');
-            });
-            document.getElementById('edit-transport-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                editDetailItem('transport');
-            });
-
-            document.getElementById('add-lodging-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                addDetail('lodging');
-            });
-            document.getElementById('edit-lodging-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                editDetailItem('lodging');
-            });
-            
-            document.getElementById('confirm-delete-btn').addEventListener('click', () => {
-                if (typeof onConfirmAction === 'function') {
-                    onConfirmAction();
+                if (dayIndex > -1) {
+                    daysArray.splice(dayIndex, 1);
+                    await remapAndSaveDays(currentTripId, daysArray);
                 }
                 closeModal('confirm-delete-modal');
             });
+        };
+
+        // --- LISTENERS DOS FORMULÁRIOS ---
+        document.getElementById('add-trip-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const tripName = document.getElementById('trip-name').value;
+            const newTrip = {
+                name: tripName,
+                destination: document.getElementById('trip-destination').value,
+                startDate: document.getElementById('trip-start-date').value,
+                endDate: document.getElementById('trip-end-date').value,
+                imageUrl: `https://placehold.co/600x400/a3e635/1e293b?text=${encodeURIComponent(tripName)}`,
+                featured: false,
+                customLinkText: '',
+                customLinkUrl: ''
+            };
+            const newTripRef = push(tripsRef);
+            await set(newTripRef, newTrip);
+            closeModal('add-trip-modal');
+        });
+
+        document.getElementById('add-document-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            if (!currentTripId) return;
+
+            const input = document.getElementById('document-name');
+            const docName = input.value.trim();
+            if (!docName) return;
+
+            const trip = tripsData.find(t => t.id === currentTripId);
+            const currentDocuments = trip.documents || [];
             
-            document.getElementById('add-activity-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const activityData = {
-                    date: document.getElementById('activity-date').value,
-                    time: document.getElementById('activity-time').value,
-                    name: document.getElementById('activity-name').value,
-                    type: document.getElementById('activity-type').value,
-                    description: document.getElementById('activity-description').value,
-                    link: document.getElementById('activity-link').value,
-                    cost: document.getElementById('activity-cost').value,
-                    icon: document.getElementById('activity-icon').value,
-                };
-                addActivity(activityData);
-            });
+            const newDocument = {
+                id: Date.now().toString(),
+                name: docName,
+            };
+
+            const updatedDocuments = [...currentDocuments, newDocument];
+            const updates = { [`/${currentTripId}/documents`]: updatedDocuments };
+            await update(tripsRef, updates);
+
+            input.value = '';
+        });
+
+        document.getElementById('add-flight-form').addEventListener('submit', (e) => { e.preventDefault(); addDetail('flights'); });
+        document.getElementById('add-transport-form').addEventListener('submit', (e) => { e.preventDefault(); addDetail('transport'); });
+        document.getElementById('add-lodging-form').addEventListener('submit', (e) => { e.preventDefault(); addDetail('lodging'); });
+
+        document.getElementById('edit-trip-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            if (!currentTripId) return;
+            const updates = {
+                name: document.getElementById('edit-trip-name').value,
+                destination: document.getElementById('edit-trip-destination').value,
+                startDate: document.getElementById('edit-trip-start-date').value,
+                endDate: document.getElementById('edit-trip-end-date').value,
+                imageUrl: document.getElementById('edit-trip-image-url').value,
+                customLinkText: document.getElementById('edit-trip-link-text').value.trim(),
+                customLinkUrl: document.getElementById('edit-trip-link-url').value.trim(),
+            };
+            const tripToUpdateRef = ref(db, `public_trips/${currentTripId}`);
+            await update(tripToUpdateRef, updates);
+            closeModal('edit-trip-modal');
+        });
+
+        document.getElementById('edit-flight-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            if (currentTripId === null || currentEditingItemIndex === null) return;
+            const trip = tripsData.find(t => t.id === currentTripId); if (!trip) return;
+            const updatedFlight = {
+                legType: document.getElementById('edit-flight-leg-type').value, date: document.getElementById('edit-flight-date').value, departureTime: document.getElementById('edit-flight-departure-time').value, arrivalTime: document.getElementById('edit-flight-arrival-time').value, origin: document.getElementById('edit-flight-origin').value, destination: document.getElementById('edit-flight-destination').value, company: document.getElementById('edit-flight-company').value, code: document.getElementById('edit-flight-code').value, flightType: document.getElementById('edit-flight-type').value,
+                cost: document.getElementById('edit-flight-cost').value,
+            };
+            const currentFlights = trip.flights ? [...Object.values(trip.flights)] : [];
+            currentFlights[currentEditingItemIndex] = updatedFlight;
+            const updates = { [`/${currentTripId}/flights`]: currentFlights };
+            await update(tripsRef, updates);
+            closeModal('edit-flight-modal');
+            currentEditingItemIndex = null;
+        });
+
+        document.getElementById('edit-transport-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            if (currentTripId === null || currentEditingItemIndex === null) return;
+            const trip = tripsData.find(t => t.id === currentTripId); if (!trip) return;
+            const updatedTransport = {
+                type: document.getElementById('edit-transport-type').value, from: document.getElementById('edit-transport-origin').value, to: document.getElementById('edit-transport-destination').value, description: document.getElementById('edit-transport-description').value, departureDate: document.getElementById('edit-transport-departure-date').value, departureTime: document.getElementById('edit-transport-departure-time').value, arrivalDate: document.getElementById('edit-transport-arrival-date').value, arrivalTime: document.getElementById('edit-transport-arrival-time').value,
+                cost: document.getElementById('edit-transport-cost').value,
+            };
+            const currentTransport = trip.transport ? [...Object.values(trip.transport)] : [];
+            currentTransport[currentEditingItemIndex] = updatedTransport;
+            const updates = { [`/${currentTripId}/transport`]: currentTransport };
+            await update(tripsRef, updates);
+            closeModal('edit-transport-modal');
+            currentEditingItemIndex = null;
+        });
+        
+        document.getElementById('edit-lodging-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            if (currentTripId === null || currentEditingItemIndex === null) return;
+            const trip = tripsData.find(t => t.id === currentTripId); if (!trip) return;
+            const updatedLodging = {
+                name: document.getElementById('edit-lodging-name').value, address: document.getElementById('edit-lodging-address').value, checkinDate: document.getElementById('edit-lodging-checkin-date').value, checkinTime: document.getElementById('edit-lodging-checkin-time').value, checkoutDate: document.getElementById('edit-lodging-checkout-date').value, checkoutTime: document.getElementById('edit-lodging-checkout-time').value,
+                cost: document.getElementById('edit-lodging-cost').value,
+                link: document.getElementById('edit-lodging-link').value.trim()
+            };
+            const currentLodging = trip.lodging ? [...Object.values(trip.lodging)] : [];
+            currentLodging[currentEditingItemIndex] = updatedLodging;
+            const updates = { [`/${currentTripId}/lodging`]: currentLodging };
+            await update(tripsRef, updates);
+            closeModal('edit-lodging-modal');
+            currentEditingItemIndex = null;
+        });
+
+        document.getElementById('add-activity-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const trip = tripsData.find(t => t.id === currentTripId);
+            const newActivity = {
+                id: Date.now().toString(),
+                date: document.getElementById('activity-date').value,
+                time: document.getElementById('activity-time').value,
+                name: document.getElementById('activity-name').value,
+                type: document.getElementById('activity-type').value,
+                description: document.getElementById('activity-description').value,
+                icon: document.getElementById('activity-icon').value,
+                link: document.getElementById('activity-link').value.trim(),
+                cost: document.getElementById('activity-cost').value,
+            };
+            const currentActivities = trip.activities ? [...Object.values(trip.activities)] : [];
+            currentActivities.push(newActivity);
+            const updates = { [`/${currentTripId}/activities`]: currentActivities };
+            await update(tripsRef, updates);
+            closeModal('add-activity-modal');
+        });
+
+        document.getElementById('edit-activity-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const trip = tripsData.find(t => t.id === currentTripId);
+            const activityId = document.getElementById('edit-activity-id').value;
+            const currentActivities = trip.activities ? Object.values(trip.activities) : [];
+            const activityIndex = currentActivities.findIndex(a => a.id === activityId);
             
-            document.getElementById('edit-activity-form').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const activityId = document.getElementById('edit-activity-id').value;
-                const updatedData = {
+            if (activityIndex > -1) {
+                currentActivities[activityIndex] = {
+                    ...currentActivities[activityIndex],
                     time: document.getElementById('edit-activity-time').value,
                     name: document.getElementById('edit-activity-name').value,
                     type: document.getElementById('edit-activity-type').value,
                     description: document.getElementById('edit-activity-description').value,
-                    link: document.getElementById('edit-activity-link').value,
-                    cost: document.getElementById('edit-activity-cost').value,
                     icon: document.getElementById('edit-activity-icon').value,
+                    link: document.getElementById('edit-activity-link').value.trim(),
+                    cost: document.getElementById('edit-activity-cost').value,
                 };
-                editActivity(activityId, updatedData);
-            });
+                const updates = { [`/${currentTripId}/activities`]: currentActivities };
+                await update(tripsRef, updates);
+            }
+closeModal('edit-activity-modal');
         });
 
-        window.openAddActivityModal = (date) => {
-            document.getElementById('activity-date').value = date;
-            
-            const picker = document.getElementById('add-icon-picker');
-            const defaultIcon = 'passeio';
-            document.getElementById('activity-icon').value = defaultIcon;
-            picker.querySelectorAll('.icon-picker-option').forEach(opt => opt.classList.remove('selected'));
-            const defaultIconElement = picker.querySelector(`[data-icon="${defaultIcon}"]`);
-            if (defaultIconElement) {
-                defaultIconElement.classList.add('selected');
-            }
+        // NOVO: Listeners para os formulários de anotações
+        document.getElementById('add-note-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const trip = tripsData.find(t => t.id === currentTripId);
+            if (!trip) return;
 
-            openModal('add-activity-modal');
-        };
-        
-        // Expondo funções para o escopo global
+            const newNote = {
+                id: Date.now().toString(),
+                title: document.getElementById('note-title').value,
+                author: document.getElementById('note-author').value,
+                description: document.getElementById('note-description').value,
+                link: document.getElementById('note-link').value.trim()
+            };
+
+            const currentNotes = trip.notes || [];
+            currentNotes.push(newNote);
+
+            const updates = { [`/${currentTripId}/notes`]: currentNotes };
+            await update(tripsRef, updates);
+            closeModal('add-note-modal');
+        });
+
+        document.getElementById('edit-note-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const trip = tripsData.find(t => t.id === currentTripId);
+            const noteId = document.getElementById('edit-note-id').value;
+            if (!trip || !trip.notes) return;
+
+            const noteIndex = trip.notes.findIndex(n => n.id === noteId);
+            if (noteIndex > -1) {
+                trip.notes[noteIndex] = {
+                    ...trip.notes[noteIndex],
+                    title: document.getElementById('edit-note-title').value,
+                    author: document.getElementById('edit-note-author').value,
+                    description: document.getElementById('edit-note-description').value,
+                    link: document.getElementById('edit-note-link').value.trim()
+                };
+                const updates = { [`/${currentTripId}/notes`]: trip.notes };
+                await update(tripsRef, updates);
+            }
+            closeModal('edit-note-modal');
+        });
+
+        document.getElementById('confirm-delete-btn').addEventListener('click', () => {
+            if (onConfirmAction) {
+                onConfirmAction();
+            }
+        });
+
+        // Expor funções globais que são chamadas via onclick no HTML
         window.openModal = openModal;
         window.closeModal = closeModal;
         window.showTripsView = showTripsView;
-        window.showTripDetails = showTripDetails;
-        window.deleteTrip = deleteTrip;
-        window.toggleFeatured = toggleFeatured;
-        window.duplicateTrip = duplicateTrip;
+        window.openEditTripModal = openEditTripModal;
+        window.scrollToItinerary = scrollToItinerary;
         window.toggleDocumentsPanel = toggleDocumentsPanel;
         window.toggleNotesPanel = toggleNotesPanel;
         window.toggleSpendingPanel = toggleSpendingPanel;
+        window.openEditFlightModal = openEditFlightModal;
+        window.openEditTransportModal = openEditTransportModal;
+        window.openEditLodgingModal = openEditLodgingModal;
+        window.reorderDetailItem = reorderDetailItem;
+        window.deleteDetailItem = deleteDetailItem;
+        window.deleteDocument = deleteDocument;
+        window.reorderDocument = reorderDocument;
+        window.deleteNote = deleteNote;
+        window.openEditNoteModal = openEditNoteModal;
+        window.openViewNoteModal = openViewNoteModal;
+        window.toggleReorganizationMode = toggleReorganizationMode;
+        window.switchReorganizationType = switchReorganizationType;
+        window.insertNewDay = insertNewDay;
+        window.deleteDay = deleteDay;
+        window.scrollToTop = scrollToTop;
+        window.openAddActivityModal = openAddActivityModal;
+        window.deleteActivity = deleteActivity;
+        window.openEditActivityModal = openEditActivityModal;
+        window.openViewActivityModal = openViewActivityModal;
+        window.toggleFeatured = toggleFeatured;
+        window.duplicateTrip = duplicateTrip;
+        window.deleteTrip = deleteTrip;
+
     </script>
 
-</body>
-</html>
+</body></html>
