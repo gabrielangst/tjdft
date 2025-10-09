@@ -10,6 +10,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
     
     <style>
+
+/* --- ESTILOS PARA O BOTÃO VOLTAR AO TOPO --- */
+        #back-to-top-btn {
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
 #view-note-description {
       white-space: pre-line;
 }
@@ -209,10 +215,10 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path><path d="m15 5 4 4"></path></svg>
                         <span>Editar Viagem</span>
                     </button>
-                    <button onclick="scrollToItinerary()" class="flex items-center gap-2 text-sm bg-white/20 text-white font-semibold px-4 py-2 rounded-lg hover:bg-white/30 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-collapse"><path d="m3 10 2.5-2.5L3 5"></path><path d="m3 19 2.5-2.5L3 14"></path><path d="M10 6h11"></path><path d="M10 12h11"></path><path d="M10 18h11"></path></svg>
-                        <span>Roteiro</span>
-                    </button>
+                    <button onclick="openModal('index-modal')" class="flex items-center gap-2 text-sm bg-white/20 text-white font-semibold px-4 py-2 rounded-lg hover:bg-white/30 transition-colors">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-marked"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path><polyline points="10 2 10 10 14 7 18 10 18 2"></polyline></svg>
+    <span>Índice</span>
+</button>
                     <button id="custom-link-btn" style="display: none;" class="flex items-center gap-2 text-sm bg-white/20 text-white font-semibold px-4 py-2 rounded-lg hover:bg-white/30 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"></path></svg>
                         <span></span> </button>
@@ -220,7 +226,7 @@
             </header>
 
             <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <section class="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg">
+                <section id="flights-section" class="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg">
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-2xl font-semibold">Voos</h2>
                         <button onclick="openModal('add-flight-modal')" class="flex items-center justify-center w-10 h-10 bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200 transition-colors">
@@ -229,7 +235,7 @@
                     </div>
                     <div id="flights-list" class="space-y-4"></div>
                 </section>
-                <section class="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg">
+                <section id="transport-section" class="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg">
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-2xl font-semibold">Transporte</h2>
                         <button onclick="openModal('add-transport-modal')" class="flex items-center justify-center w-10 h-10 bg-green-100 text-green-600 rounded-full hover:bg-green-200 transition-colors">
@@ -238,7 +244,7 @@
                     </div>
                     <div id="transport-list" class="space-y-4"></div>
                 </section>
-                <section class="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg">
+                <section id="lodging-section" class="lg:col-span-1 bg-white p-6 rounded-xl shadow-lg">
                     <div class="flex justify-between items-center mb-4">
                         <div class="flex items-center gap-3">
                             <h2 class="text-2xl font-semibold">Hospedagens</h2>
@@ -321,6 +327,24 @@
             </section>
         </div>
     </div>
+
+<div id="index-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
+    <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-sm m-4">
+        <h3 class="text-2xl font-semibold mb-6">Índice Rápido</h3>
+        <div class="space-y-3">
+            <button onclick="scrollToSectionAndClose('flights-section', 'index-modal')" class="w-full text-left p-3 rounded-lg hover:bg-slate-100 transition-colors font-medium">Voos</button>
+            <button onclick="scrollToSectionAndClose('transport-section', 'index-modal')" class="w-full text-left p-3 rounded-lg hover:bg-slate-100 transition-colors font-medium">Transporte</button>
+            <button onclick="scrollToSectionAndClose('lodging-section', 'index-modal')" class="w-full text-left p-3 rounded-lg hover:bg-slate-100 transition-colors font-medium">Hospedagens</button>
+            <button onclick="scrollToSectionAndClose('documents-panel', 'index-modal')" class="w-full text-left p-3 rounded-lg hover:bg-slate-100 transition-colors font-medium">Documentos</button>
+            <button onclick="scrollToSectionAndClose('daily-itinerary-panel', 'index-modal')" class="w-full text-left p-3 rounded-lg hover:bg-slate-100 transition-colors font-medium">Roteiro</button>
+            <button onclick="scrollToSectionAndClose('notes-panel', 'index-modal')" class="w-full text-left p-3 rounded-lg hover:bg-slate-100 transition-colors font-medium">Anotações</button>
+            <button onclick="scrollToSectionAndClose('spending-panel', 'index-modal')" class="w-full text-left p-3 rounded-lg hover:bg-slate-100 transition-colors font-medium">Resumo de Gastos</button>
+        </div>
+        <div class="pt-6 flex justify-end">
+            <button type="button" onclick="closeModal('index-modal')" class="px-6 py-2 bg-slate-200 text-slate-800 rounded-md hover:bg-slate-300 transition-colors">Fechar</button>
+        </div>
+    </div>
+</div>
 
     <div id="add-trip-modal" class="fixed inset-0 z-50 hidden items-center justify-center modal-backdrop">
         <div class="bg-white rounded-lg shadow-2xl p-8 w-full max-w-md m-4">
@@ -1904,6 +1928,14 @@ let dividerHtml = '';
             }
         }
 
+window.scrollToSectionAndClose = (targetId, modalId) => {
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            closeModal(modalId);
+        };
+
         window.openModal = (modalId) => {
             const modal = document.getElementById(modalId);
             modal.classList.replace('hidden', 'flex');
@@ -2792,6 +2824,22 @@ cost: document.getElementById('edit-activity-cost').value,
                 onConfirmAction();
             }
         });
+
+// Lógica para o botão "Voltar ao Topo"
+        const backToTopBtn = document.getElementById('back-to-top-btn');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 200) { // Mostra o botão após rolar 200 pixels
+                backToTopBtn.classList.remove('hidden');
+            } else { // Esconde o botão se estiver perto do topo
+                backToTopBtn.classList.add('hidden');
+            }
+        });
+
     </script>
+
+<button id="back-to-top-btn" onclick="scrollToTop()" class="hidden fixed bottom-8 left-8 z-40 w-12 h-12 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-colors flex items-center justify-center">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
+</button>
+
 </body>
 </html>
