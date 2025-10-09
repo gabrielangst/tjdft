@@ -1329,7 +1329,7 @@
                 return;
             }
 
-            notes.forEach((note) => {
+            notes.forEach((note, index, allNotes) => {
                 const noteElement = document.createElement('div');
                 noteElement.className = 'flex items-center justify-between p-3 rounded-lg hover:bg-slate-50 border border-slate-200 cursor-pointer';
                 
@@ -1352,11 +1352,17 @@
                         <span class="text-slate-700 font-medium">${note.title}</span>
                     </div>
                     <div class="flex items-center gap-2">
+                        <button ${index === 0 ? 'disabled' : ''} onclick="event.stopPropagation(); reorderNote('${note.id}', 'up')" class="p-1 disabled:opacity-30 disabled:cursor-not-allowed text-slate-400 hover:text-slate-700">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-circle"><circle cx="12" cy="12" r="10"></circle><path d="m16 12-4-4-4 4"></path><path d="M12 16V8"></path></svg>
+                        </button>
+                        <button ${index === allNotes.length - 1 ? 'disabled' : ''} onclick="event.stopPropagation(); reorderNote('${note.id}', 'down')" class="p-1 disabled:opacity-30 disabled:cursor-not-allowed text-slate-400 hover:text-slate-700">
+                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down-circle"><circle cx="12" cy="12" r="10"></circle><path d="m8 12 4 4 4-4"></path><path d="m12 8 v8"></path></svg>
+                        </button>
                         <button onclick="event.stopPropagation(); openEditNoteModal('${note.id}')" class="text-slate-400 hover:text-blue-600 p-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path><path d="m15 5 4 4"></path></svg>
                         </button>
                         <button onclick="event.stopPropagation(); deleteNote('${note.id}')" class="text-slate-400 hover:text-red-600 p-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg>
                         </button>
                     </div>
                 `;
@@ -2315,6 +2321,26 @@ let dividerHtml = '';
             [documents[index], documents[newIndex]] = [documents[newIndex], documents[index]];
 
             const updates = { [`/${currentTripId}/documents`]: documents };
+            await update(tripsRef, updates);
+        };
+
+	
+	window.reorderNote = async (noteId, direction) => {
+            if (!currentTripId) return;
+            const trip = tripsData.find(t => t.id === currentTripId);
+            const notes = trip.notes ? [...trip.notes] : [];
+            const index = notes.findIndex(n => n.id === noteId);
+
+            if (index === -1) return; 
+
+            const newIndex = direction === 'up' ? index - 1 : index + 1;
+
+            if (newIndex < 0 || newIndex >= notes.length) return;
+
+            // Troca os elementos de posição no array
+            [notes[index], notes[newIndex]] = [notes[newIndex], notes[index]];
+
+            const updates = { [`/${currentTripId}/notes`]: notes };
             await update(tripsRef, updates);
         };
 
