@@ -1799,12 +1799,40 @@
                     `;
                 }).join('');
 
+let dividerHtml = '';
+                if (categoryName === 'Transportes' || categoryName === 'Hospedagens') {
+                    const categoryKey = categoryName.replace(/\s+/g, '');
+
+                    // NOVO: Lê o valor salvo no banco de dados para esta categoria
+                    const savedDivider = trip.dividers?.[categoryKey] || '';
+                    
+                    // NOVO: Calcula o resultado inicial se já houver um divisor salvo
+                    let initialResultText = '';
+                    if (savedDivider && savedDivider > 0) {
+                        const result = groupSubtotal / savedDivider;
+                        initialResultText = `= ${formatCurrency(result)} por pessoa`;
+                    }
+
+                    dividerHtml = `
+                        <div class="flex items-center gap-2 text-sm mt-2 text-slate-600 pl-4">
+                            <span>(Dividido por</span>
+                            <input type="number" min="1"
+                                   value="${savedDivider}" 
+                                   oninput="saveDivider('${currentTripId}', '${categoryKey}', this.value)"
+                                   class="w-16 px-2 py-1 border border-slate-300 rounded-md shadow-sm text-center focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                            <span>pessoas)</span>
+                            <strong class="text-blue-600 font-bold ml-2">${initialResultText}</strong>
+                        </div>
+                    `;
+                }
+
                 groupHtml.innerHTML = `
                     <div class="border-b pb-2">
                         <div class="flex justify-between items-baseline">
                             <h3 class="font-semibold text-lg text-slate-800">${categoryName}</h3>
                             <span class="font-semibold text-slate-700">${formatCurrency(groupSubtotal)}</span>
                         </div>
+                       ${dividerHtml}
                         <div class="mt-1 space-y-1">${itemsHtml}</div>
                     </div>
                 `;
@@ -2513,6 +2541,23 @@
                 }
                 closeModal('confirm-delete-modal');
             });
+        };
+
+window.saveDivider = async function(tripId, categoryKey, value) {
+            // Define o caminho no banco de dados onde o divisor será salvo
+            // Ex: public_trips/-Mabc123/dividers/Hospedagens
+            const dbPath = `public_trips/${tripId}/dividers/${categoryKey}`;
+            const dividerRef = ref(db, dbPath);
+
+            const divider = parseInt(value);
+
+            if (divider && divider > 0) {
+                // Se o valor for um número válido, salva no Firebase
+                await set(dividerRef, divider);
+            } else {
+                // Se o campo for limpo ou inválido, remove o dado do Firebase
+                await remove(dividerRef);
+            }
         };
 
         // --- LISTENERS DOS FORMULÁRIOS ---
