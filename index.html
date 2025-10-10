@@ -1,5 +1,3 @@
-<!--* A ideia do programa foi criada pelo Gabriel F. A., sendo que o Filipe S.L. aproveitou ela e criou neste formato HTML.*\-->
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -12,13 +10,15 @@
         #alert-box {
             display: none;
             background-color: #36f4c8;
-            color: green;
+            color: #006400;
             padding: 20px;
             position: fixed;
             top: 20px;
             right: 20px;
             z-index: 1000;
             border-radius: 5px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
         } 
         textarea {
             width: 100%;
@@ -104,7 +104,7 @@
             background-color: #5F9EA0; /* CadetBlue */
         }
 
-        #copiarCaixa8, #copiarCaixa9, #copiarCaixa10 {
+        #copiarDados, #copiarCaixa9, #copiarCaixa10 {
             background-color: #4682B4;
             border: none;
             color: #fff;
@@ -118,7 +118,7 @@
             border-radius: 8px;
             transition: transform 0.5s ease;
         }
-        #copiarCaixa8:hover, #copiarCaixa9:hover, #copiarCaixa10:hover {
+        #copiarDados:hover, #copiarCaixa9:hover, #copiarCaixa10:hover {
             background-color: #00BFFF;
         }
         #caixa1 {
@@ -221,7 +221,7 @@
             transition: color 0.3s;
         }
 /*Se refere a cor quando passa em cima do botão*/
-        /*.botao:hover, #extrairTextoCopiado:hover, #limparCaixas:hover, #copiarCaixa8:hover, #copiarCaixa9:hover, #copiarCaixa10:hover {
+        /*.botao:hover, #extrairTextoCopiado:hover, #limparCaixas:hover, #copiarDados:hover, #copiarCaixa9:hover, #copiarCaixa10:hover {
             background-color: var(--button-hover-bg-color);
         }*/
 
@@ -338,10 +338,26 @@ body {
         .help-icon:hover + .tooltip {
             visibility: visible;
         }
+        
+                /* Novo estilo para a tabela de dados extraídos */
+        .tabela-dados-pje {
+            width: 550px;
+            border-collapse: collapse;
+            margin-top: 20px; /* Adiciona um pouco de espaço acima */
+        }
+
+        .tabela-dados-pje, .tabela-dados-pje td {
+            border: 1px solid black; /* Borda 1px preta */
+        }
+
+        .tabela-dados-pje td {
+            padding: 5px;
+        }
 
     </style>
 </head>
 <body style="margin:60px;padding:0">
+    <div id="alert-box"></div>
     <!--Interruptor temas Claro e escuro-->
     <div style="position: fixed; top: 10px; right: 10px; z-index: 1000; text-align: center;">
         <label>
@@ -355,7 +371,7 @@ body {
         </div>
     </div>
     
-    <p style="text-align: center; font-family: Georgia;" id="Autor">Filipe de Sousa Lima | Gabriel Freitas Angst <br> 5º NUVIMEC/TJDFT | <b>18/03/2025 15:15 <a title="Veja um tutorial em vídeo de como utilizar esta ferramenta" href="https://tjdf.sharepoint.com/sites/5NUVIMEC/_layouts/15/stream.aspx?id=%2Fsites%2F5NUVIMEC%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20%2D%20Extrator%20PJe%2Emp4&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E8feed9ae%2D0b9e%2D4e31%2D943c%2D9b089e43d927" target="_blank">🎦</a></b></p>
+    <p style="text-align: center; font-family: Georgia;" id="Autor">Filipe de Sousa Lima | Gabriel Freitas Angst <br> 5º NUVIMEC/TJDFT | <b>10/10/2025 15:39 <a title="Veja um tutorial em vídeo de como utilizar esta ferramenta" href="https://tjdf.sharepoint.com/sites/5NUVIMEC/_layouts/15/stream.aspx?id=%2Fsites%2F5NUVIMEC%2FPasta%20de%20rede%2F04%20V%C3%ADdeos%20Instrut%C3%B3rios%2F07%2E%20Ferramentas%20Adicionais%2F01%20%2D%20Extrator%20PJe%2Emp4&ga=1&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2E8feed9ae%2D0b9e%2D4e31%2D943c%2D9b089e43d927" target="_blank">🎦</a></b></p>
     <h1>📄 Extrator de cabeçalhos do PJe </h1>
     <textarea id="caixa1" placeholder="Após abrir o cabeçalho do processo no PJe e copiar todos os dados apertando Ctrl+A e Ctrl+C, clique no botão abaixo ''Extrair texto copiado''"></textarea>
     <textarea id="caixa2" placeholder="Caixa de Texto 2"></textarea>
@@ -365,27 +381,40 @@ body {
     <textarea id="caixa6" placeholder="Caixa de Texto 6"></textarea>
     <textarea id="caixa7" placeholder="Caixa de Texto 7"></textarea>
     <br>
-    <div>
+  
         <button class="botao" id="extrairTextoCopiado" onclick="extrairClipboard()">Extrair texto copiado</button>  
         <button class="botao" id="limparCaixas" onclick="limparCaixas()">Limpar todas Caixas</button>
+        <button class="botao" id="copiarDados" onclick="copiarDadosFormatados()">Copiar Cabeçalho Completo</button>
         <button class="botao" id="gerarWord" onclick="gerarWord()">Baixar Doc Word</button>
-    </div>
-    <br><div id="alert-box">Dados copiados <b>com sucesso</b>!</div><br>
-    <div class="Dados_documento">   
-        <P2><br><b>DADOS EXTRAÍDOS DO PJE</b> <button class="botao" id="copiarCaixa8" onclick="copiarCaixa8()">Copiar Dados</button> </P2>
-        <p id="output1"></p>
-    </div>
-    <br><br>
-    <div class="Dados_documento">
-        <P3><b>PARTICIPANTES DA AUDIÊNCIA</b> <button class="botao" id="copiarCaixa9" onclick="copiarCaixa9()">Copiar Participantes</button></P3>
+        
+  
+    <br>
+    
+    <div id="dados-para-copiar">
+        <table class="tabela-dados-pje">
+            <tr>
+                <td>
+            <p id="output1"></p>
+                </td>
+            </tr>
+        </table>
+
         <br>
-        <p id="output2"></p>
-    </div>
-    <br><br>
-    <div class="Dados_documento">
-        <P4><b>DADOS DAS PARTES</b> <button class="botao" id="copiarCaixa10" onclick="copiarCaixa10()">Copiar Dados das Partes</button></P4>
+    <table class="tabela-dados-pje">
+            <tr>
+                <td>
+            <p id="output2"></p>
+            </td>
+            </tr>
+        </table>
         <br>
-        <p id="output3"></p>
+    <table class="tabela-dados-pje">
+            <tr>
+                <td>  
+            <p id="output3"></p>
+            </td>
+            </tr>
+        </table>
     </div>
 <div>
     <!-- Contêiner com ícone e texto -->
@@ -403,8 +432,9 @@ body {
 <!-- Início do Script-->
 
 <script>
-    function showAlert3s() {
+    function showAlert3s(message) {
         const alertBox = document.getElementById('alert-box');
+        alertBox.textContent = message || 'Ação concluída com sucesso!';
         alertBox.style.display = 'block';
         setTimeout(() => {
             alertBox.style.display = 'none';
@@ -427,8 +457,39 @@ body {
         document.getElementById('output3').innerHTML = '';
     }
 
-    function copiarCaixa8() {
-        copiarTexto('output1');
+    function copiarDadosFormatados() {
+        const contentToCopy = document.getElementById('dados-para-copiar');
+        if (!contentToCopy) {
+            console.error('Elemento "dados-para-copiar" não encontrado.');
+            return;
+        }
+
+        // Para preservar a formatação, criamos um elemento temporário
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = contentToCopy.innerHTML;
+
+        // Adiciona o elemento temporário ao DOM para que possa ser selecionado
+        document.body.appendChild(tempDiv);
+
+        // Seleciona o conteúdo do elemento temporário
+        const range = document.createRange();
+        range.selectNodeContents(tempDiv);
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        // Copia o conteúdo selecionado para a área de transferência
+        try {
+            document.execCommand('copy');
+            showAlert3s('Dados copiados para a área de transferência!');
+        } catch (err) {
+            console.error('Falha ao copiar os dados: ', err);
+            showAlert3s('Erro ao copiar os dados.');
+        }
+
+        // Remove o elemento temporário do DOM e limpa a seleção
+        document.body.removeChild(tempDiv);
+        window.getSelection().removeAllRanges();
     }
 
     function copiarCaixa9() {
@@ -822,8 +883,6 @@ function gerarWord() {
 });
 
     </script>
-
-</script>
 
 </body>
 </html>
