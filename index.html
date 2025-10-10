@@ -354,6 +354,20 @@ body {
             padding: 5px;
         }
 
+        .titulo-tabela {
+    text-align: center; /* REMOVA o sublinhado daqui */
+}
+
+/* NOVA CLASSE para aplicar o sublinhado apenas no texto principal */
+.titulo-principal {
+    text-decoration: underline;
+}
+
+.subtitulo-tabela {
+    display: block; 
+    margin-top: 2px; 
+    font-weight: normal; 
+}
     </style>
 </head>
 <body style="margin:60px;padding:0">
@@ -394,6 +408,7 @@ body {
         <table class="tabela-dados-pje">
             <tr>
                 <td>
+                <p class="titulo-tabela"><span class="titulo-principal">DADOS EXTRAÍDOS DO PJE</span></p>
             <p id="output1"></p>
                 </td>
             </tr>
@@ -403,6 +418,7 @@ body {
     <table class="tabela-dados-pje">
             <tr>
                 <td>
+                <p class="titulo-tabela"><span class="titulo-principal">PARTICIPANTES DA AUDIÊNCIA</span></p>
             <p id="output2"></p>
             </td>
             </tr>
@@ -410,7 +426,11 @@ body {
         <br>
     <table class="tabela-dados-pje">
             <tr>
-                <td>  
+                <td>
+               <p class="titulo-tabela">
+    <span class="titulo-principal">DADOS DAS PARTES</span>
+    <span class="subtitulo-tabela">(Portaria Conjunta GPR, GPVP, GSVP e GC n.º 71/2013; e CPC, art. 319, II)</span>
+</p>
             <p id="output3"></p>
             </td>
             </tr>
