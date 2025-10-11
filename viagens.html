@@ -1052,6 +1052,7 @@
         let currentEditingItemIndex = null;
         let currentEditingItemId = null; // Para anotações e outros itens com ID único
         let onConfirmAction = () => {};
+        let confirmDeleteTimer = null; // <<< ADICIONE ESTA LINHA
         
         // Variáveis de estado para reorganização
         let isReorganizing = false;
@@ -2086,7 +2087,24 @@ window.scrollToSectionAndClose = (targetId, modalId) => {
             document.getElementById(modalId).classList.replace('flex', 'hidden');
             const form = document.getElementById(modalId).querySelector('form');
             if (form) form.reset();
-            if (modalId === 'confirm-delete-modal') onConfirmAction = () => {};
+            
+            // Verificação específica para o modal de exclusão
+            if (modalId === 'confirm-delete-modal') {
+                onConfirmAction = () => {};
+
+                // Se o modal for fechado, o timer é cancelado
+                if (confirmDeleteTimer) {
+                    clearTimeout(confirmDeleteTimer);
+                    confirmDeleteTimer = null;
+                }
+
+                // E o botão de exclusão é resetado imediatamente
+                const deleteBtn = document.getElementById('confirm-delete-btn');
+                deleteBtn.disabled = false;
+                deleteBtn.classList.remove('bg-slate-400', 'cursor-not-allowed');
+                deleteBtn.classList.add('bg-red-600', 'hover:bg-red-700');
+                deleteBtn.textContent = 'Excluir';
+            }
         }
         
         window.scrollToItinerary = () => {
@@ -2308,7 +2326,29 @@ window.scrollToSectionAndClose = (targetId, modalId) => {
         function showConfirmDelete(message, onConfirm) {
             document.getElementById('confirm-delete-message').innerText = message;
             onConfirmAction = onConfirm;
+            
+            const deleteBtn = document.getElementById('confirm-delete-btn');
+            
+            // Desabilita o botão imediatamente
+            deleteBtn.disabled = true;
+            deleteBtn.classList.remove('bg-red-600', 'hover:bg-red-700');
+            deleteBtn.classList.add('bg-slate-400', 'cursor-not-allowed');
+            deleteBtn.textContent = 'Aguarde 2s...';
+
             openModal('confirm-delete-modal');
+
+            // Limpa qualquer timer anterior para garantir que não haja sobreposição
+            if (confirmDeleteTimer) {
+                clearTimeout(confirmDeleteTimer);
+            }
+            
+            // Define um timer para reabilitar o botão após 2 segundos
+            confirmDeleteTimer = setTimeout(() => {
+                deleteBtn.disabled = false;
+                deleteBtn.classList.remove('bg-slate-400', 'cursor-not-allowed');
+                deleteBtn.classList.add('bg-red-600', 'hover:bg-red-700');
+                deleteBtn.textContent = 'Excluir';
+            }, 2000); // 2000 milissegundos = 2 segundos
         }
 
         async function addDetail(category) {
