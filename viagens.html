@@ -175,6 +175,32 @@
             justify-content: center;
             gap: 8px;
         }
+
+        /* --- ESTILOS PARA O DROPDOWN DE SUGESTÕES --- */
+        .autocomplete-container {
+            position: relative;
+        }
+        .autocomplete-suggestions {
+            position: absolute;
+            border: 1px solid #cbd5e1;
+            border-top: none;
+            z-index: 99;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: white;
+            border-radius: 0 0 0.375rem 0.375rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        .autocomplete-suggestion-item {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+        }
+        .autocomplete-suggestion-item:hover {
+            background-color: #f1f5f9;
+        }
     </style>
 </head>
 <body class="bg-slate-100 text-slate-800">
@@ -198,6 +224,9 @@
             <main>
                 <h2 class="text-2xl font-bold text-slate-800 mb-4">Todas as Viagens</h2>
                 <div id="trips-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                
+                <p class="text-center text-sm text-slate-500 mt-8">v1.0074 | 10/10/2025, 22:21</p>
+
             </main>
         </div>
 
@@ -337,7 +366,7 @@
             <button onclick="scrollToSectionAndClose('lodging-section', 'index-modal')" class="w-full text-left p-3 rounded-lg hover:bg-slate-100 transition-colors font-medium">Hospedagens</button>
             <button onclick="scrollToSectionAndClose('documents-panel', 'index-modal')" class="w-full text-left p-3 rounded-lg hover:bg-slate-100 transition-colors font-medium">Documentos</button>
             <button onclick="scrollToSectionAndClose('daily-itinerary-panel', 'index-modal')" class="w-full text-left p-3 rounded-lg hover:bg-slate-100 transition-colors font-medium">Roteiro</button>
-            <button onclick="scrollToSectionAndClose('notes-panel', 'index-modal')" class="w-full text-left p-3 rounded-lg hover:bg-slate-100 transition-colors font-medium">Anotações</button>
+            <button id="index-btn-notes" onclick="scrollToSectionAndClose('notes-panel', 'index-modal')" class="w-full text-left p-3 rounded-lg hover:bg-slate-100 transition-colors font-medium">Anotações</button>
             <button onclick="scrollToSectionAndClose('spending-panel', 'index-modal')" class="w-full text-left p-3 rounded-lg hover:bg-slate-100 transition-colors font-medium">Resumo de Gastos</button>
         </div>
         <div class="pt-6 flex justify-end">
@@ -918,10 +947,10 @@
                     <label for="note-title" class="block text-sm font-medium text-slate-600">Nome da Anotação</label>
                     <input type="text" id="note-title" placeholder="Ex: Dica de restaurante do amigo" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
                 </div>
-                <div>
-                    <label for="note-author" class="block text-sm font-medium text-slate-600">Nome (de quem incluiu)</label>
-                    <input type="text" id="note-author" placeholder="Ex: João" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm">
-                </div>
+                <div class="autocomplete-container">
+                   <label for="note-author" class="block text-sm font-medium text-slate-600">Nome (de quem incluiu)</label>
+                   <input type="text" id="note-author" placeholder="Ex: João" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm">
+            </div>
                 <div>
                     <label for="note-description" class="block text-sm font-medium text-slate-600">Descrição</label>
                     <textarea id="note-description" rows="3" placeholder="Anotações, detalhes, etc." class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm"></textarea>
@@ -953,9 +982,9 @@
                     <label for="edit-note-title" class="block text-sm font-medium text-slate-600">Nome da Anotação</label>
                     <input type="text" id="edit-note-title" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm" required>
                 </div>
-                <div>
+                <div class="autocomplete-container">
                     <label for="edit-note-author" class="block text-sm font-medium text-slate-600">Nome (de quem incluiu)</label>
-                    <input type="text" id="edit-note-author" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm">
+                  <input type="text" id="edit-note-author" class="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm">
                 </div>
                 <div>
                     <label for="edit-note-description" class="block text-sm font-medium text-slate-600">Descrição</label>
@@ -1080,6 +1109,12 @@
             note_star: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
             note_remedy: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-plus"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>`,
             note_alert: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-siren"><path d="M7 12a5 5 0 0 1 5-5v0a5 5 0 0 1 5 5v0a5 5 0 0 1-5 5v0a5 5 0 0 1-5-5Z"/><path d="M12 2v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="M20 12h2"/><path d="m19.07 4.93-1.41 1.41"/><path d="M12 22a2 2 0 0 0 2-2h-4a2 2 0 0 0 2 2Z"/><path d="M10 19h4"/><path d="M12 12v-5"/></svg>`,
+            
+            note_tag: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-tag-icon lucide-tag"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>`,
+            note_backpack: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-backpack-icon lucide-backpack"><path d="M4 10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M8 10h8"/><path d="M8 18h8"/><path d="M8 22v-6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v6"/><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>`,
+            note_money: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-dollar-sign-icon lucide-circle-dollar-sign"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>`,
+            note_gift: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gift-icon lucide-gift"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></svg>`,
+            note_heart: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart-icon lucide-heart"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg>`,
 
 		default: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`
         };
@@ -1100,6 +1135,58 @@
             }
         } else {
             console.error("Firebase config is not available.");
+        }
+
+        // NOVO: Função para gerenciar o autocomplete do campo de autor
+        function setupAuthorAutocomplete(inputId) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+
+            input.addEventListener('input', function() {
+                const trip = tripsData.find(t => t.id === currentTripId);
+                const notes = trip ? trip.notes || [] : [];
+                const existingAuthors = [...new Set(notes.map(note => note.author).filter(Boolean))];
+                
+                const value = this.value;
+                closeAutocomplete();
+
+                if (!value) return;
+
+                const suggestions = existingAuthors.filter(author => 
+                    author.toLowerCase().includes(value.toLowerCase())
+                );
+
+                if (suggestions.length === 0) return;
+
+                const suggestionsDiv = document.createElement('div');
+                suggestionsDiv.setAttribute('class', 'autocomplete-suggestions');
+                this.parentNode.appendChild(suggestionsDiv);
+
+                suggestions.forEach(suggestion => {
+                    const item = document.createElement('div');
+                    item.setAttribute('class', 'autocomplete-suggestion-item');
+                    item.textContent = suggestion;
+                    item.addEventListener('click', function() {
+                        input.value = this.textContent;
+                        closeAutocomplete();
+                    });
+                    suggestionsDiv.appendChild(item);
+                });
+            });
+
+            function closeAutocomplete() {
+                const existingSuggestions = input.parentNode.querySelector('.autocomplete-suggestions');
+                if (existingSuggestions) {
+                    existingSuggestions.remove();
+                }
+            }
+            
+            // Fecha o dropdown se o usuário clicar fora
+            document.addEventListener('click', function(e) {
+                if (e.target !== input) {
+                    closeAutocomplete();
+                }
+            });
         }
         
         // --- FUNÇÕES DE RENDERIZAÇÃO ---
@@ -1177,6 +1264,13 @@
                 console.error("Viagem não encontrada:", tripId);
                 showTripsView();
                 return;
+            }
+
+            // Atualiza o contador de anotações no botão do Índice Rápido
+            const notesCount = trip.notes ? trip.notes.length : 0;
+            const indexNotesButton = document.getElementById('index-btn-notes');
+            if (indexNotesButton) {
+                indexNotesButton.textContent = `Anotações (${notesCount})`;
             }
 
             const header = document.getElementById('details-header');
@@ -1343,6 +1437,7 @@
         }
 
         // NOVO: Função para renderizar as anotações
+        // NOVO: Função para renderizar as anotações (COM AGRUPAMENTO POR AUTOR)
         function renderNotes(trip) {
             const listElement = document.getElementById('notes-list');
             listElement.innerHTML = '';
@@ -1353,44 +1448,69 @@
                 return;
             }
 
-            notes.forEach((note, index, allNotes) => {
-                const noteElement = document.createElement('div');
-                noteElement.className = 'flex items-center justify-between p-3 rounded-lg hover:bg-slate-50 border border-slate-200 cursor-pointer';
+            // 1. Agrupa as anotações por autor
+            const notesByAuthor = notes.reduce((acc, note) => {
+                const author = note.author ? note.author.trim() : 'Sem autor';
+                if (!acc[author]) {
+                    acc[author] = [];
+                }
+                acc[author].push(note);
+                return acc;
+            }, {});
+
+            // 2. Obtém os nomes dos autores e os ordena alfabeticamente
+            const sortedAuthors = Object.keys(notesByAuthor).sort((a, b) => a.localeCompare(b));
+
+            // 3. Itera sobre os autores ordenados e renderiza suas anotações
+            sortedAuthors.forEach(author => {
+                const authorNotes = notesByAuthor[author];
                 
-                // Adiciona os dados ao dataset para o modal de visualização
-                noteElement.dataset.title = note.title;
-                noteElement.dataset.author = note.author || 'Não especificado';
-                noteElement.dataset.description = note.description || 'Sem descrição.';
-                noteElement.dataset.link = note.link || '';
-                noteElement.dataset.icon = note.icon || 'note_food'; // Adiciona o ícone ao dataset
+                // Cria um cabeçalho para o autor
+                const authorHeader = document.createElement('div'); // Usamos div para mais flexibilidade
+                authorHeader.className = 'mt-4 mb-2'; // Apenas margens no container
+                // O <span> interno recebe o estilo de "tag" verde
+                authorHeader.innerHTML = `<span class="inline-block bg-green-100 text-green-800 text-sm font-semibold px-3 py-1 rounded-md">${author}</span>`;
+                listElement.appendChild(authorHeader);
 
-                noteElement.onclick = () => openViewNoteModal(noteElement);
+                // Renderiza cada anotação do autor
+                authorNotes.forEach(note => {
+                    const noteElement = document.createElement('div');
+                    noteElement.className = 'flex items-center justify-between p-3 rounded-lg hover:bg-slate-50 border border-slate-200 cursor-pointer';
+                    
+                    noteElement.dataset.title = note.title;
+                    noteElement.dataset.author = note.author || 'Não especificado';
+                    noteElement.dataset.description = note.description || 'Sem descrição.';
+                    noteElement.dataset.link = note.link || '';
+                    noteElement.dataset.icon = note.icon || 'note_food'; 
+                    noteElement.onclick = () => openViewNoteModal(noteElement);
 
-                const iconSvg = ICONS[note.icon] || ICONS['note_food'];
+                    const iconSvg = ICONS[note.icon] || ICONS['note_food'];
+                    const originalNoteIndex = notes.findIndex(n => n.id === note.id); // Pega o índice original para reordenação
 
-                noteElement.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <div class="text-slate-500">
-                           ${iconSvg.replace(/class="[^"]*"/, 'class="w-6 h-6"')}
+                    noteElement.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <div class="text-slate-500">
+                               ${iconSvg.replace(/class="[^"]*"/, 'class="w-6 h-6"')}
+                            </div>
+                            <span class="text-slate-700 font-medium">${note.title}</span>
                         </div>
-                        <span class="text-slate-700 font-medium">${note.title}</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <button ${index === 0 ? 'disabled' : ''} onclick="event.stopPropagation(); reorderNote('${note.id}', 'up')" class="p-1 disabled:opacity-30 disabled:cursor-not-allowed text-slate-400 hover:text-slate-700">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-circle"><circle cx="12" cy="12" r="10"></circle><path d="m16 12-4-4-4 4"></path><path d="M12 16V8"></path></svg>
-                        </button>
-                        <button ${index === allNotes.length - 1 ? 'disabled' : ''} onclick="event.stopPropagation(); reorderNote('${note.id}', 'down')" class="p-1 disabled:opacity-30 disabled:cursor-not-allowed text-slate-400 hover:text-slate-700">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down-circle"><circle cx="12" cy="12" r="10"></circle><path d="m8 12 4 4 4-4"></path><path d="m12 8 v8"></path></svg>
-                        </button>
-                        <button onclick="event.stopPropagation(); openEditNoteModal('${note.id}')" class="text-slate-400 hover:text-blue-600 p-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path><path d="m15 5 4 4"></path></svg>
-                        </button>
-                        <button onclick="event.stopPropagation(); deleteNote('${note.id}')" class="text-slate-400 hover:text-red-600 p-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg>
-                        </button>
-                    </div>
-                `;
-                listElement.appendChild(noteElement);
+                        <div class="flex items-center gap-2">
+                            <button ${originalNoteIndex === 0 ? 'disabled' : ''} onclick="event.stopPropagation(); reorderNote('${note.id}', 'up')" class="p-1 disabled:opacity-30 disabled:cursor-not-allowed text-slate-400 hover:text-slate-700">
+                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-circle"><circle cx="12" cy="12" r="10"></circle><path d="m16 12-4-4-4 4"></path><path d="M12 16V8"></path></svg>
+                            </button>
+                            <button ${originalNoteIndex === notes.length - 1 ? 'disabled' : ''} onclick="event.stopPropagation(); reorderNote('${note.id}', 'down')" class="p-1 disabled:opacity-30 disabled:cursor-not-allowed text-slate-400 hover:text-slate-700">
+                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-down-circle"><circle cx="12" cy="12" r="10"></circle><path d="m8 12 4 4 4-4"></path><path d="m12 8 v8"></path></svg>
+                            </button>
+                            <button onclick="event.stopPropagation(); openEditNoteModal('${note.id}')" class="text-slate-400 hover:text-blue-600 p-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path><path d="m15 5 4 4"></path></svg>
+                            </button>
+                            <button onclick="event.stopPropagation(); deleteNote('${note.id}')" class="text-slate-400 hover:text-red-600 p-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" x2="10" y1="11" y2="17"></line><line x1="14" x2="14" y1="11" y2="17"></line></svg>
+                            </button>
+                        </div>
+                    `;
+                    listElement.appendChild(noteElement);
+                });
             });
         }
         
@@ -1627,6 +1747,8 @@
             }, error => {
                 console.error("Error listening to Realtime Database:", error);
             });
+            setupAuthorAutocomplete('note-author');
+            setupAuthorAutocomplete('edit-note-author');
         }
 
           function setupIconPickers() {
@@ -1640,7 +1762,9 @@
             
             const noteIconOptions = {
                 note_food: ICONS.note_food, note_market: ICONS.note_market, note_star: ICONS.note_star,
-                note_remedy: ICONS.note_remedy, note_alert: ICONS.note_alert
+                note_remedy: ICONS.note_remedy, note_alert: ICONS.note_alert, note_tag: ICONS.note_tag,
+                note_backpack: ICONS.note_backpack, note_money: ICONS.note_money, note_gift: ICONS.note_gift,
+                note_heart: ICONS.note_heart
             };
 
             const populatePicker = (pickerId, iconSet) => {
