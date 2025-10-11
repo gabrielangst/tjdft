@@ -2949,13 +2949,21 @@ cost: document.getElementById('edit-activity-cost').value,
             }
         });
 
-// Lógica para o botão "Voltar ao Topo"
+// Lógica para os botões flutuantes (Voltar ao Topo e Índice)
         const backToTopBtn = document.getElementById('back-to-top-btn');
+        const openIndexBtn = document.getElementById('open-index-btn');
+        const detailsView = document.getElementById('details-view');
+
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 200) { // Mostra o botão após rolar 200 pixels
+            const isDetailsViewVisible = !detailsView.classList.contains('hidden');
+            
+            // Mostra os botões após rolar 300 pixels E se a tela de detalhes estiver visível
+            if (window.scrollY > 300 && isDetailsViewVisible) { 
                 backToTopBtn.classList.remove('hidden');
-            } else { // Esconde o botão se estiver perto do topo
+                openIndexBtn.classList.remove('hidden');
+            } else { // Esconde os botões em outras situações
                 backToTopBtn.classList.add('hidden');
+                openIndexBtn.classList.add('hidden');
             }
         });
 
@@ -2963,6 +2971,10 @@ cost: document.getElementById('edit-activity-cost').value,
 
 <button id="back-to-top-btn" onclick="scrollToTop()" class="hidden fixed bottom-8 left-8 z-40 w-12 h-12 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-colors flex items-center justify-center">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
+</button>
+
+<button id="open-index-btn" onclick="openModal('index-modal')" class="hidden fixed bottom-8 left-24 z-40 w-12 h-12 bg-green-600 text-white rounded-full shadow-lg hover:bg-green-700 transition-colors flex items-center justify-center">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
 </button>
 
 </body>
